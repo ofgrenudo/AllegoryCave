@@ -1,0 +1,157 @@
+[gd_scene load_steps=14 format=3 uid="uid://da7bfbph1odmc"]
+
+[ext_resource type="Script" path="res://Sceens/Combat/combat.gd" id="1_r6sh8"]
+[ext_resource type="Texture2D" uid="uid://cl3kevejdsmne" path="res://Media/Room_place_holder.png" id="1_welb2"]
+[ext_resource type="Texture2D" uid="uid://cdh503df5bldu" path="res://Media/Hand_Place_Holder.png" id="2_t4oqd"]
+[ext_resource type="Texture2D" uid="uid://c52dwimuh18ul" path="res://Media/fire_card_place_holder.png" id="3_nre6n"]
+[ext_resource type="Texture2D" uid="uid://btjspb2kxbcsh" path="res://Media/lightning_card_place_holder.png" id="4_0r3as"]
+[ext_resource type="Texture2D" uid="uid://3d8abjf0xw1m" path="res://Media/acid_card_place_holder.png" id="5_kc0jq"]
+[ext_resource type="Texture2D" uid="uid://dryfsyqpgw71f" path="res://Media/deck_place_holder.png" id="6_ou3yg"]
+[ext_resource type="Texture2D" uid="uid://dmiqqijggp2u5" path="res://Media/Enemy_Place_Holder.png" id="7_ls24f"]
+[ext_resource type="Script" path="res://Sceens/Combat/Enemy.gd" id="9_66w4a"]
+
+[sub_resource type="CapsuleShape2D" id="CapsuleShape2D_37se0"]
+radius = 71.003
+height = 146.49
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_4vuvx"]
+size = Vector2(323.577, 396.951)
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_mvqv8"]
+size = Vector2(327.986, 430.167)
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_sy4h2"]
+size = Vector2(22.9217, 472.552)
+
+[node name="Combat" type="Node2D"]
+script = ExtResource("1_r6sh8")
+
+[node name="Room" type="Sprite2D" parent="."]
+position = Vector2(962, 542)
+texture = ExtResource("1_welb2")
+
+[node name="Hand" type="Sprite2D" parent="Room"]
+position = Vector2(7, 395)
+rotation = -0.0233868
+texture = ExtResource("2_t4oqd")
+
+[node name="CardOne" type="Sprite2D" parent="Room/Hand"]
+position = Vector2(-131.455, 17.9308)
+rotation = -0.392048
+texture = ExtResource("3_nre6n")
+
+[node name="CardOneTopCollission" type="Area2D" parent="Room/Hand/CardOne"]
+position = Vector2(0.942413, 10.2524)
+scale = Vector2(0.659062, 1.02441)
+disable_mode = 1
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Room/Hand/CardOne/CardOneTopCollission"]
+position = Vector2(0.0232296, -64.4748)
+rotation = 3.12295
+scale = Vector2(0.809396, 1.03982)
+shape = SubResource("CapsuleShape2D_37se0")
+
+[node name="CardOneBottomCollission" type="Area2D" parent="Room/Hand/CardOne"]
+position = Vector2(-34.5733, 90.7672)
+rotation = 0.198251
+scale = Vector2(0.356062, 0.583398)
+disable_mode = 1
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Room/Hand/CardOne/CardOneBottomCollission"]
+position = Vector2(31.5605, -174.793)
+rotation = 2.87026
+scale = Vector2(0.777533, 1.02113)
+shape = SubResource("RectangleShape2D_4vuvx")
+
+[node name="CardTwo" type="Sprite2D" parent="Room/Hand"]
+position = Vector2(-63.4036, 16.5218)
+rotation = -0.0113552
+texture = ExtResource("4_0r3as")
+
+[node name="CardTwoTopCollision" type="Area2D" parent="Room/Hand/CardTwo"]
+position = Vector2(5.06639, -1.82503)
+rotation = -0.0498661
+scale = Vector2(0.752387, 0.974312)
+disable_mode = 1
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Room/Hand/CardTwo/CardTwoTopCollision"]
+position = Vector2(0.0232296, -64.4748)
+rotation = 3.12295
+scale = Vector2(0.809396, 1.03982)
+shape = SubResource("CapsuleShape2D_37se0")
+
+[node name="CardTwoBottomCollision" type="Area2D" parent="Room/Hand/CardTwo"]
+position = Vector2(-36.0021, 85.8013)
+rotation = 0.243874
+scale = Vector2(0.356062, 0.583398)
+disable_mode = 1
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Room/Hand/CardTwo/CardTwoBottomCollision"]
+position = Vector2(21.7005, -160.516)
+rotation = 2.9229
+scale = Vector2(0.809396, 1.03982)
+shape = SubResource("RectangleShape2D_mvqv8")
+
+[node name="CardThree" type="Sprite2D" parent="Room/Hand"]
+position = Vector2(3.15704, 36.0837)
+rotation = 0.317852
+texture = ExtResource("5_kc0jq")
+
+[node name="CardThreeTopCollision" type="Area2D" parent="Room/Hand/CardThree"]
+position = Vector2(-4.54942, 16.0094)
+rotation = 0.108521
+scale = Vector2(0.757223, 1.02591)
+disable_mode = 1
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Room/Hand/CardThree/CardThreeTopCollision"]
+position = Vector2(0.0232296, -64.4748)
+rotation = 3.12295
+scale = Vector2(0.809396, 1.03982)
+shape = SubResource("CapsuleShape2D_37se0")
+
+[node name="CardThreeBottomCollision" type="Area2D" parent="Room/Hand/CardThree"]
+position = Vector2(-4.67461, 101.736)
+rotation = 0.108521
+scale = Vector2(0.847618, 0.498093)
+disable_mode = 1
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Room/Hand/CardThree/CardThreeBottomCollision"]
+position = Vector2(-8.32422, -203.297)
+rotation = 3.07492
+scale = Vector2(5.02425, 1.03982)
+shape = SubResource("RectangleShape2D_sy4h2")
+
+[node name="Deck" type="Sprite2D" parent="Room/Hand"]
+position = Vector2(156.77, 11.6692)
+rotation = 0.0477174
+texture = ExtResource("6_ou3yg")
+
+[node name="DeckCollision" type="Area2D" parent="Room/Hand/Deck"]
+position = Vector2(-0.323153, 110.04)
+rotation = 0.010067
+scale = Vector2(0.847618, 1.65458)
+disable_mode = 1
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Room/Hand/Deck/DeckCollision"]
+position = Vector2(0.0232296, -64.4748)
+rotation = 3.12295
+scale = Vector2(0.809396, 1.03982)
+shape = SubResource("CapsuleShape2D_37se0")
+
+[node name="Enemy" type="Sprite2D" parent="Room"]
+position = Vector2(2, 59)
+texture = ExtResource("7_ls24f")
+script = ExtResource("9_66w4a")
+
+[connection signal="input_event" from="Room/Hand/CardOne/CardOneTopCollission" to="." method="_on_card_one_top_collission_input_event"]
+[connection signal="mouse_entered" from="Room/Hand/CardOne/CardOneBottomCollission" to="." method="_on_card_one_bottom_collission_mouse_entered"]
+[connection signal="mouse_exited" from="Room/Hand/CardOne/CardOneBottomCollission" to="." method="_on_card_one_bottom_collission_mouse_exited"]
+[connection signal="input_event" from="Room/Hand/CardTwo/CardTwoTopCollision" to="." method="_on_card_two_top_collision_input_event"]
+[connection signal="mouse_entered" from="Room/Hand/CardTwo/CardTwoBottomCollision" to="." method="_on_card_two_bottom_collision_mouse_entered"]
+[connection signal="mouse_exited" from="Room/Hand/CardTwo/CardTwoBottomCollision" to="." method="_on_card_two_bottom_collision_mouse_exited"]
+[connection signal="input_event" from="Room/Hand/CardThree/CardThreeTopCollision" to="." method="_on_card_three_top_collision_input_event"]
+[connection signal="mouse_entered" from="Room/Hand/CardThree/CardThreeBottomCollision" to="." method="_on_card_three_bottom_collision_mouse_entered"]
+[connection signal="mouse_exited" from="Room/Hand/CardThree/CardThreeBottomCollision" to="." method="_on_card_three_bottom_collision_mouse_exited"]
+[connection signal="input_event" from="Room/Hand/Deck/DeckCollision" to="." method="_on_deck_collision_input_event"]
+[connection signal="mouse_entered" from="Room/Hand/Deck/DeckCollision" to="." method="_on_deck_collision_mouse_entered"]
+[connection signal="mouse_exited" from="Room/Hand/Deck/DeckCollision" to="." method="_on_deck_collision_mouse_exited"]
