@@ -1,0 +1,45 @@
+[gd_scene load_steps=4 format=3 uid="uid://c0j2xan2twr21"]
+
+[ext_resource type="Texture2D" uid="uid://dhg377svcrs1q" path="res://Media/Navigation_Hall_Way.png" id="1_4ddei"]
+[ext_resource type="Script" path="res://Sceens/Navigation/navigation.gd" id="1_v5el4"]
+[ext_resource type="Texture2D" uid="uid://bh7tfeqs2dx5g" path="res://Media/Navigation_Left_Or_Right.png" id="2_ii1bi"]
+
+[node name="Navigation" type="Node2D"]
+script = ExtResource("1_v5el4")
+
+[node name="Hall Way" type="Sprite2D" parent="."]
+visible = false
+position = Vector2(959, 545)
+texture = ExtResource("1_4ddei")
+
+[node name="onward" type="Button" parent="Hall Way"]
+offset_left = -91.0
+offset_top = 16.0
+offset_right = -74.0
+offset_bottom = 70.0
+text = "^
+|"
+
+[node name="Left Or Right" type="Sprite2D" parent="."]
+visible = false
+position = Vector2(959, 545)
+texture = ExtResource("2_ii1bi")
+
+[node name="left" type="Button" parent="Left Or Right"]
+offset_left = -333.0
+offset_top = 3.0
+offset_right = -310.0
+offset_bottom = 34.0
+text = "<-
+"
+
+[node name="right" type="Button" parent="Left Or Right"]
+offset_left = 224.0
+offset_top = -8.0
+offset_right = 247.0
+offset_bottom = 23.0
+text = "->"
+
+[connection signal="pressed" from="Hall Way/onward" to="." method="_on_onward_pressed"]
+[connection signal="pressed" from="Left Or Right/left" to="." method="_on_left_pressed"]
+[connection signal="pressed" from="Left Or Right/right" to="." method="_on_right_pressed"]
