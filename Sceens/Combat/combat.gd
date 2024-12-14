@@ -1,102 +1,69 @@
 extends Node2D
 
-var card_one_hovered 	:= false
-var card_two_hovered 	:= false
-var card_three_hovered 	:= false
-var card_deck_hovered 	:= false
+## This class essentially acts as a medium between the Hand, Enemy, and Player.
+## It should on delta process any changes in either of the programs. It should 
+## also keep track of whos turn it is.
 
-var card_one_selected	:= false
-var card_two_selected 	:= false
-var card_three_selected := false
-var card_deck_selected 	:= false
+@onready var hand 	:= get_node("Room/Hand")
+@onready var enemy 	:= get_node("Room/Enemy")
+@onready var player	:= get_node("Room/Player") 
 
-var attack_counter := 0
+## Always make the player move first. We can adjust this later easily...
+var player_turn := true
 
-@onready var card_one 		:= get_node("Room/Hand/CardOne")
-@onready var card_two 		:= get_node("Room/Hand/CardTwo")
-@onready var card_three 	:= get_node("Room/Hand/CardThree")
-@onready var card_deck	 	:= get_node("Room/Hand/Deck")
-
-@onready var enemy 			:= get_node("Room/Enemy")
-
+## Player Action Information
+var player_card_type : String = "None"
+var player_card_damage : int = 0
 
 func _ready() -> void:
 	pass # Replace with function body.
 
 func _process(delta: float) -> void:
-	if (attack_counter > 3):
-		get_tree().change_scene_to_file("res://Sceens/Navigation/Navigation.tscn") ## Load our Navigation Sceene
-
-
-# =================================== Card One ===================================
-
-func _on_card_one_top_collission_input_event(viewport: Node, event: InputEvent, shape_idx: int) -> void:
-	if event.is_action_pressed("select"): # set this up in project settings
-		enemy.start_shake_and_wobble()
-		print("Card One Selected!")
-		attack_counter += 1
+	if enemy.get_health() >= 0: pass
+	else: player_turn = false
+	
+	if (player_turn):
+		get_card_played() ## Get Info From Hand
+		hand.toggle_card_selected()  ## Clear Info From Hand
 		
-func _on_card_one_bottom_collission_mouse_entered() -> void:
-	card_one_hovered = true
-	card_one.scale = Vector2(1.25, 1.25)
-	print("Mouse on Card One!")
+		## Apply Damage to Enemy
+		## The keyword await, ensures that the function is completed before
+		## moving forward. Without it, the enemy gets stuck taking damage over 
+		## and over.
+		await enemy.apply_damage(player_card_type, player_card_damage)
+		## TODO! Apply Damage to Player
+	else:
+		get_tree().change_scene_to_file("res://Sceens/Navigation/Navigation.tscn") ## Load our Navigation Sceene
+	
+	## At the end of the game loop, empty out card actions
+	player_card_type = "None"
+	player_card_damage = 0
+	
 
-func _on_card_one_bottom_collission_mouse_exited() -> void:
-	card_one_hovered = false
-	card_one.scale = Vector2(1.0, 1.0)
-	print("Mouse off Card One!")
+func get_card_played():
+	if (hand.get_card_selected()):
+		var card_one_selected	 :bool = hand.get_card_one_selected()
+		var card_two_selected 	 :bool = hand.get_card_two_selected()
+		var card_three_selected	 :bool = hand.get_card_three_selected()
+		var card_deck_selected 	 :bool = hand.get_card_deck_selected()
+		
+		if (card_one_selected):
+			player_card_type 	= hand.get_card_one_type()
+			player_card_damage 	= hand.get_card_one_damage()
 
-# =================================== Card Two ===================================
+		if (card_two_selected):
+			player_card_type 	= hand.get_card_two_type()
+			player_card_damage 	= hand.get_card_two_damage()
 
-func _on_card_two_bottom_collision_mouse_entered() -> void:
-	card_two_hovered = true
-	card_two.scale = Vector2(1.25, 1.25)
-	print("Mouse on Card Two!")
+		if (card_three_selected):
+			player_card_type 	= hand.get_card_three_type()
+			player_card_damage 	= hand.get_card_three_damage()
+			
+		if (card_deck_selected):
+			player_card_type 	= "Deck"
+			player_card_damage	= 0
 
+		#print("Player Card Type ", player_card_type)
+		#print("Player Card Damage ", player_card_damage)
 
-func _on_card_two_bottom_collision_mouse_exited() -> void:
-	card_two_hovered = false
-	card_two.scale = Vector2(1.0, 1.0)
-	print("Mouse off Card Two!")
-
-
-func _on_card_two_top_collision_input_event(viewport: Node, event: InputEvent, shape_idx: int) -> void:
-	if event.is_action_pressed("select"): # set this up in project settings
-		enemy.start_shake_and_wobble()
-		print("Card Two Selected!")
-		attack_counter += 1
-
-# =================================== Card Three ===================================
-
-func _on_card_three_top_collision_input_event(viewport: Node, event: InputEvent, shape_idx: int) -> void:
-	if event.is_action_pressed("select"): # set this up in project settings
-		enemy.start_shake_and_wobble()		
-		print("Card Three Selected!")
-		attack_counter += 1
-
-
-func _on_card_three_bottom_collision_mouse_entered() -> void:
-	card_three_hovered = true
-	card_three.scale = Vector2(1.25, 1.25)
-	print("Mouse on Card Three!")
-
-func _on_card_three_bottom_collision_mouse_exited() -> void:
-	card_three_hovered = false
-	card_three.scale = Vector2(1.0, 1.0)
-	print("Mouse off Card Three!")
-
-# =================================== Deck of Cards ===================================
-
-func _on_deck_collision_input_event(viewport: Node, event: InputEvent, shape_idx: int) -> void:
-	if event.is_action_pressed("select"): # set this up in project settings
-		print("Deck of Cards Selected!")
-
-func _on_deck_collision_mouse_entered() -> void:
-	card_deck_hovered = true
-	card_deck.scale = Vector2(1.25, 1.25)
-	print("Mouse on Deck of Cards!")
-
-func _on_deck_collision_mouse_exited() -> void:
-	card_deck_hovered = false
-	card_deck.scale = Vector2(1.0, 1.0)
-	print("Mouse off Deck of Cards!")
+	pass

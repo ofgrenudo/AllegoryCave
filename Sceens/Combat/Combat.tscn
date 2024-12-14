@@ -1,14 +1,18 @@
-[gd_scene load_steps=14 format=3 uid="uid://da7bfbph1odmc"]
+[gd_scene load_steps=19 format=3 uid="uid://da7bfbph1odmc"]
 
-[ext_resource type="Script" path="res://Sceens/Combat/combat.gd" id="1_r6sh8"]
 [ext_resource type="Texture2D" uid="uid://cl3kevejdsmne" path="res://Media/Room_place_holder.png" id="1_welb2"]
+[ext_resource type="Script" path="res://Sceens/Combat/Combat.gd" id="1_wien3"]
 [ext_resource type="Texture2D" uid="uid://cdh503df5bldu" path="res://Media/Hand_Place_Holder.png" id="2_t4oqd"]
 [ext_resource type="Texture2D" uid="uid://c52dwimuh18ul" path="res://Media/fire_card_place_holder.png" id="3_nre6n"]
 [ext_resource type="Texture2D" uid="uid://btjspb2kxbcsh" path="res://Media/lightning_card_place_holder.png" id="4_0r3as"]
+[ext_resource type="Script" path="res://Sceens/Combat/Hand.gd" id="4_1baxm"]
 [ext_resource type="Texture2D" uid="uid://3d8abjf0xw1m" path="res://Media/acid_card_place_holder.png" id="5_kc0jq"]
 [ext_resource type="Texture2D" uid="uid://dryfsyqpgw71f" path="res://Media/deck_place_holder.png" id="6_ou3yg"]
 [ext_resource type="Texture2D" uid="uid://dmiqqijggp2u5" path="res://Media/Enemy_Place_Holder.png" id="7_ls24f"]
 [ext_resource type="Script" path="res://Sceens/Combat/Enemy.gd" id="9_66w4a"]
+[ext_resource type="Texture2D" uid="uid://ciycr031ethmp" path="res://Media/Heart_Background.png" id="10_qwfnh"]
+[ext_resource type="Texture2D" uid="uid://coekpet0npm4c" path="res://Media/Heart_Filled_Placeholder.png" id="11_02y54"]
+[ext_resource type="Texture2D" uid="uid://b1a607o7cmcge" path="res://Media/you_died.png" id="12_gv2k7"]
 
 [sub_resource type="CapsuleShape2D" id="CapsuleShape2D_37se0"]
 radius = 71.003
@@ -23,8 +27,11 @@ size = Vector2(327.986, 430.167)
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_sy4h2"]
 size = Vector2(22.9217, 472.552)
 
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_mlcm0"]
+size = Vector2(145.877, 143.051)
+
 [node name="Combat" type="Node2D"]
-script = ExtResource("1_r6sh8")
+script = ExtResource("1_wien3")
 
 [node name="Room" type="Sprite2D" parent="."]
 position = Vector2(962, 542)
@@ -34,6 +41,7 @@ texture = ExtResource("1_welb2")
 position = Vector2(7, 395)
 rotation = -0.0233868
 texture = ExtResource("2_t4oqd")
+script = ExtResource("4_1baxm")
 
 [node name="CardOne" type="Sprite2D" parent="Room/Hand"]
 position = Vector2(-131.455, 17.9308)
@@ -133,25 +141,46 @@ scale = Vector2(0.847618, 1.65458)
 disable_mode = 1
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="Room/Hand/Deck/DeckCollision"]
-position = Vector2(0.0232296, -64.4748)
+position = Vector2(0.0693359, -66.5276)
 rotation = 3.12295
 scale = Vector2(0.809396, 1.03982)
-shape = SubResource("CapsuleShape2D_37se0")
+shape = SubResource("RectangleShape2D_mlcm0")
 
 [node name="Enemy" type="Sprite2D" parent="Room"]
 position = Vector2(2, 59)
 texture = ExtResource("7_ls24f")
 script = ExtResource("9_66w4a")
 
-[connection signal="input_event" from="Room/Hand/CardOne/CardOneTopCollission" to="." method="_on_card_one_top_collission_input_event"]
-[connection signal="mouse_entered" from="Room/Hand/CardOne/CardOneBottomCollission" to="." method="_on_card_one_bottom_collission_mouse_entered"]
-[connection signal="mouse_exited" from="Room/Hand/CardOne/CardOneBottomCollission" to="." method="_on_card_one_bottom_collission_mouse_exited"]
-[connection signal="input_event" from="Room/Hand/CardTwo/CardTwoTopCollision" to="." method="_on_card_two_top_collision_input_event"]
-[connection signal="mouse_entered" from="Room/Hand/CardTwo/CardTwoBottomCollision" to="." method="_on_card_two_bottom_collision_mouse_entered"]
-[connection signal="mouse_exited" from="Room/Hand/CardTwo/CardTwoBottomCollision" to="." method="_on_card_two_bottom_collision_mouse_exited"]
-[connection signal="input_event" from="Room/Hand/CardThree/CardThreeTopCollision" to="." method="_on_card_three_top_collision_input_event"]
-[connection signal="mouse_entered" from="Room/Hand/CardThree/CardThreeBottomCollision" to="." method="_on_card_three_bottom_collision_mouse_entered"]
-[connection signal="mouse_exited" from="Room/Hand/CardThree/CardThreeBottomCollision" to="." method="_on_card_three_bottom_collision_mouse_exited"]
-[connection signal="input_event" from="Room/Hand/Deck/DeckCollision" to="." method="_on_deck_collision_input_event"]
-[connection signal="mouse_entered" from="Room/Hand/Deck/DeckCollision" to="." method="_on_deck_collision_mouse_entered"]
-[connection signal="mouse_exited" from="Room/Hand/Deck/DeckCollision" to="." method="_on_deck_collision_mouse_exited"]
+[node name="Player" type="Sprite2D" parent="Room"]
+position = Vector2(-712, 438)
+texture = ExtResource("10_qwfnh")
+
+[node name="HeartOne" type="Sprite2D" parent="Room/Player"]
+position = Vector2(-99, 0)
+texture = ExtResource("11_02y54")
+
+[node name="HeartTwo" type="Sprite2D" parent="Room/Player"]
+position = Vector2(6, 0)
+texture = ExtResource("11_02y54")
+
+[node name="HeartThree" type="Sprite2D" parent="Room/Player"]
+position = Vector2(100, 0)
+texture = ExtResource("11_02y54")
+
+[node name="DeathScreen" type="Sprite2D" parent="Room/Player"]
+visible = false
+position = Vector2(-250, -980)
+texture = ExtResource("12_gv2k7")
+
+[connection signal="input_event" from="Room/Hand/CardOne/CardOneTopCollission" to="Room/Hand" method="_on_card_one_top_collission_input_event"]
+[connection signal="mouse_entered" from="Room/Hand/CardOne/CardOneBottomCollission" to="Room/Hand" method="_on_card_one_bottom_collission_mouse_entered"]
+[connection signal="mouse_exited" from="Room/Hand/CardOne/CardOneBottomCollission" to="Room/Hand" method="_on_card_one_bottom_collission_mouse_exited"]
+[connection signal="input_event" from="Room/Hand/CardTwo/CardTwoTopCollision" to="Room/Hand" method="_on_card_two_top_collision_input_event"]
+[connection signal="mouse_entered" from="Room/Hand/CardTwo/CardTwoBottomCollision" to="Room/Hand" method="_on_card_two_bottom_collision_mouse_entered"]
+[connection signal="mouse_exited" from="Room/Hand/CardTwo/CardTwoBottomCollision" to="Room/Hand" method="_on_card_two_bottom_collision_mouse_exited"]
+[connection signal="input_event" from="Room/Hand/CardThree/CardThreeTopCollision" to="Room/Hand" method="_on_card_three_top_collision_input_event"]
+[connection signal="mouse_entered" from="Room/Hand/CardThree/CardThreeBottomCollision" to="Room/Hand" method="_on_card_three_bottom_collision_mouse_entered"]
+[connection signal="mouse_exited" from="Room/Hand/CardThree/CardThreeBottomCollision" to="Room/Hand" method="_on_card_three_bottom_collision_mouse_exited"]
+[connection signal="input_event" from="Room/Hand/Deck/DeckCollision" to="Room/Hand" method="_on_deck_collision_input_event"]
+[connection signal="mouse_entered" from="Room/Hand/Deck/DeckCollision" to="Room/Hand" method="_on_deck_collision_mouse_entered"]
+[connection signal="mouse_exited" from="Room/Hand/Deck/DeckCollision" to="Room/Hand" method="_on_deck_collision_mouse_exited"]
