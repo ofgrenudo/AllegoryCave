@@ -1,7 +1,7 @@
 extends Node2D
 
-@onready var navigation_preload = preload("res://Sceens/Navigation/navigation.tscn")
-@onready var combat_preload = preload("res://Sceens/Combat/combat.tscn")
+@onready var navigation_preload = preload("res://Sceens/Navigation/Navigation.tscn")
+@onready var combat_preload = preload("res://Sceens/Combat/Combat.tscn")
 @onready var hallway = get_node("Hall Way")
 @onready var left_or_right = get_node("Left Or Right")
 
