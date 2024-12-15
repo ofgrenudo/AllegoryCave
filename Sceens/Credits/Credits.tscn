@@ -1,15 +1,108 @@
-[gd_scene load_steps=2 format=3 uid="uid://best5rt1b6gtg"]
+[gd_scene load_steps=14 format=3 uid="uid://best5rt1b6gtg"]
 
-[ext_resource type="Texture2D" uid="uid://cl3kevejdsmne" path="res://Media/Room_place_holder.png" id="1_4ij26"]
+[ext_resource type="Script" path="res://Sceens/Credits/Credits.gd" id="1_fxttj"]
+[ext_resource type="Texture2D" uid="uid://sdsij0f5brft" path="res://Media/Rooms/combat_sceene.PNG" id="1_ubnjb"]
+[ext_resource type="Texture2D" uid="uid://dydmoxl047qir" path="res://Media/Cards/Untitled_Artwork-8.png" id="2_pgag8"]
+[ext_resource type="Texture2D" uid="uid://box72hycqdtj1" path="res://Media/Text/art.png" id="3_nesiy"]
+[ext_resource type="Texture2D" uid="uid://d1nincp8ncxhx" path="res://Media/Cards/Untitled_Artwork-5.png" id="4_x4deq"]
+[ext_resource type="Texture2D" uid="uid://bonymd0e44g5" path="res://Media/Text/music.png" id="5_on02t"]
+[ext_resource type="Texture2D" uid="uid://clxykg3alnlbn" path="res://Media/Cards/Untitled_Artwork-6.png" id="6_juu10"]
+[ext_resource type="Texture2D" uid="uid://c06r55uddlkl6" path="res://Media/Text/development.png" id="7_br6r7"]
+[ext_resource type="Texture2D" uid="uid://dd5jg26hfy26u" path="res://Media/Text/return.png" id="9_dft1q"]
+[ext_resource type="AudioStream" uid="uid://dvf6crfw2iscx" path="res://Media/Music/One Man Symphony - Downtempo & Lofi & Progressive Music Pack Vol1/One Man Symphony - Downtempo & Lofi & Progressive Music Pack Vol - 1 (Free) - 05 Cozy.mp3" id="10_1n1bf"]
 
-[node name="Credits" type="Control"]
-layout_mode = 3
-anchors_preset = 15
-anchor_right = 1.0
-anchor_bottom = 1.0
-grow_horizontal = 2
-grow_vertical = 2
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_sbrbj"]
+size = Vector2(16.9165, 20.6735)
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_7e0dl"]
+size = Vector2(20.2432, 566.62)
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_vd37s"]
+
+[node name="Credits" type="Node2D"]
+script = ExtResource("1_fxttj")
 
 [node name="Background" type="Sprite2D" parent="."]
 position = Vector2(962, 540)
-texture = ExtResource("1_4ij26")
+scale = Vector2(0.445, 0.445)
+texture = ExtResource("1_ubnjb")
+
+[node name="ArtCard" type="Sprite2D" parent="Background"]
+position = Vector2(-853.933, 406.742)
+rotation = -0.134809
+scale = Vector2(0.25, 0.25)
+texture = ExtResource("2_pgag8")
+
+[node name="Text" type="Sprite2D" parent="Background/ArtCard"]
+position = Vector2(8.55957, 1207.61)
+scale = Vector2(6.26569, 8.31908)
+texture = ExtResource("3_nesiy")
+
+[node name="ArtShape2d" type="Area2D" parent="Background/ArtCard"]
+position = Vector2(-28.3802, -58.2757)
+scale = Vector2(1.25963, 1)
+
+[node name="ArtCollisionShape2D" type="CollisionShape2D" parent="Background/ArtCard/ArtShape2d"]
+position = Vector2(22.8308, 51.0923)
+scale = Vector2(91.5731, 151.713)
+shape = SubResource("RectangleShape2D_sbrbj")
+
+[node name="MusicCard" type="Sprite2D" parent="Background"]
+position = Vector2(-67.4157, 188.764)
+scale = Vector2(0.25, 0.25)
+texture = ExtResource("4_x4deq")
+
+[node name="Text" type="Sprite2D" parent="Background/MusicCard"]
+position = Vector2(-0.000152588, 1294.38)
+rotation = 0.00268753
+scale = Vector2(6.26569, 8.31908)
+texture = ExtResource("5_on02t")
+
+[node name="MusicArea2D" type="Area2D" parent="Background/MusicCard"]
+
+[node name="MusicCollisionShape2D" type="CollisionShape2D" parent="Background/MusicCard/MusicArea2D"]
+position = Vector2(-11.5264, 0)
+scale = Vector2(94.7737, -5.48889)
+shape = SubResource("RectangleShape2D_7e0dl")
+
+[node name="DevCard" type="Sprite2D" parent="Background"]
+position = Vector2(746.068, 361.798)
+rotation = 0.222189
+scale = Vector2(0.25, 0.25)
+texture = ExtResource("6_juu10")
+
+[node name="Text" type="Sprite2D" parent="Background/DevCard"]
+position = Vector2(-34.365, 1316.34)
+rotation = 0.0358541
+scale = Vector2(6.26569, 8.31908)
+texture = ExtResource("7_br6r7")
+
+[node name="DevArea2D" type="Area2D" parent="Background/DevCard"]
+
+[node name="DevCollisionShape2D" type="CollisionShape2D" parent="Background/DevCard/DevArea2D"]
+scale = Vector2(96.2143, 154.899)
+shape = SubResource("RectangleShape2D_vd37s")
+
+[node name="ReturnButton" type="Button" parent="Background"]
+offset_left = -1721.35
+offset_top = 824.719
+offset_right = -1513.35
+offset_bottom = 932.719
+icon = ExtResource("9_dft1q")
+
+[node name="AudioStreamPlayer2D" type="AudioStreamPlayer2D" parent="Background"]
+stream = ExtResource("10_1n1bf")
+volume_db = -2.0
+autoplay = true
+parameters/looping = true
+
+[connection signal="input_event" from="Background/ArtCard/ArtShape2d" to="." method="_on_art_shape_2d_input_event"]
+[connection signal="mouse_entered" from="Background/ArtCard/ArtShape2d" to="." method="_on_art_shape_2d_mouse_entered"]
+[connection signal="mouse_exited" from="Background/ArtCard/ArtShape2d" to="." method="_on_art_shape_2d_mouse_exited"]
+[connection signal="input_event" from="Background/MusicCard/MusicArea2D" to="." method="_on_music_area_2d_input_event"]
+[connection signal="mouse_entered" from="Background/MusicCard/MusicArea2D" to="." method="_on_music_area_2d_mouse_entered"]
+[connection signal="mouse_exited" from="Background/MusicCard/MusicArea2D" to="." method="_on_music_area_2d_mouse_exited"]
+[connection signal="input_event" from="Background/DevCard/DevArea2D" to="." method="_on_dev_area_2d_input_event"]
+[connection signal="mouse_entered" from="Background/DevCard/DevArea2D" to="." method="_on_dev_area_2d_mouse_entered"]
+[connection signal="mouse_exited" from="Background/DevCard/DevArea2D" to="." method="_on_dev_area_2d_mouse_exited"]
+[connection signal="pressed" from="Background/ReturnButton" to="." method="_on_return_button_pressed"]
