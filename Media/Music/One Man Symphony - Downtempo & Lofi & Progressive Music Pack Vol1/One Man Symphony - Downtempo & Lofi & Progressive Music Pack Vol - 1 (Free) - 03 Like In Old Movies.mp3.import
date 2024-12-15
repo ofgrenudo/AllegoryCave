@@ -1,0 +1,19 @@
+[remap]
+
+importer="mp3"
+type="AudioStreamMP3"
+uid="uid://q70o7n8gnyy8"
+path="res://.godot/imported/One Man Symphony - Downtempo & Lofi & Progressive Music Pack Vol - 1 (Free) - 03 Like In Old Movies.mp3-454dd1451ed8a2363f38ec6762b7dce3.mp3str"
+
+[deps]
+
+source_file="res://Media/Music/One Man Symphony - Downtempo & Lofi & Progressive Music Pack Vol1/One Man Symphony - Downtempo & Lofi & Progressive Music Pack Vol - 1 (Free) - 03 Like In Old Movies.mp3"
+dest_files=["res://.godot/imported/One Man Symphony - Downtempo & Lofi & Progressive Music Pack Vol - 1 (Free) - 03 Like In Old Movies.mp3-454dd1451ed8a2363f38ec6762b7dce3.mp3str"]
+
+[params]
+
+loop=false
+loop_offset=0
+bpm=0
+beat_count=0
+bar_beats=4

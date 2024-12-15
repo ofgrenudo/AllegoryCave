@@ -1,0 +1,19 @@
+[remap]
+
+importer="mp3"
+type="AudioStreamMP3"
+uid="uid://1y64g24hrec6"
+path="res://.godot/imported/One Man Symphony - Downtempo & Lofi & Progressive Music Pack Vol - 1 (Free) - 01 A Place Where It's Just The Two Of Us.mp3-9adc7b6aeac01c586c166b13951af164.mp3str"
+
+[deps]
+
+source_file="res://Media/Music/One Man Symphony - Downtempo & Lofi & Progressive Music Pack Vol1/One Man Symphony - Downtempo & Lofi & Progressive Music Pack Vol - 1 (Free) - 01 A Place Where It's Just The Two Of Us.mp3"
+dest_files=["res://.godot/imported/One Man Symphony - Downtempo & Lofi & Progressive Music Pack Vol - 1 (Free) - 01 A Place Where It's Just The Two Of Us.mp3-9adc7b6aeac01c586c166b13951af164.mp3str"]
+
+[params]
+
+loop=false
+loop_offset=0
+bpm=0
+beat_count=0
+bar_beats=4
