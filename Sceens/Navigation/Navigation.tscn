@@ -1,47 +1,124 @@
-[gd_scene load_steps=4 format=3 uid="uid://c0j2xan2twr21"]
+[gd_scene load_steps=10 format=3 uid="uid://c0j2xan2twr21"]
 
-[ext_resource type="Texture2D" uid="uid://dhg377svcrs1q" path="res://Media/Navigation_Hall_Way.png" id="1_4ddei"]
 [ext_resource type="Script" path="res://Sceens/Navigation/navigation.gd" id="1_v5el4"]
-[ext_resource type="Texture2D" uid="uid://bh7tfeqs2dx5g" path="res://Media/Navigation_Left_Or_Right.png" id="2_ii1bi"]
+[ext_resource type="Texture2D" uid="uid://nbbyc27nxg2v" path="res://Media/Rooms/forward_left.PNG" id="2_flv57"]
+[ext_resource type="Texture2D" uid="uid://o8x8jah42uqj" path="res://Media/Rooms/forward_right.PNG" id="3_gttf5"]
+[ext_resource type="Texture2D" uid="uid://b0vqpkv4a6vr" path="res://Media/Rooms/left.PNG" id="4_1yvcg"]
+[ext_resource type="AudioStream" uid="uid://q70o7n8gnyy8" path="res://Media/Music/One Man Symphony - Downtempo & Lofi & Progressive Music Pack Vol1/One Man Symphony - Downtempo & Lofi & Progressive Music Pack Vol - 1 (Free) - 03 Like In Old Movies.mp3" id="4_qbpms"]
+[ext_resource type="Texture2D" uid="uid://dea7ypbtljy2f" path="res://Media/Rooms/right.PNG" id="5_7wfpc"]
+[ext_resource type="Texture2D" uid="uid://bhc5eq4vp6q8j" path="res://Media/Rooms/left_or_right_one.PNG" id="6_itwuq"]
+[ext_resource type="Texture2D" uid="uid://m85xnm5wbpfl" path="res://Media/Rooms/left_or_right_two.PNG" id="7_jnhkk"]
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_s7ar7"]
+size = Vector2(990.929, 1719.1)
 
 [node name="Navigation" type="Node2D"]
 script = ExtResource("1_v5el4")
 
-[node name="Hall Way" type="Sprite2D" parent="."]
-position = Vector2(959, 545)
-texture = ExtResource("1_4ddei")
+[node name="left" type="Sprite2D" parent="."]
+position = Vector2(960, 515)
+scale = Vector2(0.445, 0.445)
+texture = ExtResource("2_flv57")
 
-[node name="onward" type="Button" parent="Hall Way"]
-offset_left = -175.0
-offset_top = -24.0
-offset_right = -158.0
-offset_bottom = 30.0
-scale = Vector2(10.4455, 3.85453)
-text = "^
-|"
+[node name="left_area" type="Area2D" parent="left"]
+position = Vector2(8.98876, 114.607)
+scale = Vector2(1.84402, 1.04428)
 
-[node name="Left Or Right" type="Sprite2D" parent="."]
+[node name="CollisionShape2D" type="CollisionShape2D" parent="left/left_area"]
+position = Vector2(-23.3177, -43.2584)
+shape = SubResource("RectangleShape2D_s7ar7")
+
+[node name="right" type="Sprite2D" parent="."]
 visible = false
-position = Vector2(959, 545)
-texture = ExtResource("2_ii1bi")
+position = Vector2(960, 515)
+scale = Vector2(0.445, 0.445)
+texture = ExtResource("3_gttf5")
 
-[node name="left" type="Button" parent="Left Or Right"]
-offset_left = -447.0
-offset_top = -19.0
-offset_right = -424.0
-offset_bottom = 12.0
-scale = Vector2(6.84399, 5.35747)
-text = "<-
-"
+[node name="right_area" type="Area2D" parent="right"]
+position = Vector2(4.49438, 166.292)
+scale = Vector2(1.94667, 0.970085)
 
-[node name="right" type="Button" parent="Left Or Right"]
-offset_left = 225.0
-offset_top = -8.0
-offset_right = 248.0
-offset_bottom = 23.0
-scale = Vector2(6.71997, 5.17676)
-text = "->"
+[node name="CollisionShape2D" type="CollisionShape2D" parent="right/right_area"]
+position = Vector2(30.6149, -85.9551)
+shape = SubResource("RectangleShape2D_s7ar7")
 
-[connection signal="pressed" from="Hall Way/onward" to="." method="_on_onward_pressed"]
-[connection signal="pressed" from="Left Or Right/left" to="." method="_on_left_pressed"]
-[connection signal="pressed" from="Left Or Right/right" to="." method="_on_right_pressed"]
+[node name="forward_left" type="Sprite2D" parent="."]
+visible = false
+position = Vector2(960, 515)
+scale = Vector2(0.445, 0.445)
+texture = ExtResource("4_1yvcg")
+
+[node name="forward_left_area" type="Area2D" parent="forward_left"]
+position = Vector2(-17.9775, 137.079)
+scale = Vector2(1.52777, 0.911862)
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="forward_left/forward_left_area"]
+position = Vector2(30.6149, -85.9551)
+shape = SubResource("RectangleShape2D_s7ar7")
+
+[node name="forward_right" type="Sprite2D" parent="."]
+visible = false
+position = Vector2(960, 513)
+scale = Vector2(0.445, 0.445)
+texture = ExtResource("5_7wfpc")
+
+[node name="forward_right_area" type="Area2D" parent="forward_right"]
+position = Vector2(0, 137.079)
+scale = Vector2(1.73545, 0.904183)
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="forward_right/forward_right_area"]
+position = Vector2(30.6149, -85.9551)
+shape = SubResource("RectangleShape2D_s7ar7")
+
+[node name="left_or_right_1" type="Sprite2D" parent="."]
+visible = false
+position = Vector2(960, 515)
+scale = Vector2(0.445, 0.445)
+texture = ExtResource("6_itwuq")
+
+[node name="LEFT_or_right_area_one" type="Area2D" parent="left_or_right_1"]
+position = Vector2(166.292, -11.236)
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="left_or_right_1/LEFT_or_right_area_one"]
+position = Vector2(-688.486, 24.1573)
+shape = SubResource("RectangleShape2D_s7ar7")
+
+[node name="left_or_RIGHT_area_one" type="Area2D" parent="left_or_right_1"]
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="left_or_right_1/left_or_RIGHT_area_one"]
+position = Vector2(502.525, 15.1685)
+shape = SubResource("RectangleShape2D_s7ar7")
+
+[node name="left_or_right_2" type="Sprite2D" parent="."]
+visible = false
+position = Vector2(960, 513)
+scale = Vector2(0.445, 0.445)
+texture = ExtResource("7_jnhkk")
+
+[node name="LEFT_or_right_area_two" type="Area2D" parent="left_or_right_2"]
+position = Vector2(71.9101, -4.49438)
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="left_or_right_2/LEFT_or_right_area_two"]
+position = Vector2(-688.486, 24.1573)
+shape = SubResource("RectangleShape2D_s7ar7")
+
+[node name="left_or_RIGHT_area_two" type="Area2D" parent="left_or_right_2"]
+position = Vector2(-47.191, 0)
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="left_or_right_2/left_or_RIGHT_area_two"]
+position = Vector2(502.525, 15.1685)
+shape = SubResource("RectangleShape2D_s7ar7")
+
+[node name="AudioStreamPlayer2D" type="AudioStreamPlayer2D" parent="."]
+stream = ExtResource("4_qbpms")
+autoplay = true
+parameters/looping = true
+
+[connection signal="input_event" from="left/left_area" to="." method="_on_left_area_input_event"]
+[connection signal="input_event" from="right/right_area" to="." method="_on_right_area_input_event"]
+[connection signal="input_event" from="forward_left/forward_left_area" to="." method="_on_forward_left_area_input_event"]
+[connection signal="input_event" from="forward_right/forward_right_area" to="." method="_on_forward_right_area_input_event"]
+[connection signal="input_event" from="left_or_right_1/LEFT_or_right_area_one" to="." method="_on_left_or_right_area_one_input_event"]
+[connection signal="input_event" from="left_or_right_1/left_or_RIGHT_area_one" to="." method="_on_left_or_right_area_one_input_event"]
+[connection signal="input_event" from="left_or_right_2/LEFT_or_right_area_two" to="." method="_on_left_or_right_area_two_input_event"]
+[connection signal="input_event" from="left_or_right_2/left_or_RIGHT_area_two" to="." method="_on_left_or_right_area_two_input_event"]
