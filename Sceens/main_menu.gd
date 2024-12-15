@@ -11,11 +11,11 @@ extends Control
 @onready var settings_scene := preload("res://Sceens/Settings/Settings.tscn")
 ## Load our Beginning Level
 @onready var opening_scene := preload("res://Sceens/Opening Sceen/Opening Sceen.tscn")
-
+@onready var music := get_node("Background/AudioStreamPlayer2D")
 
 
 func _ready() -> void:
-	pass # Replace with function body.
+	pass
 
 ## This will navigate you to the starting scene when clicked.
 func _on_start_pressed() -> void:
@@ -28,3 +28,6 @@ func _on_settings_pressed() -> void:
 ## This will safely, quit the game when ran.
 func _on_quit_pressed() -> void:
 	get_tree().quit() ## Safely Exits the Game.
+
+func _on_credits_pressed() -> void:
+	pass # Replace with function body.
