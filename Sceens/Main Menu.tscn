@@ -20,7 +20,7 @@ texture = ExtResource("2_3dxbm")
 
 [node name="AudioStreamPlayer2D" type="AudioStreamPlayer2D" parent="Background"]
 stream = ExtResource("3_loalc")
-volume_db = -12.5
+volume_db = -2.0
 autoplay = true
 parameters/looping = true
 
