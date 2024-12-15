@@ -1,69 +1,103 @@
 extends Node2D
 
-## This class essentially acts as a medium between the Hand, Enemy, and Player.
-## It should on delta process any changes in either of the programs. It should 
-## also keep track of whos turn it is.
+## This class acts as a medium between the Hand, Enemy, and Player.
+## It keeps track of the game states and processes turns.
 
 @onready var hand 	:= get_node("Room/Hand")
 @onready var enemy 	:= get_node("Room/Enemy")
-@onready var player	:= get_node("Room/Player") 
+@onready var player	:= get_node("Room/Player")
+@onready var preload_combat_sceene := preload("res://Sceens/Navigation/Navigation.tscn")
+@onready var preload_main_menu_sceene := preload("res://Sceens/Main Menu.tscn")
 
-## Always make the player move first. We can adjust this later easily...
-var player_turn := true
+## Game States
+enum State { PlayerTurn, EnemyTurn, CheckWin }
+
+var current_state: State = State.PlayerTurn
 
 ## Player Action Information
-var player_card_type : String = "None"
-var player_card_damage : int = 0
+var player_card_type: String = "None"
+var player_card_damage: int = 0
 
 func _ready() -> void:
-	pass # Replace with function body.
+	current_state = State.PlayerTurn
 
-func _process(delta: float) -> void:
-	if enemy.get_health() >= 0: pass
-	else: player_turn = false
-	
-	if (player_turn):
-		get_card_played() ## Get Info From Hand
-		hand.toggle_card_selected()  ## Clear Info From Hand
-		
-		## Apply Damage to Enemy
-		## The keyword await, ensures that the function is completed before
-		## moving forward. Without it, the enemy gets stuck taking damage over 
-		## and over.
+func _process(_delta: float) -> void:
+
+	match current_state:
+		State.PlayerTurn:
+			player_turn()
+		State.EnemyTurn:
+			enemy_turn()
+		State.CheckWin:
+			check_win()
+
+# Player's Turn
+func player_turn() -> void:
+	get_card_played()  ## Get info from the hand
+	hand.toggle_card_selected()  ## Clear selected card
+
+	## Apply damage to the enemy
+	if (!(player_card_type == "None") && !(player_card_damage == 0)):
+		print("Player Card Type -> ", player_card_type, " and Player Card Damage -> ", player_card_damage)
 		await enemy.apply_damage(player_card_type, player_card_damage)
-		## TODO! Apply Damage to Player
-	else:
-		get_tree().change_scene_to_file("res://Sceens/Navigation/Navigation.tscn") ## Load our Navigation Sceene
-	
-	## At the end of the game loop, empty out card actions
+		
+		## Pass turn to enemy
+		current_state = State.EnemyTurn
+		
+	if ((player_card_type == "Deck")):
+		print("Player Card Type -> ", player_card_type, " and Player Card Damage -> ", player_card_damage)
+		#await enemy.apply_damage(player_card_type, player_card_damage)
+		
+		## Pass turn to enemy
+		await get_tree().create_timer(1.0).timeout
+		current_state = State.EnemyTurn
+
+
+	## Reset player card info
 	player_card_type = "None"
 	player_card_damage = 0
-	
 
-func get_card_played():
-	if (hand.get_card_selected()):
-		var card_one_selected	 :bool = hand.get_card_one_selected()
-		var card_two_selected 	 :bool = hand.get_card_two_selected()
-		var card_three_selected	 :bool = hand.get_card_three_selected()
-		var card_deck_selected 	 :bool = hand.get_card_deck_selected()
-		
-		if (card_one_selected):
-			player_card_type 	= hand.get_card_one_type()
-			player_card_damage 	= hand.get_card_one_damage()
 
-		if (card_two_selected):
-			player_card_type 	= hand.get_card_two_type()
-			player_card_damage 	= hand.get_card_two_damage()
+# Enemy's Turn
+func enemy_turn() -> void:
+	## Apply damage to the player
+	var enemy_damage = 15	
+	await player.apply_damage(enemy_damage)
 
-		if (card_three_selected):
-			player_card_type 	= hand.get_card_three_type()
-			player_card_damage 	= hand.get_card_three_damage()
-			
-		if (card_deck_selected):
-			player_card_type 	= "Deck"
-			player_card_damage	= 0
+	## Pass turn to the check-win state
+	current_state = State.CheckWin
 
-		#print("Player Card Type ", player_card_type)
-		#print("Player Card Damage ", player_card_damage)
+# Check for game over or proceed to the next turn
+func check_win() -> void:
+	if enemy.get_health() <= 0:
+		# Load Navigation scene (victory)
+		get_tree().change_scene_to_file("res://Sceens/Navigation/Navigation.tscn")
+		return
 
-	pass
+	if player.get_health() <= 0:
+		# TODO: Create a death scene
+		get_tree().change_scene_to_packed(preload_main_menu_sceene)
+		return
+
+	# If no one has won, return to the player's turn
+	current_state = State.PlayerTurn
+
+
+# Get the card information from the hand
+func get_card_played() -> void:
+	if hand.get_card_selected():
+		if hand.get_card_one_selected():
+			player_card_type = hand.get_card_one_type()
+			player_card_damage = hand.get_card_one_damage()
+
+		elif hand.get_card_two_selected():
+			player_card_type = hand.get_card_two_type()
+			player_card_damage = hand.get_card_two_damage()
+
+		elif hand.get_card_three_selected():
+			player_card_type = hand.get_card_three_type()
+			player_card_damage = hand.get_card_three_damage()
+
+		elif hand.get_card_deck_selected():
+			player_card_type = "Deck"
+			player_card_damage = 0
