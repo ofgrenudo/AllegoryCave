@@ -1,5 +1,6 @@
 extends Sprite2D
 
+
 ## Used to make the card larger on hover.
 var card_one_hovered 	:= false
 var card_two_hovered 	:= false
@@ -15,8 +16,8 @@ var card_selected	 	:= false
 
 @onready var card_one 		:= get_node("CardOne")
 @onready var card_two 		:= get_node("CardTwo")
-@onready var card_three 		:= get_node("CardThree")
-@onready var card_deck	 	:= get_node("Deck")
+@onready var card_three 	:= get_node("CardThree")
+#@onready var card_deck	 	:= get_node("Deck")
 
 # Called when the node enters the scene tree for the first time.
 func _ready() -> void:
@@ -24,9 +25,8 @@ func _ready() -> void:
 
 
 # Called every frame. 'delta' is the elapsed time since the previous frame.
-func _process(delta: float) -> void:
+func _process(_delta: float) -> void:
 	pass
-	
 
 # =================================== Getters  ===================================
 func get_card_one_selected() -> bool:
@@ -74,77 +74,54 @@ func get_card_two_damage():
 func get_card_three_damage():
 	return 30
 
-# =================================== Card One ===================================
-func _on_card_one_top_collission_input_event(viewport: Node, event: InputEvent, shape_idx: int) -> void:
+# =================================== Input  ===================================
+func _on_card_one_collission_input_event(_viewport: Node, event: InputEvent, _shape_idx: int) -> void:
 	if event.is_action_pressed("select"): # set this up in project settings
 		#print("Card One Selected!")
 		if card_selected == false:
 			card_one_selected = true
 			card_selected = true
-		
-func _on_card_one_bottom_collission_mouse_entered() -> void:
-	card_one_hovered = true
-	card_one.scale = Vector2(1.25, 1.25)
-	#print("Mouse on Card One!")
 
-func _on_card_one_bottom_collission_mouse_exited() -> void:
-	card_one_hovered = false
-	card_one.scale = Vector2(1.0, 1.0)
-	#print("Mouse off Card One!")
-
-# =================================== Card Two ===================================
-func _on_card_two_top_collision_input_event(viewport: Node, event: InputEvent, shape_idx: int) -> void:
+func _on_card_two_collission_input_event(_viewport: Node, event: InputEvent, _shape_idx: int) -> void:
 	if event.is_action_pressed("select"): # set this up in project settings
-		#print("Card Two Selected!")
+		#print("Card One Selected!")
 		if card_selected == false:
 			card_two_selected = true
 			card_selected = true
 
-func _on_card_two_bottom_collision_mouse_entered() -> void:
-	card_two_hovered = true
-	card_two.scale = Vector2(1.25, 1.25)
-	#print("Mouse on Card Two!")
-
-
-func _on_card_two_bottom_collision_mouse_exited() -> void:
-	card_two_hovered = false
-	card_two.scale = Vector2(1.0, 1.0)
-	#print("Mouse off Card Two!")
-
-# =================================== Card Three ===================================
-
-func _on_card_three_top_collision_input_event(viewport: Node, event: InputEvent, shape_idx: int) -> void:
+func _on_card_three_collission_input_event(_viewport: Node, event: InputEvent, _shape_idx: int) -> void:
 	if event.is_action_pressed("select"): # set this up in project settings
-		#print("Card Three Selected!")
+		#print("Card One Selected!")
 		if card_selected == false:
 			card_three_selected = true
 			card_selected = true
 
+# =================================== Scale Up / Down  ===================================
+func _on_card_one_collission_mouse_entered() -> void:
+	card_one_hovered = false
+	card_one.scale = Vector2(0.14, 0.14)
 
-func _on_card_three_bottom_collision_mouse_entered() -> void:
-	card_three_hovered = true
-	card_three.scale = Vector2(1.25, 1.25)
-	#print("Mouse on Card Three!")
 
-func _on_card_three_bottom_collision_mouse_exited() -> void:
+func _on_card_one_collission_mouse_exited() -> void:
+	card_one_hovered = false
+	card_one.scale = Vector2(0.125, 0.125)
+
+
+func _on_card_two_collission_mouse_entered() -> void:
+	card_two_hovered = false
+	card_two.scale = Vector2(0.14, 0.14)
+
+
+func _on_card_two_collission_mouse_exited() -> void:
+	card_two_hovered = false
+	card_two.scale = Vector2(0.125, 0.125)
+
+
+func _on_card_three_collission_mouse_entered() -> void:
 	card_three_hovered = false
-	card_three.scale = Vector2(1.0, 1.0)
-	#print("Mouse off Card Three!")
+	card_three.scale = Vector2(0.14, 0.14)
 
-# =================================== Deck of Cards ===================================
-func _on_deck_collision_input_event(viewport: Node, event: InputEvent, shape_idx: int) -> void:
-	if event.is_action_pressed("select"): # set this up in project settings
-		if card_selected == false:
-			card_deck_selected = true
-			card_selected = true
-			print("Deck of Cards Selected!")
 
-func _on_deck_collision_mouse_entered() -> void:
-	card_deck_hovered = true
-	card_deck.scale = Vector2(1.25, 1.25)
-	#print("Mouse on Deck of Cards!")
-
-func _on_deck_collision_mouse_exited() -> void:
-	card_deck_hovered = false
-	card_deck.scale = Vector2(1.0, 1.0)
-	#print("Mouse off Deck of Cards!")
+func _on_card_three_collission_mouse_exited() -> void:
+	card_three_hovered = false
+	card_three.scale = Vector2(0.125, 0.125)
