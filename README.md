@@ -22,5 +22,8 @@ This game is a simple dungeon crawler, using cards for the major combat mechanic
 - Game Systems : In terms of game systems, there will be random encounters, and random enemy generation. The player will interact with the UI to navigate through the dungeon as well as selecting the card or spell youd like to cast.
 - Interactivity : Interactivitiy will be handeled by mouse click, or keyboard / controller input for accessibility.
 
+# Credits
 
-
+- Art Work Done by K. Korea Ray [Link to Instagram](https://www.instagram.com/antisocial.dinos/) [https://www.instagram.com/antisocial.dinos/](https://www.instagram.com/antisocial.dinos/)
+- Game Development by Joshua Winters-Brown
+- Music is [Downtemp & Lofi Progression Music Pack Vol 1 by One Man Symphony](https://onemansymphony.bandcamp.com/album/downtempo-lofi-progressive-music-pack-vol-1-free)
