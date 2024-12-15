@@ -1,16 +1,14 @@
 extends Node2D
 
-@onready var navigation := preload("res://Sceens/Navigation/Navigation.tscn")
+@onready var navigation = preload("res://Sceens/Navigation/Navigation.tscn")
 
 # Called when the node enters the scene tree for the first time.
 func _ready() -> void:
 	pass # Replace with function body.
 
-
 # Called every frame. 'delta' is the elapsed time since the previous frame.
-func _process(delta: float) -> void:
+func _process(_delta: float) -> void:
 	pass
 
-
 func _on_proceed_button_pressed() -> void:
-	get_tree().change_scene_to_packed(navigation) ## Load our Navigation Sceene
+		get_tree().change_scene_to_packed(navigation)
