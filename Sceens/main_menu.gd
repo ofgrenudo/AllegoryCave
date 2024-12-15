@@ -9,6 +9,7 @@ extends Control
 
 ## Load our Settings Sceen on Ready
 @onready var settings_scene := preload("res://Sceens/Settings/Settings.tscn")
+@onready var credits_sceen := preload("res://Sceens/Credits/Credits.tscn")
 ## Load our Beginning Level
 @onready var opening_scene := preload("res://Sceens/Opening Sceen/Opening Sceen.tscn")
 @onready var music := get_node("Background/AudioStreamPlayer2D")
@@ -30,4 +31,4 @@ func _on_quit_pressed() -> void:
 	get_tree().quit() ## Safely Exits the Game.
 
 func _on_credits_pressed() -> void:
-	pass # Replace with function body.
+	get_tree().change_scene_to_packed(credits_sceen)
