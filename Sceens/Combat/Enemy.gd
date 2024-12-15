@@ -4,11 +4,11 @@ var health = 100
 
 ## Shake Vars
 var is_shaking = false  ## To prevent multiple shake calls
-var shake_intensity = 0  ## How far the object moves when shaking
+var shake_intensity = 1  ## How far the object moves when shaking
 var wobble_intensity = 5  ## How much the object rotates
 var shake_duration = 0.3  ## Duration of the effect
 var shake_timer = 0.0  ## Internal timer
-@onready var starting_position = Vector2(2, 59) ## Hard Coded Value.... Cant figure out how to get these in script
+@onready var starting_position = position ## Hard Coded Value.... Cant figure out how to get these in script
 
 func _ready():
 	pass  # Called when the node is added to the scene
@@ -24,7 +24,7 @@ func _process(delta):
 		else:
 			apply_shake_and_wobble()
 
-func _input_event(viewport, event, shape_idx):
+func _input_event(_viewport, event, _shape_idx):
 	if event is InputEventMouseButton and event.pressed:
 		if not is_shaking:
 			start_shake_and_wobble()
@@ -32,7 +32,7 @@ func _input_event(viewport, event, shape_idx):
 func apply_damage(damage_type: String, damage_value: int):
 	if (damage_value > 0):
 		health = health - damage_value
-		print("==================== ", health)
+		print("Enemy Health -> ", health)
 		start_shake_and_wobble()
 	
 	if (damage_type == "Deck"):
@@ -50,9 +50,9 @@ func start_shake_and_wobble():
 ## Start Shake and Wobble
 func apply_shake_and_wobble():
 	# Random shake offset
-	var shake_x = randf_range(-shake_intensity, shake_intensity)
-	var shake_y = randf_range(-shake_intensity, shake_intensity)
-	position = Vector2(shake_x, shake_y)
+	#var shake_x = randf_range(-shake_intensity, shake_intensity)
+	#var shake_y = randf_range(-shake_intensity, shake_intensity)
+	#position = Vector2(shake_x, shake_y)
 
 	# Random wobble rotation
 	rotation = deg_to_rad(randf_range(-wobble_intensity, wobble_intensity))
