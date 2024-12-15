@@ -25,32 +25,49 @@ func _process(_delta: float) -> void:
 	pass
 
 func navigate_rooms():
+	## Make all Sceens Not Visible. This needs to run in the beginning of the
+	## function because at times it doesnt complete before you display the room you selected.
+	for index in navigation_array_size:
+			navigation_options[index].visible = false
+
+
+	## Randomize the Generator with a time based seed.
 	rng.randomize()
-	var new_navigation_random_number = rng.randi_range(0, navigation_array_size)
+
+	## Generate the Probability or a combat encounter.
 	var combat_encounter_chance = rng.randi_range(0, 1000)
-		
+	## Nerf the possbility of a combat encounter after you immediately leave
+	## a combat sceene
 	if (first_run):
+		## Take whatever chance we generated and remove over half of it.
 		combat_encounter_chance = combat_encounter_chance - 650
 		first_run = false
 
+
+
+	## Generate a New Random Room Number from 0 to Navigation Array Size.
+	var new_navigation_random_number = rng.randi_range(0, navigation_array_size)
+	## Make sure that the newly generated number isnt the number that we already have.
 	if (new_navigation_random_number == navigation_random_number):
-		rng.randomize()
+		## Remake the number this time, assign it directly.
 		navigation_random_number = rng.randi_range(0, navigation_array_size)
+	## The generated number is unique, we will apply it here.
 	else:
 		navigation_random_number = new_navigation_random_number
 
+	## For Debugging the Navigation Sceene, print out our important information
 	print("\nNavigation Combat Encounter = ", combat_encounter_chance)
 	print("Navigation Random Number = ", navigation_random_number)
 
+
+	## From here below, we will begin setting the sceene appropriately
+	## If our combat encounter is greater than 750, we will enter combat.
 	if (combat_encounter_chance > 750):
 		#await get_tree().change_scene_to_packed(preloaded_combat_sceen)
 		get_tree().change_scene_to_file("res://Sceens/Combat/Combat.tscn")
+	## set the appropriate room to visible.
 	else:
-		for index in navigation_array_size:
-			navigation_options[index].visible = false
-
-			rng.randomize()
-			navigation_options[navigation_random_number].visible = true
+		navigation_options[navigation_random_number].visible = true
 
 func _on_left_area_input_event(_viewport: Node, event: InputEvent, _shape_idx: int) -> void:
 	if event.is_action_pressed("select"): # set this up in project settings
