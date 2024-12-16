@@ -1,0 +1,12 @@
+[gd_scene load_steps=3 format=3 uid="uid://csvx8fjqt7k5a"]
+
+[ext_resource type="Script" path="res://Sceens/Cards/lightning_one.gd" id="1_ckqr1"]
+[ext_resource type="Texture2D" uid="uid://ckm3xbogqm0kw" path="res://Media/Cards/magic/Untitled_Artwork-1.png" id="1_xbnur"]
+
+[node name="LightningOne" type="Node2D"]
+scale = Vector2(0.125, 0.125)
+script = ExtResource("1_ckqr1")
+
+[node name="Sprite2D" type="Sprite2D" parent="."]
+scale = Vector2(0.125, 0.125)
+texture = ExtResource("1_xbnur")
