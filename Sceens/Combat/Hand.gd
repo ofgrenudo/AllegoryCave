@@ -17,7 +17,7 @@ var card_selected	 	:= false
 @onready var card_one 		:= get_node("CardOne")
 @onready var card_two 		:= get_node("CardTwo")
 @onready var card_three 	:= get_node("CardThree")
-#@onready var card_deck	 	:= get_node("Deck")
+@onready var card_deck	 	:= get_node("Deck")
 
 # Called when the node enters the scene tree for the first time.
 func _ready() -> void:
@@ -125,3 +125,18 @@ func _on_card_three_collission_mouse_entered() -> void:
 func _on_card_three_collission_mouse_exited() -> void:
 	card_three_hovered = false
 	card_three.scale = Vector2(0.125, 0.125)
+
+func _on_deck_area_2d_input_event(viewport: Node, event: InputEvent, shape_idx: int) -> void:
+	if event.is_action_pressed("select"): # set this up in project settings
+		#print("Card One Selected!")
+		if card_selected == false:
+			card_deck_selected = true
+			card_selected = true
+
+func _on_deck_area_2d_mouse_entered() -> void:
+	card_deck_hovered = true
+	card_deck.scale = Vector2(0.40, 0.40)
+
+func _on_deck_area_2d_mouse_exited() -> void:
+	card_deck_hovered = false
+	card_deck.scale = Vector2(0.35, 0.35)
