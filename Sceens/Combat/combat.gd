@@ -33,27 +33,23 @@ func _process(_delta: float) -> void:
 
 # Player's Turn
 func player_turn() -> void:
-	get_card_played()  ## Get info from the hand
-	hand.toggle_card_selected()  ## Clear selected card
+	# Get the selected card
+	get_card_played()
+	hand.toggle_card_selected()
 
-	## Apply damage to the enemy
-	if (!(player_card_type == "None") && !(player_card_damage == 0)):
+	# If a valid attack card is played
+	if player_card_type != "None" and player_card_damage != 0:
 		print("Player Card Type -> ", player_card_type, " and Player Card Damage -> ", player_card_damage)
 		await enemy.apply_damage(player_card_type, player_card_damage)
-		
-		## Pass turn to enemy
 		current_state = State.EnemyTurn
-		
-	if ((player_card_type == "Deck")):
-		print("Player Card Type -> ", player_card_type, " and Player Card Damage -> ", player_card_damage)
-		#await enemy.apply_damage(player_card_type, player_card_damage)
-		
-		## Pass turn to enemy
+
+	# If the Deck card is played
+	elif player_card_type == "Deck":
+		print("Player drew from the deck.")
 		await get_tree().create_timer(1.0).timeout
 		current_state = State.EnemyTurn
 
-
-	## Reset player card info
+	# Reset player card info to prevent re-triggering
 	player_card_type = "None"
 	player_card_damage = 0
 
@@ -63,6 +59,11 @@ func enemy_turn() -> void:
 	## Apply damage to the player
 	var enemy_damage = 15	
 	await player.apply_damage(enemy_damage)
+
+	if ((player_card_type == "Deck")):
+		## Reset player card info
+		player_card_type = "None"
+		player_card_damage = 0
 
 	## Pass turn to the check-win state
 	current_state = State.CheckWin
@@ -101,3 +102,9 @@ func get_card_played() -> void:
 		elif hand.get_card_deck_selected():
 			player_card_type = "Deck"
 			player_card_damage = 0
+		
+		print("Card Selected: ", player_card_type, "Card Damage: ", player_card_damage)
+
+	else:
+		player_card_type = "None"
+		player_card_damage = 0

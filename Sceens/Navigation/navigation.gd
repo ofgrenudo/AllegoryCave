@@ -6,6 +6,8 @@ extends Node2D
 @onready var nav_forward_right = get_node("forward_right")
 @onready var nav_left_or_right_1 = get_node("left_or_right_1")
 @onready var nav_left_or_right_2 = get_node("left_or_right_2")
+@onready var card_deck	 	:= get_node("Deck")
+
 
 @onready var navigation_options = [nav_left, nav_right, nav_forward_left, nav_forward_right, nav_left_or_right_1, nav_left_or_right_2]
 @onready var navigation_array_size = navigation_options.size() - 1
@@ -92,3 +94,14 @@ func _on_left_or_right_area_one_input_event(_viewport: Node, event: InputEvent, 
 func _on_left_or_right_area_two_input_event(_viewport: Node, event: InputEvent, _shape_idx: int) -> void:
 	if event.is_action_pressed("select"): # set this up in project settings
 		navigate_rooms() # Replace with function body.
+
+
+func _on_deck_area_2d_input_event(viewport: Node, event: InputEvent, shape_idx: int) -> void:
+	pass # Replace with function body.
+
+
+func _on_deck_area_2d_mouse_entered() -> void:
+	card_deck.scale = Vector2(0.20, 0.20)
+
+func _on_deck_area_2d_mouse_exited() -> void:
+	card_deck.scale = Vector2(0.15, 0.15)

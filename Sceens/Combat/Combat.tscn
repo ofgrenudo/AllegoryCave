@@ -1,4 +1,4 @@
-[gd_scene load_steps=28 format=3 uid="uid://da7bfbph1odmc"]
+[gd_scene load_steps=30 format=3 uid="uid://da7bfbph1odmc"]
 
 [ext_resource type="Script" path="res://Sceens/Combat/Combat.gd" id="1_wien3"]
 [ext_resource type="Texture2D" uid="uid://cdh503df5bldu" path="res://Media/Hand_Place_Holder.png" id="2_t4oqd"]
@@ -12,6 +12,7 @@
 [ext_resource type="Texture2D" uid="uid://d1nincp8ncxhx" path="res://Media/Cards/Untitled_Artwork-5.png" id="5_o0biq"]
 [ext_resource type="Texture2D" uid="uid://dryfsyqpgw71f" path="res://Media/deck_place_holder.png" id="6_ou3yg"]
 [ext_resource type="Texture2D" uid="uid://djcrodb8an6g5" path="res://Media/Enemys/BlobCube.png" id="7_1qse1"]
+[ext_resource type="Texture2D" uid="uid://ck62d4n6bbjkc" path="res://Media/Cards/EndTurn.png" id="7_hdr5s"]
 [ext_resource type="Script" path="res://Sceens/Combat/Enemy.gd" id="9_66w4a"]
 [ext_resource type="Texture2D" uid="uid://ciycr031ethmp" path="res://Media/Heart_Background.png" id="10_qwfnh"]
 [ext_resource type="Texture2D" uid="uid://coekpet0npm4c" path="res://Media/Heart_Filled_Placeholder.png" id="11_02y54"]
@@ -27,6 +28,9 @@ size = Vector2(17.7168, 18.8508)
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_04xbk"]
 size = Vector2(34.8516, 43.0423)
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_6rrsm"]
+size = Vector2(22.853, 60.4622)
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_4vuvx"]
 size = Vector2(323.577, 396.951)
@@ -100,6 +104,19 @@ texture = ExtResource("5_o0biq")
 position = Vector2(14.0918, -26.3164)
 scale = Vector2(52.7007, 71.4228)
 shape = SubResource("RectangleShape2D_04xbk")
+
+[node name="Deck" type="Sprite2D" parent="Room/Hand"]
+position = Vector2(1613.73, 937.768)
+scale = Vector2(0.35, 0.35)
+texture = ExtResource("7_hdr5s")
+
+[node name="DeckArea2D" type="Area2D" parent="Room/Hand/Deck"]
+
+[node name="DeckCollisionShape2D" type="CollisionShape2D" parent="Room/Hand/Deck/DeckArea2D"]
+position = Vector2(21.459, -9.19531)
+rotation = 0.551395
+scale = Vector2(35.3349, 15.7149)
+shape = SubResource("RectangleShape2D_6rrsm")
 
 [node name="Enemy" type="Sprite2D" parent="Room"]
 position = Vector2(-85.8369, 354.077)
@@ -258,6 +275,9 @@ shape = SubResource("RectangleShape2D_mlcm0")
 [connection signal="input_event" from="Room/Hand/CardThree/CardThreeCollission" to="Room/Hand" method="_on_card_three_collission_input_event"]
 [connection signal="mouse_entered" from="Room/Hand/CardThree/CardThreeCollission" to="Room/Hand" method="_on_card_three_collission_mouse_entered"]
 [connection signal="mouse_exited" from="Room/Hand/CardThree/CardThreeCollission" to="Room/Hand" method="_on_card_three_collission_mouse_exited"]
+[connection signal="input_event" from="Room/Hand/Deck/DeckArea2D" to="Room/Hand" method="_on_deck_area_2d_input_event"]
+[connection signal="mouse_entered" from="Room/Hand/Deck/DeckArea2D" to="Room/Hand" method="_on_deck_area_2d_mouse_entered"]
+[connection signal="mouse_exited" from="Room/Hand/Deck/DeckArea2D" to="Room/Hand" method="_on_deck_area_2d_mouse_exited"]
 [connection signal="input_event" from="HandOld/CardOne/CardOneTopCollission" to="HandOld" method="_on_card_one_top_collission_input_event"]
 [connection signal="mouse_entered" from="HandOld/CardOne/CardOneBottomCollission" to="HandOld" method="_on_card_one_bottom_collission_mouse_entered"]
 [connection signal="mouse_exited" from="HandOld/CardOne/CardOneBottomCollission" to="HandOld" method="_on_card_one_bottom_collission_mouse_exited"]
