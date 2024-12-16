@@ -1,0 +1,11 @@
+[gd_scene load_steps=3 format=3 uid="uid://e8luld4ber1i"]
+
+[ext_resource type="Script" path="res://Sceens/Cards/light_one.gd" id="1_1o7et"]
+[ext_resource type="Texture2D" uid="uid://3ntmjrfokyel" path="res://Media/Cards/magic/Untitled_Artwork-7.png" id="1_xjuk2"]
+
+[node name="LightOne" type="Node2D"]
+scale = Vector2(0.125, 0.125)
+script = ExtResource("1_1o7et")
+
+[node name="Sprite2D" type="Sprite2D" parent="."]
+texture = ExtResource("1_xjuk2")

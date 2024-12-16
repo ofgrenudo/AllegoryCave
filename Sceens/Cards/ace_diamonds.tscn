@@ -1,0 +1,11 @@
+[gd_scene load_steps=3 format=3 uid="uid://dhib1o1ojsrhh"]
+
+[ext_resource type="Script" path="res://Sceens/Cards/ace_diamonds.gd" id="1_4k6me"]
+[ext_resource type="Texture2D" uid="uid://ve0vyshs8pii" path="res://Media/Cards/normal/Untitled_Artwork-6.png" id="1_pewxr"]
+
+[node name="AceDiamonds" type="Node2D"]
+script = ExtResource("1_4k6me")
+
+[node name="Sprite2D" type="Sprite2D" parent="."]
+scale = Vector2(0.125, 0.125)
+texture = ExtResource("1_pewxr")

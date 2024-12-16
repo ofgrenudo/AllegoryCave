@@ -1,0 +1,11 @@
+[gd_scene load_steps=3 format=3 uid="uid://b7g1678t1wx4d"]
+
+[ext_resource type="Texture2D" uid="uid://da2y2cmy8f3hb" path="res://Media/Cards/magic/Untitled_Artwork-3.png" id="1_fxt10"]
+[ext_resource type="Script" path="res://Sceens/Cards/fire_one.gd" id="1_txvof"]
+
+[node name="FireOne" type="Node2D"]
+scale = Vector2(0.125, 0.125)
+script = ExtResource("1_txvof")
+
+[node name="Sprite2D" type="Sprite2D" parent="."]
+texture = ExtResource("1_fxt10")
