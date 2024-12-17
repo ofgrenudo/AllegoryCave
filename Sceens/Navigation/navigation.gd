@@ -17,15 +17,32 @@ extends Node2D
 @onready var preloaded_combat_sceen = preload("res://Sceens/Combat/Combat.tscn")
 @onready var first_run = true
 
+var deck_manager_original_position: Vector2
+var deck_manager_position: Vector2
+var shake_duration = 0.5  # How long to shake in seconds
+var shake_strength = 10   # How strong the shake is
+var shaking = false       # Is the object shaking?
+
 var rng = RandomNumberGenerator.new()
 
 # Called when the node enters the scene tree for the first time.
 func _ready() -> void:
+	deck_manager_original_position = deck_manager.position
 	navigate_rooms()
 
 # Called every frame. 'delta' is the elapsed time since the previous frame.
 func _process(_delta: float) -> void:
-	pass
+	if shaking:
+		shake_duration -= _delta
+		if shake_duration > 0:
+			print("Shaking!")
+			deck_manager.position = deck_manager_position + Vector2(
+				randf_range(-shake_strength, shake_strength),
+				randf_range(-shake_strength, shake_strength)
+			)
+		else:
+			shaking = false
+			deck_manager.position = deck_manager_original_position
 
 func navigate_rooms():
 	## Make all Sceens Not Visible. This needs to run in the beginning of the
@@ -98,9 +115,18 @@ func _on_left_or_right_area_two_input_event(_viewport: Node, event: InputEvent, 
 
 
 func _on_deck_area_2d_input_event(_viewport: Node, event: InputEvent, _shape_idx: int) -> void:
+	var cards_in_play = 0
+	for card in Global.card_states:
+		if Global.card_states[card] == true:
+			cards_in_play += 1
+	
 	if (deck_manager.visible):
-		if event.is_action_pressed("select"): # set this up in project settings
-			deck_manager.visible = false
+		if event.is_action_pressed("select") and Global.card_states: # set this up in project settings
+			if cards_in_play >= 6:
+				deck_manager.visible = false
+			else:
+				start_shake_deck_manager()
+			
 	else:
 		if event.is_action_pressed("select"): # set this up in project settings
 			deck_manager.visible = true
@@ -111,3 +137,9 @@ func _on_deck_area_2d_mouse_entered() -> void:
 
 func _on_deck_area_2d_mouse_exited() -> void:
 	card_deck.scale = Vector2(0.15, 0.15)
+
+func start_shake_deck_manager(duration: float = 0.5, strength: float = 10) -> void:
+	shake_duration = duration
+	shake_strength = strength
+	shaking = true
+	deck_manager_position = deck_manager.position

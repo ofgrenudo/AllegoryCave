@@ -18,6 +18,7 @@ extends Control
 
 # Selected Cards Counter
 var selected_cards_count = 0
+const MIN_SELECTION = 3
 const MAX_SELECTION = 6
 
 # Shader Material
