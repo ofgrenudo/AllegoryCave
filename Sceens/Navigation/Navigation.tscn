@@ -20,6 +20,7 @@ size = Vector2(990.929, 1719.1)
 script = ExtResource("1_v5el4")
 
 [node name="left" type="Sprite2D" parent="."]
+visible = false
 position = Vector2(960, 515)
 scale = Vector2(0.445, 0.445)
 texture = ExtResource("2_flv57")

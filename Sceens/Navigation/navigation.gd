@@ -47,7 +47,7 @@ func _process(_delta: float) -> void:
 func navigate_rooms():
 	## Make all Sceens Not Visible. This needs to run in the beginning of the
 	## function because at times it doesnt complete before you display the room you selected.
-	for index in navigation_array_size:
+	for index in navigation_options.size():
 			navigation_options[index].visible = false
 
 
