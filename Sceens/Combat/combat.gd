@@ -76,7 +76,7 @@ func check_win() -> void:
 
 	if player.get_health() <= 0:
 		# TODO: Create a death scene
-		get_tree().change_scene_to_packed(preload_main_menu_sceene)
+		get_tree().change_scene_to_file("res://Sceens/Main Menu.tscn")
 		return
 
 	# If no one has won, return to the player's turn
