@@ -22,7 +22,6 @@ func _ready() -> void:
 	current_state = State.PlayerTurn
 
 func _process(_delta: float) -> void:
-
 	match current_state:
 		State.PlayerTurn:
 			player_turn()
@@ -86,6 +85,7 @@ func check_win() -> void:
 
 # Get the card information from the hand
 func get_card_played() -> void:
+	#print(hand.get_card_selected())
 	if hand.get_card_selected():
 		if hand.get_card_one_selected():
 			player_card_type = hand.get_card_one_type()
@@ -103,7 +103,8 @@ func get_card_played() -> void:
 			player_card_type = "Deck"
 			player_card_damage = 0
 		
-		print("Card Selected: ", player_card_type, "Card Damage: ", player_card_damage)
+		if !(player_card_type == "None"):
+			print("Card Selected: ", player_card_type, " Card Damage: ", player_card_damage, "\n\n")
 
 	else:
 		player_card_type = "None"

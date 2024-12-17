@@ -2,12 +2,22 @@ extends Node2D
 
 @export var card_type = "Lightning"
 @export var card_damage = 30
+@export var selected = false
 
-# Called when the node enters the scene tree for the first time.
 func _ready() -> void:
-	pass # Replace with function body.
-
-
+	pass
+	
 # Called every frame. 'delta' is the elapsed time since the previous frame.
 func _process(delta: float) -> void:
 	pass
+
+# Signal Handlers
+func _on_area_2d_mouse_entered() -> void:
+	scale += Vector2(0.05, 0.05)
+
+func _on_area_2d_mouse_exited() -> void:
+	scale -= Vector2(0.05, 0.05)
+
+func _on_area_2d_input_event(_viewport: Node, event: InputEvent, _shape_idx: int) -> void:
+	if event.is_action_pressed("select"):
+		selected = true

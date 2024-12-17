@@ -1,4 +1,4 @@
-[gd_scene load_steps=12 format=3 uid="uid://c0j2xan2twr21"]
+[gd_scene load_steps=13 format=3 uid="uid://c0j2xan2twr21"]
 
 [ext_resource type="Script" path="res://Sceens/Navigation/navigation.gd" id="1_v5el4"]
 [ext_resource type="Texture2D" uid="uid://nbbyc27nxg2v" path="res://Media/Rooms/forward_left.PNG" id="2_flv57"]
@@ -9,6 +9,7 @@
 [ext_resource type="Texture2D" uid="uid://bhc5eq4vp6q8j" path="res://Media/Rooms/left_or_right_one.PNG" id="6_itwuq"]
 [ext_resource type="Texture2D" uid="uid://m85xnm5wbpfl" path="res://Media/Rooms/left_or_right_two.PNG" id="7_jnhkk"]
 [ext_resource type="Texture2D" uid="uid://bbkoyab2n6sh0" path="res://Media/Cards/Deck.png" id="9_uqxmp"]
+[ext_resource type="PackedScene" uid="uid://hb07017mapfi" path="res://Sceens/Deck Manager/deck_manager.tscn" id="10_tetnt"]
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_s7ar7"]
 size = Vector2(990.929, 1719.1)
@@ -129,6 +130,14 @@ scale = Vector2(37.1646, 52.619)
 
 [node name="DeckCollisionShape2D" type="CollisionShape2D" parent="Deck/DeckArea2D"]
 shape = SubResource("RectangleShape2D_q2gd1")
+
+[node name="DeckManager" parent="." instance=ExtResource("10_tetnt")]
+visible = false
+offset_left = 178.0
+offset_top = 34.0
+offset_right = 178.0
+offset_bottom = 34.0
+scale = Vector2(0.8, 0.8)
 
 [connection signal="input_event" from="left/left_area" to="." method="_on_left_area_input_event"]
 [connection signal="input_event" from="right/right_area" to="." method="_on_right_area_input_event"]
