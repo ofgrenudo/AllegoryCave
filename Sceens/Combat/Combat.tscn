@@ -31,8 +31,8 @@ size = Vector2(34.8516, 43.0423)
 script = ExtResource("1_wien3")
 
 [node name="Room" type="Sprite2D" parent="."]
-position = Vector2(960, 515)
-scale = Vector2(0.466, 0.466)
+position = Vector2(960, 543)
+scale = Vector2(0.444, 0.411)
 texture = ExtResource("2_u60ik")
 
 [node name="Hand" type="Sprite2D" parent="Room"]
