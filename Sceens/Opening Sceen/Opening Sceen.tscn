@@ -21,17 +21,17 @@ scale = Vector2(0.46, 0.46)
 texture = ExtResource("2_nw054")
 
 [node name="Note" type="Sprite2D" parent="Room"]
-position = Vector2(23.9131, -104.348)
-scale = Vector2(0.535145, 0.458131)
+position = Vector2(139.13, -100)
+scale = Vector2(0.811051, 0.458131)
 texture = ExtResource("4_or7a2")
 
 [node name="Label" type="Label" parent="Room/Note"]
-offset_left = -869.33
-offset_top = -1433.04
-offset_right = 992.672
-offset_bottom = -932.044
+offset_left = -868.439
+offset_top = -1380.85
+offset_right = 993.563
+offset_bottom = -879.851
 rotation = -0.00537792
-scale = Vector2(1.10832, 5.05751)
+scale = Vector2(0.977222, 3.81464)
 text = "You wake up in a dark and cold stone room, Theres nothing
 around you. You check you pockets and discover a deck of cards.
 
@@ -42,7 +42,7 @@ them wisely.
 label_settings = SubResource("LabelSettings_a8e37")
 
 [node name="Cards" type="Sprite2D" parent="Room"]
-position = Vector2(226.087, 221.739)
+position = Vector2(473.913, 267.391)
 scale = Vector2(0.5, 0.5)
 texture = ExtResource("3_knodb")
 
