@@ -46,6 +46,7 @@ enum CardArt {
 
 var loaded_art
 
+## These are the variables that will go into the Inspector
 @export var selected_art: CardArt = CardArt.BLANK_CARD
 @export var type: CardType = CardType.NORMAL
 @export var damage: int = 15
@@ -76,7 +77,8 @@ func get_selected():
 
 func set_selected(on_or_off: bool):
 	selected = on_or_off
-	
+
+## Apply our loaded texture to the TextureRect.texture value
 func load_selected_texture():
 	print("CARD > Loading Card Texture ", selected_art)
 	match selected_art:
