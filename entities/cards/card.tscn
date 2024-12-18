@@ -1,0 +1,20 @@
+[gd_scene load_steps=3 format=3 uid="uid://bjvuasvioeawv"]
+
+[ext_resource type="Script" path="res://entities/cards/card.gd" id="1_l66n7"]
+[ext_resource type="Texture2D" uid="uid://d115ril5gxwf2" path="res://entities/cards/blank_card.png" id="2_wllmu"]
+
+[node name="Card" type="Control"]
+layout_mode = 3
+anchors_preset = 0
+script = ExtResource("1_l66n7")
+selected_art = 14
+
+[node name="Image" type="TextureRect" parent="."]
+layout_mode = 0
+offset_right = 40.0
+offset_bottom = 40.0
+scale = Vector2(0.08, 0.08)
+texture = ExtResource("2_wllmu")
+
+[connection signal="mouse_entered" from="." to="." method="_on_mouse_entered"]
+[connection signal="mouse_exited" from="." to="." method="_on_mouse_exited"]
