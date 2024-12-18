@@ -1,0 +1,29 @@
+[gd_scene load_steps=3 format=3 uid="uid://b35bwc551irmt"]
+
+[ext_resource type="Script" path="res://entities/cards/deck.gd" id="1_cjhi5"]
+[ext_resource type="Texture2D" uid="uid://bw1p8wiysyli8" path="res://entities/cards/deck_of_cards.png" id="2_gilo5"]
+
+[node name="Deck" type="Control"]
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_left = -4.0
+offset_top = 8.0
+offset_right = -4.0
+offset_bottom = 8.0
+grow_horizontal = 2
+grow_vertical = 2
+script = ExtResource("1_cjhi5")
+
+[node name="Image" type="TextureRect" parent="."]
+layout_mode = 0
+offset_left = -94.0
+offset_top = -53.0
+offset_right = 2375.0
+offset_bottom = 1336.0
+scale = Vector2(0.08, 0.08)
+texture = ExtResource("2_gilo5")
+
+[connection signal="mouse_entered" from="Image" to="." method="_on_image_mouse_entered"]
+[connection signal="mouse_exited" from="Image" to="." method="_on_image_mouse_exited"]
