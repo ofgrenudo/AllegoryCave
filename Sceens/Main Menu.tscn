@@ -14,8 +14,8 @@ grow_vertical = 2
 script = ExtResource("1_37vaq")
 
 [node name="Background" type="Sprite2D" parent="."]
-position = Vector2(962, 540)
-scale = Vector2(0.466, 0.466)
+position = Vector2(965.62, 539.76)
+scale = Vector2(0.444, 0.414)
 texture = ExtResource("2_1n5ev")
 
 [node name="AudioStreamPlayer2D" type="AudioStreamPlayer2D" parent="Background"]
