@@ -1,0 +1,13 @@
+[gd_scene load_steps=2 format=3 uid="uid://bfcm0p3oob8ye"]
+
+[ext_resource type="Script" path="res://entities/rooms/room.gd" id="1_671xj"]
+
+[node name="Room" type="Control"]
+layout_mode = 3
+anchors_preset = 0
+script = ExtResource("1_671xj")
+
+[node name="TextureRect" type="TextureRect" parent="."]
+layout_mode = 0
+offset_right = 40.0
+offset_bottom = 40.0
