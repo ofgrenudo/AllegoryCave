@@ -78,6 +78,9 @@ func get_selected():
 func set_selected(on_or_off: bool):
 	selected = on_or_off
 
+func set_custom_position(x_and_y) -> void:
+	position = x_and_y
+
 ## Apply our loaded texture to the TextureRect.texture value
 func load_selected_texture():
 	print("CARD > Loading Card Texture ", selected_art)
@@ -136,7 +139,9 @@ func load_selected_texture():
 ## Signals
 func _on_mouse_entered() -> void:
 	image.scale += Vector2(hover_scale_factor, hover_scale_factor)
+	image.z_index += 1
 
 func _on_mouse_exited() -> void:
 	image.scale -= Vector2(hover_scale_factor, hover_scale_factor)
+	image.z_index -= 1
 	

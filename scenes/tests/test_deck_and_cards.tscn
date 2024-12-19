@@ -1,49 +1,7 @@
-[gd_scene load_steps=5 format=3 uid="uid://bumtkjmk45roi"]
+[gd_scene load_steps=2 format=3 uid="uid://bumtkjmk45roi"]
 
-[ext_resource type="PackedScene" uid="uid://bjvuasvioeawv" path="res://entities/cards/card.tscn" id="1_40rfv"]
-[ext_resource type="Script" path="res://scenes/tests/test_deck_and_cards.gd" id="2_el7we"]
-[ext_resource type="PackedScene" uid="uid://b35bwc551irmt" path="res://entities/cards/deck.tscn" id="2_wgv0q"]
-
-[sub_resource type="CircleShape2D" id="CircleShape2D_f727v"]
-radius = 300.0
+[ext_resource type="PackedScene" uid="uid://wbiuusdnwws2" path="res://scenes/playing_hand.tscn" id="1_iss27"]
 
 [node name="TestDeckAndCards" type="Node2D"]
 
-[node name="Deck" parent="." instance=ExtResource("2_wgv0q")]
-offset_left = 601.0
-offset_top = 405.0
-offset_right = 601.0
-offset_bottom = 405.0
-scale_factor = 0.1
-
-[node name="HandArea2D" type="Area2D" parent="."]
-script = ExtResource("2_el7we")
-
-[node name="HandCollisionShape2D" type="CollisionShape2D" parent="HandArea2D"]
-position = Vector2(985, 1083)
-scale = Vector2(1.138, 1)
-shape = SubResource("CircleShape2D_f727v")
-
-[node name="CardOne" parent="HandArea2D/HandCollisionShape2D" instance=ExtResource("1_40rfv")]
-offset_left = -396.309
-offset_top = -327.0
-offset_right = -396.309
-offset_bottom = -327.0
-rotation = -0.459697
-selected_art = 19
-
-[node name="CardTwo" parent="HandArea2D/HandCollisionShape2D" instance=ExtResource("1_40rfv")]
-offset_left = -396.309
-offset_top = -327.0
-offset_right = -396.309
-offset_bottom = -327.0
-rotation = -0.459697
-selected_art = 19
-
-[node name="CardThree" parent="HandArea2D/HandCollisionShape2D" instance=ExtResource("1_40rfv")]
-offset_left = -396.309
-offset_top = -327.0
-offset_right = -396.309
-offset_bottom = -327.0
-rotation = -0.459697
-selected_art = 19
+[node name="HandArea2D" parent="." instance=ExtResource("1_iss27")]

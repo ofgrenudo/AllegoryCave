@@ -1,0 +1,48 @@
+[gd_scene load_steps=5 format=3 uid="uid://wbiuusdnwws2"]
+
+[ext_resource type="Script" path="res://scenes/playing_hand.gd" id="1_qawph"]
+[ext_resource type="PackedScene" uid="uid://b35bwc551irmt" path="res://entities/cards/deck.tscn" id="2_l6pow"]
+[ext_resource type="PackedScene" uid="uid://bjvuasvioeawv" path="res://entities/cards/card.tscn" id="3_pgh7s"]
+
+[sub_resource type="CircleShape2D" id="CircleShape2D_f727v"]
+radius = 100.0
+
+[node name="HandArea2D" type="Area2D"]
+position = Vector2(0, -155)
+script = ExtResource("1_qawph")
+
+[node name="Deck" parent="." instance=ExtResource("2_l6pow")]
+offset_left = 1763.0
+offset_top = 915.0
+offset_right = 1763.0
+offset_bottom = 915.0
+scale_factor = 0.1
+
+[node name="HandCollisionShape2D" type="CollisionShape2D" parent="."]
+position = Vector2(884, 873)
+shape = SubResource("CircleShape2D_f727v")
+metadata/_edit_group_ = true
+
+[node name="CardOne" parent="HandCollisionShape2D" instance=ExtResource("3_pgh7s")]
+offset_left = -75.0
+offset_top = -144.0
+offset_right = -75.0
+offset_bottom = -144.0
+pivot_offset = Vector2(147, 120)
+metadata/_edit_use_anchors_ = true
+
+[node name="CardTwo" parent="HandCollisionShape2D" instance=ExtResource("3_pgh7s")]
+offset_left = -75.0
+offset_top = -144.0
+offset_right = -75.0
+offset_bottom = -144.0
+pivot_offset = Vector2(81, 233)
+metadata/_edit_use_anchors_ = true
+
+[node name="CardThree" parent="HandCollisionShape2D" instance=ExtResource("3_pgh7s")]
+offset_left = -75.0
+offset_top = -144.0
+offset_right = -75.0
+offset_bottom = -144.0
+pivot_offset = Vector2(79, 233)
+metadata/_edit_use_anchors_ = true

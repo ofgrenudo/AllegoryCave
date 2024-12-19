@@ -6,17 +6,17 @@
 [node name="Card" type="Control"]
 layout_mode = 3
 anchors_preset = 0
+pivot_offset = Vector2(74, 125)
 script = ExtResource("1_l66n7")
 selected_art = 14
 
 [node name="Image" type="TextureRect" parent="."]
 layout_mode = 0
-offset_left = -73.0
-offset_top = -108.0
-offset_right = 1863.0
-offset_bottom = 2996.0
+offset_right = 1936.0
+offset_bottom = 3104.0
 scale = Vector2(0.08, 0.08)
 texture = ExtResource("2_wllmu")
+stretch_mode = 5
 
 [connection signal="mouse_entered" from="." to="." method="_on_mouse_entered"]
 [connection signal="mouse_exited" from="." to="." method="_on_mouse_exited"]
