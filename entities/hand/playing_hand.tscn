@@ -1,6 +1,6 @@
 [gd_scene load_steps=5 format=3 uid="uid://wbiuusdnwws2"]
 
-[ext_resource type="Script" path="res://scenes/playing_hand.gd" id="1_qawph"]
+[ext_resource type="Script" path="res://entities/hand/playing_hand.gd" id="1_qawph"]
 [ext_resource type="PackedScene" uid="uid://b35bwc551irmt" path="res://entities/cards/deck.tscn" id="2_l6pow"]
 [ext_resource type="PackedScene" uid="uid://bjvuasvioeawv" path="res://entities/cards/card.tscn" id="3_pgh7s"]
 

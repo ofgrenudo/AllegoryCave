@@ -1,0 +1,13 @@
+[gd_scene load_steps=2 format=3 uid="uid://nrg3oi8wixvm"]
+
+[ext_resource type="Script" path="res://entities/rooms/room.gd" id="1_464i4"]
+
+[node name="MainMenu" type="Control"]
+layout_mode = 3
+anchors_preset = 0
+
+[node name="Room" type="Control" parent="."]
+anchors_preset = 0
+offset_right = 40.0
+offset_bottom = 40.0
+script = ExtResource("1_464i4")

@@ -1,6 +1,6 @@
 [gd_scene load_steps=2 format=3 uid="uid://bumtkjmk45roi"]
 
-[ext_resource type="PackedScene" uid="uid://wbiuusdnwws2" path="res://scenes/playing_hand.tscn" id="1_iss27"]
+[ext_resource type="PackedScene" uid="uid://wbiuusdnwws2" path="res://entities/hand/playing_hand.tscn" id="1_iss27"]
 
 [node name="TestDeckAndCards" type="Node2D"]
 
