@@ -1,7 +1,8 @@
-[gd_scene load_steps=3 format=3 uid="uid://bfcm0p3oob8ye"]
+[gd_scene load_steps=4 format=3 uid="uid://bfcm0p3oob8ye"]
 
 [ext_resource type="Script" path="res://entities/rooms/room.gd" id="1_671xj"]
 [ext_resource type="Texture2D" uid="uid://cbo6uvxyrswhq" path="res://entities/rooms/intro_wake_up.png" id="2_gsrif"]
+[ext_resource type="Texture2D" uid="uid://d115ril5gxwf2" path="res://entities/cards/blank_card.png" id="3_iosju"]
 
 [node name="Room" type="Control"]
 layout_mode = 3
@@ -13,9 +14,9 @@ grow_vertical = 2
 size_flags_horizontal = 3
 size_flags_vertical = 3
 script = ExtResource("1_671xj")
-selected_room = 6
+selected_room = 7
 
-[node name="Image" type="TextureRect" parent="."]
+[node name="Background" type="TextureRect" parent="."]
 layout_mode = 1
 anchors_preset = 15
 anchor_right = 1.0
@@ -25,3 +26,21 @@ grow_vertical = 2
 texture = ExtResource("2_gsrif")
 expand_mode = 5
 stretch_mode = 4
+
+[node name="Background2" type="TextureRect" parent="."]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+texture = ExtResource("2_gsrif")
+expand_mode = 5
+stretch_mode = 4
+
+[node name="Image" type="TextureRect" parent="."]
+offset_right = 1936.0
+offset_bottom = 3104.0
+scale = Vector2(0.08, 0.08)
+texture = ExtResource("3_iosju")
+stretch_mode = 5
