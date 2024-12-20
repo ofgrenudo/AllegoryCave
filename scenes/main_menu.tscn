@@ -1,13 +1,50 @@
 [gd_scene load_steps=2 format=3 uid="uid://nrg3oi8wixvm"]
 
-[ext_resource type="Script" path="res://entities/rooms/room.gd" id="1_464i4"]
+[ext_resource type="PackedScene" uid="uid://bfcm0p3oob8ye" path="res://entities/rooms/room.tscn" id="2_yd4aj"]
 
 [node name="MainMenu" type="Control"]
 layout_mode = 3
 anchors_preset = 0
 
-[node name="Room" type="Control" parent="."]
-anchors_preset = 0
-offset_right = 40.0
-offset_bottom = 40.0
-script = ExtResource("1_464i4")
+[node name="Room" parent="." instance=ExtResource("2_yd4aj")]
+layout_mode = 1
+offset_left = 960.0
+offset_top = 540.0
+offset_right = 960.0
+offset_bottom = 540.0
+selected_room = 8
+
+[node name="VBoxContainer" type="VBoxContainer" parent="."]
+layout_mode = 0
+offset_left = 195.0
+offset_top = 735.0
+offset_right = 265.0
+offset_bottom = 906.0
+scale = Vector2(1.22222, 1.22222)
+
+[node name="Start" type="Button" parent="VBoxContainer"]
+layout_mode = 2
+text = "Start"
+alignment = 0
+
+[node name="Load" type="Button" parent="VBoxContainer"]
+visible = false
+layout_mode = 2
+text = "Load"
+alignment = 0
+
+[node name="Settings" type="Button" parent="VBoxContainer"]
+layout_mode = 2
+text = "Settings"
+alignment = 0
+
+[node name="Credits" type="Button" parent="VBoxContainer"]
+layout_mode = 2
+text = "Credits"
+alignment = 0
+
+[node name="Quit" type="Button" parent="VBoxContainer"]
+layout_mode = 2
+text = "Quit
+"
+alignment = 0
