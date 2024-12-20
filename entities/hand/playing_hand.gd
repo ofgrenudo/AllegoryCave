@@ -5,6 +5,10 @@ extends Area2D
 @onready var card_two = get_node("HandCollisionShape2D/CardTwo")
 @onready var card_three = get_node("HandCollisionShape2D/CardThree")
 @onready var hand_collission_shape = get_node("HandCollisionShape2D")
+var card_positions
+var card_one_position
+var card_two_position
+var card_three_position
 
 ## A little math for documentation.
 ## you have a semi circle. I have three cards. Take 180 / 3
@@ -31,7 +35,7 @@ func order_in_semi_circle(number_of_items: int, radius: float, center=Vector2.ZE
 	
 	return output
 
-
+## NOTE Unused...
 func order_in_circle(number_of_items: int, radius: float, center=Vector2.ZERO, start_offset=0.0) -> Array:
 	var output = []
 	var offset = 2.0 * PI / abs(number_of_items) # Confirms N is non zero
@@ -45,17 +49,32 @@ func order_in_circle(number_of_items: int, radius: float, center=Vector2.ZERO, s
 
 # Called when the node enters the scene tree for the first time.
 func _ready() -> void:
-	var card_positions = order_in_semi_circle(3, hand_collission_shape.shape.radius, Vector2.ZERO)
-	
-	card_one.position = Vector2(card_positions[0][0], card_positions[0][1])
+	card_positions = order_in_semi_circle(3, hand_collission_shape.shape.radius, Vector2.ZERO)
+	card_one_position = Vector2(card_positions[0][0], card_positions[0][1])
+	card_two_position = Vector2(card_positions[1][0], card_positions[1][1])
+	card_three_position = Vector2(card_positions[2][0], card_positions[2][1])
+
+	#print(card_positions)
+	card_one.position = card_one_position
 	card_one.rotation = deg_to_rad(card_positions[0][2])
 	
-	card_two.position = Vector2(card_positions[1][0], card_positions[1][1])
+	card_two.position = card_two_position
 	card_two.rotation = deg_to_rad(card_positions[1][2])
 	
-	card_three.position = Vector2(card_positions[2][0], card_positions[2][1])
+	card_three.position = card_three_position
 	card_three.rotation = deg_to_rad(card_positions[2][2])
 
 # Called every frame. 'delta' is the elapsed time since the previous frame.
 func _process(delta: float) -> void:
-	pass
+	if card_one.is_dragging == false and card_one.position != card_one_position:
+		# TODO Check if Card is Colliding with Object
+		print(card_one.position)
+		card_one.position = card_one_position
+	if card_two.is_dragging == false and card_two.position != card_two_position:
+		# TODO Check if Card is Colliding with Object
+		print(card_two.position)
+		card_two.position = card_two_position
+	if card_three.is_dragging == false and card_three.position != card_three_position:	
+		# TODO Check if Card is Colliding with Object
+		print(card_three.position)
+		card_three.position = card_three_position

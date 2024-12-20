@@ -56,6 +56,11 @@ var loaded_art
 
 @onready var image = get_node("Image")
 
+var is_dragging = false
+var offset = Vector2()
+var card_position = Vector2()
+
+
 # Called when the node enters the scene tree for the first time.
 func _ready() -> void:
 	load_selected_texture()
@@ -63,8 +68,8 @@ func _ready() -> void:
 
 # Called every frame. 'delta' is the elapsed time since the previous frame.
 func _process(_delta: float) -> void:
-	pass
-
+	if is_dragging:
+		position = get_global_mouse_position() + offset
 ## Helper Functions
 func get_type():
 	return type
@@ -145,3 +150,12 @@ func _on_mouse_exited() -> void:
 	image.scale -= Vector2(hover_scale_factor, hover_scale_factor)
 	image.z_index -= 1
 	
+func _on_gui_input(event: InputEvent) -> void:
+	if event is InputEventMouseButton:
+		if event.button_index == MOUSE_BUTTON_LEFT and event.pressed:
+			is_dragging = true
+			offset = position - get_global_mouse_position()
+			card_position = position
+		elif event.button_index == MOUSE_BUTTON_LEFT and not event.pressed:
+			is_dragging = false
+			pass
