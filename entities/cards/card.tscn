@@ -8,7 +8,7 @@ layout_mode = 3
 anchors_preset = 0
 pivot_offset = Vector2(74, 125)
 script = ExtResource("1_l66n7")
-selected_art = 14
+selected_art = 3
 
 [node name="Image" type="TextureRect" parent="."]
 layout_mode = 0
