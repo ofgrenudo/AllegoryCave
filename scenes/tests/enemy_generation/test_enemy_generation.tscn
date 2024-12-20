@@ -1,0 +1,20 @@
+[gd_scene load_steps=3 format=3 uid="uid://bxvs5aog5dbtq"]
+
+[ext_resource type="PackedScene" uid="uid://bghgivpi1f8so" path="res://entities/enemies/enemy.tscn" id="1_5tsvk"]
+[ext_resource type="Script" path="res://scenes/tests/enemy_generation/test_enemy_generation.gd" id="1_ne685"]
+
+[node name="TestEnemyGeneration" type="Node2D"]
+script = ExtResource("1_ne685")
+
+[node name="Enemy" parent="." instance=ExtResource("1_5tsvk")]
+position = Vector2(890, 284)
+
+[node name="Button" type="Button" parent="."]
+offset_left = 1409.0
+offset_top = 343.0
+offset_right = 1489.0
+offset_bottom = 374.0
+text = "Generate
+"
+
+[connection signal="pressed" from="Button" to="." method="_on_button_pressed"]
