@@ -1,3 +1,19 @@
-[gd_scene format=3 uid="uid://biqxyhdlua46q"]
+[gd_scene load_steps=4 format=3 uid="uid://biqxyhdlua46q"]
+
+[ext_resource type="PackedScene" uid="uid://bfcm0p3oob8ye" path="res://entities/rooms/room.tscn" id="1_kqywu"]
+[ext_resource type="PackedScene" uid="uid://bghgivpi1f8so" path="res://entities/enemies/enemy.tscn" id="2_3hrus"]
+[ext_resource type="PackedScene" uid="uid://wbiuusdnwws2" path="res://entities/hand/playing_hand.tscn" id="3_eqjjs"]
 
 [node name="TestCombat" type="Node2D"]
+
+[node name="Room" parent="." instance=ExtResource("1_kqywu")]
+offset_left = 959.0
+offset_top = 539.0
+offset_right = 959.0
+offset_bottom = 539.0
+
+[node name="Enemy" parent="." instance=ExtResource("2_3hrus")]
+position = Vector2(932, 490)
+
+[node name="HandArea2D" parent="." instance=ExtResource("3_eqjjs")]
+position = Vector2(0, -89)
