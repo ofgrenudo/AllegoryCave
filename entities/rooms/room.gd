@@ -19,21 +19,20 @@ enum RoomType {
 ## Variables that will appear in the root nodes inspector
 @export var selected_room: RoomType = RoomType.INTRO_WAKE_UP
 
-@onready var image = get_node("Image")
+@onready var room_image = get_node("Background")
+@onready var loaded_room
 
 # Called when the node enters the scene tree for the first time.
 func _ready() -> void:
 	load_selected_room()
-	image = get_node("Image")
-
 
 # Called every frame. 'delta' is the elapsed time since the previous frame.
 func _process(_delta: float) -> void:
-	print(get_node("Image"))
-
+	pass
+	
 ## Load our selected room into the Images Texture Rect Texture
 func load_selected_room():
-	var loaded_room
+	print("ROOM > Selected Room is ", selected_room)
 	match selected_room:
 		RoomType.FORWARD_LEFT:
 			loaded_room = load("res://entities/rooms/forward_left.PNG")
@@ -42,6 +41,7 @@ func load_selected_room():
 		RoomType.INTRO_WAKE_UP:
 			loaded_room = load("res://entities/rooms/intro_wake_up.png")
 		RoomType.LEFT:
+			print("LEFT!!!!!")
 			loaded_room = load("res://entities/rooms/left.PNG")
 		RoomType.LEFT_OR_RIGHT_ONE:
 			loaded_room = load("res://entities/rooms/left_or_right_one.PNG")
@@ -55,3 +55,9 @@ func load_selected_room():
 			loaded_room = load("res://entities/rooms/title_card.png")
 		_:
 			loaded_room = load("res://entities/cards/blank_card.png")
+			
+	print("ROOM > Current Room ", room_image.texture)
+	print("ROOM > Selected Room ", loaded_room)
+	print("\nROOM > Loading room now...")
+	room_image.set_texture(loaded_room)
+	print("ROOM > Room Loaded now is ", room_image.texture)
