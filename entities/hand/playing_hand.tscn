@@ -8,7 +8,7 @@
 [sub_resource type="CircleShape2D" id="CircleShape2D_f727v"]
 radius = 125.0
 
-[node name="HandArea2D" type="Area2D"]
+[node name="PlayerHand" type="Area2D"]
 position = Vector2(0, -155)
 script = ExtResource("1_qawph")
 

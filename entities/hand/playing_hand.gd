@@ -1,16 +1,19 @@
 extends Area2D
 
-@onready var round_holding = get_node("HandCollisionShape2D")
 @onready var card_one = get_node("HandCollisionShape2D/CardOne")
 @onready var card_two = get_node("HandCollisionShape2D/CardTwo")
 @onready var card_three = get_node("HandCollisionShape2D/CardThree")
 @onready var hand_collission_shape = get_node("HandCollisionShape2D")
 @onready var drop_zone = get_node("DropZone")
+@onready var action_taken = false
 
 var card_positions
 var card_one_position
 var card_two_position
 var card_three_position
+
+var card_dropped = false
+var card_dropped_data = []
 
 ## A little math for documentation.
 ## you have a semi circle. I have three cards. Take 180 / 3
@@ -38,22 +41,28 @@ func order_in_semi_circle(number_of_items: int, radius: float, center=Vector2.ZE
 	return output
 
 ## NOTE Unused...
-func order_in_circle(number_of_items: int, radius: float, center=Vector2.ZERO, start_offset=0.0) -> Array:
-	var output = []
-	var offset = 2.0 * PI / abs(number_of_items) # Confirms N is non zero
-	
-	for item in number_of_items:
-		var new_position = radius * Vector2.from_angle(item * offset + start_offset)
-		output.push_front(new_position + center)
-	
-	return output
-		#polar2cartesian(radius, item * offset + start_offset)
+#func order_in_circle(number_of_items: int, radius: float, center=Vector2.ZERO, start_offset=0.0) -> Array:
+	#var output = []
+	#var offset = 2.0 * PI / abs(number_of_items) # Confirms N is non zero
+	#
+	#for item in number_of_items:
+		#var new_position = radius * Vector2.from_angle(item * offset + start_offset)
+		#output.push_front(new_position + center)
+	#
+	#return output
+		##polar2cartesian(radius, item * offset + start_offset)
+
+func get_card_selected():
+	if drop_zone.card_dropped == true:
+		print("PLAYER HAND > Card Dropped!")
+		card_dropped = drop_zone.card_dropped
+		card_dropped_data = drop_zone.get_card_dropped()
 
 # Called when the node enters the scene tree for the first time.
 func _ready() -> void:
 	card_positions = order_in_semi_circle(3, hand_collission_shape.shape.radius, Vector2.ZERO)
 	card_one_position = Vector2(card_positions[0][0], card_positions[0][1])
-	card_two_position = Vector2(card_positions[1][0], card_positions[1][1])
+	card_two_position = Vector2(card_positions[1][0], card_positions[1][1]+80)
 	card_three_position = Vector2(card_positions[2][0], card_positions[2][1])
 
 	#print(card_positions)
@@ -68,6 +77,10 @@ func _ready() -> void:
 
 # Called every frame. 'delta' is the elapsed time since the previous frame.
 func _process(delta: float) -> void:
+	
+	get_card_selected()
+	
+	## Reset Card Position
 	if card_one.is_dragging == false and card_one.position != card_one_position:
 		# TODO Check if Card is Colliding with Object
 		card_one.position = card_one_position
