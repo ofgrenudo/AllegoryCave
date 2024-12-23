@@ -46,6 +46,7 @@ offset_top = -972.0
 offset_right = -884.0
 offset_bottom = -972.0
 selected_art = 18
+type = 4
 
 [node name="DropZone" type="TextureRect" parent="."]
 offset_left = 751.0

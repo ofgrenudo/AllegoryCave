@@ -88,7 +88,7 @@ func set_custom_position(x_and_y) -> void:
 
 ## Apply our loaded texture to the TextureRect.texture value
 func load_selected_texture():
-	print("CARD > Loading Card Texture ", selected_art)
+	print("CARD > Loading Card Texture ", CardArt.keys()[selected_art])
 	match selected_art:
 		CardArt.BLANK_CARD:
 			loaded_art = preload("res://entities/cards/blank_card.png")
@@ -144,7 +144,8 @@ func load_selected_texture():
 func check_drop_zone():
 	var drop_zone = get_parent().get_parent().get_node("DropZone")
 	if drop_zone and global_position.distance_to(drop_zone.global_position) < drop_zone.get_rect().size.length() / 2:
-		drop_zone.handle_card_drop(self)
+		var meta_data = {"type": CardType.keys()[type], "damage": damage}
+		drop_zone.handle_card_drop(meta_data)
 
 ## Signals
 func _on_mouse_entered() -> void:
