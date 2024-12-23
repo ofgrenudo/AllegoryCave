@@ -14,6 +14,7 @@ offset_right = -4.0
 offset_bottom = 8.0
 grow_horizontal = 2
 grow_vertical = 2
+pivot_offset = Vector2(17, 45)
 script = ExtResource("1_cjhi5")
 
 [node name="Image" type="TextureRect" parent="."]

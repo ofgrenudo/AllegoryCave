@@ -1,8 +1,9 @@
-[gd_scene load_steps=5 format=3 uid="uid://wbiuusdnwws2"]
+[gd_scene load_steps=6 format=3 uid="uid://wbiuusdnwws2"]
 
 [ext_resource type="Script" path="res://entities/hand/playing_hand.gd" id="1_qawph"]
 [ext_resource type="PackedScene" uid="uid://b35bwc551irmt" path="res://entities/cards/deck.tscn" id="2_l6pow"]
 [ext_resource type="PackedScene" uid="uid://bjvuasvioeawv" path="res://entities/cards/card.tscn" id="3_pgh7s"]
+[ext_resource type="Script" path="res://entities/hand/drop_zone.gd" id="4_f44u0"]
 
 [sub_resource type="CircleShape2D" id="CircleShape2D_f727v"]
 radius = 125.0
@@ -12,32 +13,44 @@ position = Vector2(0, -155)
 script = ExtResource("1_qawph")
 
 [node name="Deck" parent="." instance=ExtResource("2_l6pow")]
-offset_left = 931.0
-offset_top = 1028.0
-offset_right = 931.0
-offset_bottom = 1028.0
+offset_left = 1212.0
+offset_top = 1052.0
+offset_right = 1212.0
+offset_bottom = 1052.0
+pivot_offset = Vector2(5, -7)
+art = 1
 scale_factor = 0.2
 hover_scale_factor = 0.01
 
 [node name="HandCollisionShape2D" type="CollisionShape2D" parent="."]
-position = Vector2(884, 873)
+position = Vector2(960, 974)
 shape = SubResource("CircleShape2D_f727v")
 metadata/_edit_group_ = true
 
 [node name="CardOne" parent="HandCollisionShape2D" instance=ExtResource("3_pgh7s")]
-offset_left = -884.0
-offset_top = -873.0
-offset_right = -884.0
-offset_bottom = -873.0
+offset_left = -879.0
+offset_top = -971.0
+offset_right = -879.0
+offset_bottom = -971.0
+selected_art = 8
 
 [node name="CardTwo" parent="HandCollisionShape2D" instance=ExtResource("3_pgh7s")]
 offset_left = -884.0
-offset_top = -873.0
+offset_top = -972.0
 offset_right = -884.0
-offset_bottom = -873.0
+offset_bottom = -972.0
 
 [node name="CardThree" parent="HandCollisionShape2D" instance=ExtResource("3_pgh7s")]
 offset_left = -884.0
-offset_top = -873.0
+offset_top = -972.0
 offset_right = -884.0
-offset_bottom = -873.0
+offset_bottom = -972.0
+selected_art = 18
+
+[node name="DropZone" type="TextureRect" parent="."]
+offset_left = 751.0
+offset_top = 226.0
+offset_right = 1151.0
+offset_bottom = 726.0
+expand_mode = 1
+script = ExtResource("4_f44u0")

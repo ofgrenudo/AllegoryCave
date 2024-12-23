@@ -60,7 +60,6 @@ var is_dragging = false
 var offset = Vector2()
 var card_position = Vector2()
 
-
 # Called when the node enters the scene tree for the first time.
 func _ready() -> void:
 	load_selected_texture()
@@ -70,6 +69,7 @@ func _ready() -> void:
 func _process(_delta: float) -> void:
 	if is_dragging:
 		position = get_global_mouse_position() + offset
+
 ## Helper Functions
 func get_type():
 	return type
@@ -141,6 +141,11 @@ func load_selected_texture():
 
 	image.texture = loaded_art
 
+func check_drop_zone():
+	var drop_zone = get_parent().get_parent().get_node("DropZone")
+	if drop_zone and global_position.distance_to(drop_zone.global_position) < drop_zone.get_rect().size.length() / 2:
+		drop_zone.handle_card_drop(self)
+
 ## Signals
 func _on_mouse_entered() -> void:
 	image.scale += Vector2(hover_scale_factor, hover_scale_factor)
@@ -158,4 +163,5 @@ func _on_gui_input(event: InputEvent) -> void:
 			card_position = position
 		elif event.button_index == MOUSE_BUTTON_LEFT and not event.pressed:
 			is_dragging = false
+			check_drop_zone()
 			pass

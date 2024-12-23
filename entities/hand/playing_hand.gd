@@ -5,6 +5,8 @@ extends Area2D
 @onready var card_two = get_node("HandCollisionShape2D/CardTwo")
 @onready var card_three = get_node("HandCollisionShape2D/CardThree")
 @onready var hand_collission_shape = get_node("HandCollisionShape2D")
+@onready var drop_zone = get_node("DropZone")
+
 var card_positions
 var card_one_position
 var card_two_position
@@ -68,13 +70,10 @@ func _ready() -> void:
 func _process(delta: float) -> void:
 	if card_one.is_dragging == false and card_one.position != card_one_position:
 		# TODO Check if Card is Colliding with Object
-		print(card_one.position)
 		card_one.position = card_one_position
 	if card_two.is_dragging == false and card_two.position != card_two_position:
 		# TODO Check if Card is Colliding with Object
-		print(card_two.position)
 		card_two.position = card_two_position
 	if card_three.is_dragging == false and card_three.position != card_three_position:	
 		# TODO Check if Card is Colliding with Object
-		print(card_three.position)
 		card_three.position = card_three_position
