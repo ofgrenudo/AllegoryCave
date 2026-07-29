@@ -1,5 +1,22 @@
 # Changelog
 
+## [1.3.0](https://github.com/ofgrenudo/AllegoryCave/compare/v1.2.0...v1.3.0) (2026-07-29)
+
+
+### Features
+
+* a bunch of nonsense ([2cc381c](https://github.com/ofgrenudo/AllegoryCave/commit/2cc381c31608586885a89295d0e94a10244ba205))
+* implement defend cards. ([c66bc6e](https://github.com/ofgrenudo/AllegoryCave/commit/c66bc6e7e371e9c3eb8e0b393c22b3d153b65418))
+* implement standard number of cards ([c66bc6e](https://github.com/ofgrenudo/AllegoryCave/commit/c66bc6e7e371e9c3eb8e0b393c22b3d153b65418))
+* implement weapon attack cards ([c66bc6e](https://github.com/ofgrenudo/AllegoryCave/commit/c66bc6e7e371e9c3eb8e0b393c22b3d153b65418))
+* now we only use standard cards in the beginning of the game ([c66bc6e](https://github.com/ofgrenudo/AllegoryCave/commit/c66bc6e7e371e9c3eb8e0b393c22b3d153b65418))
+
+
+### Bug Fixes
+
+* ice two had a type of acid and should have had a type of ice ([70ffaef](https://github.com/ofgrenudo/AllegoryCave/commit/70ffaefbb5fd1b70afb6685e5b6436394dd183eb))
+* shrink start menu ([5378dca](https://github.com/ofgrenudo/AllegoryCave/commit/5378dcaaba4255f8e150977f64d465cb2cc536c4))
+
 ## [1.2.0](https://github.com/ofgrenudo/AllegoryCave/compare/v1.1.0...v1.2.0) (2026-07-29)
 
 
