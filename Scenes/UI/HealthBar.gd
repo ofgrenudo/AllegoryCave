@@ -51,7 +51,11 @@ func await_settled() -> void:
 	## Yields until the currently-running fill tween finishes. combat.gd calls
 	## this so the "slower combat" flow can wait for the healthbar to visibly
 	## drain before the next beat.
-	if _tween_fill and _tween_fill.is_valid():
+	##
+	## IMPORTANT: We only await if the tween is still RUNNING. Awaiting
+	## .finished on a tween that already completed will hang forever, because
+	## the signal already fired and Godot signals don't buffer.
+	if _tween_fill and _tween_fill.is_valid() and _tween_fill.is_running():
 		await _tween_fill.finished
 
 # ------------------------------------------------------------------------
