@@ -1,144 +1,139 @@
 extends Node2D
 
-@onready var nav_left = get_node("left")
-@onready var nav_right = get_node("right")
-@onready var nav_forward_left = get_node("forward_left")
-@onready var nav_forward_right = get_node("forward_right")
-@onready var nav_left_or_right_1 = get_node("left_or_right_1")
-@onready var nav_left_or_right_2 = get_node("left_or_right_2")
-@onready var card_deck	 	:= get_node("Deck")
-@onready var deck_manager 	:= get_node("DeckManager")
+## Navigation — pick a random room to display, with a chance of triggering
+## combat or a reward room. Tracks Global.rooms_visited toward escape.
 
+@onready var nav_left              = get_node("left")
+@onready var nav_right             = get_node("right")
+@onready var nav_forward_left      = get_node("forward_left")
+@onready var nav_forward_right     = get_node("forward_right")
+@onready var nav_left_or_right_1   = get_node("left_or_right_1")
+@onready var nav_left_or_right_2   = get_node("left_or_right_2")
+@onready var card_deck             = get_node("Deck")
+@onready var deck_manager          = get_node("DeckManager")
 
-@onready var navigation_options = [nav_left, nav_right, nav_forward_left, nav_forward_right, nav_left_or_right_1, nav_left_or_right_2]
-@onready var navigation_array_size = navigation_options.size() - 1
-@onready var navigation_random_number = 0
+@onready var navigation_options = [
+	nav_left, nav_right, nav_forward_left, nav_forward_right,
+	nav_left_or_right_1, nav_left_or_right_2,
+]
 
-@onready var preloaded_combat_sceen = preload("res://Sceens/Combat/Combat.tscn")
-@onready var first_run = true
+var last_room_index: int = -1
 
+# Deck-manager shake
 var deck_manager_original_position: Vector2
 var deck_manager_position: Vector2
-var shake_duration = 0.5  # How long to shake in seconds
-var shake_strength = 10   # How strong the shake is
-var shaking = false       # Is the object shaking?
+var shake_duration: float = 0.5
+var shake_strength: float = 10.0
+var shaking: bool = false
 
-var rng = RandomNumberGenerator.new()
+# Combat chance nerf right after leaving combat
+var first_run_since_combat: bool = true
 
-# Called when the node enters the scene tree for the first time.
+var rng := RandomNumberGenerator.new()
+
 func _ready() -> void:
+	rng.randomize()
 	deck_manager_original_position = deck_manager.position
 	navigate_rooms()
 
-# Called every frame. 'delta' is the elapsed time since the previous frame.
-func _process(_delta: float) -> void:
+func _process(delta: float) -> void:
 	if shaking:
-		shake_duration -= _delta
+		shake_duration -= delta
 		if shake_duration > 0:
-			print("Shaking!")
 			deck_manager.position = deck_manager_position + Vector2(
 				randf_range(-shake_strength, shake_strength),
-				randf_range(-shake_strength, shake_strength)
+				randf_range(-shake_strength, shake_strength),
 			)
 		else:
 			shaking = false
 			deck_manager.position = deck_manager_original_position
 
-func navigate_rooms():
-	## Make all Sceens Not Visible. This needs to run in the beginning of the
-	## function because at times it doesnt complete before you display the room you selected.
-	for index in navigation_options.size():
-			navigation_options[index].visible = false
+func navigate_rooms() -> void:
+	# Hide every room.
+	for room in navigation_options:
+		room.visible = false
 
+	# Count this room toward escape progress; if we've hit the goal, win.
+	Global.rooms_visited += 1
+	if Global.rooms_visited >= Global.ROOMS_TO_ESCAPE:
+		get_tree().change_scene_to_file("res://Sceens/Escape/Escape.tscn")
+		return
 
-	## Randomize the Generator with a time based seed.
-	rng.randomize()
+	# Roll for combat / reward / normal room.
+	var combat_chance: int = rng.randi_range(0, 1000)
+	if first_run_since_combat:
+		combat_chance -= 650  # nerf right after leaving combat
+		first_run_since_combat = false
 
-	## Generate the Probability or a combat encounter.
-	var combat_encounter_chance = rng.randi_range(0, 1000)
-	## Nerf the possbility of a combat encounter after you immediately leave
-	## a combat sceene
-	if (first_run):
-		## Take whatever chance we generated and remove over half of it.
-		combat_encounter_chance = combat_encounter_chance - 650
-		first_run = false
+	var reward_chance: int = rng.randi_range(0, 1000)
 
+	print("[Nav] room %d/%d  combat_roll=%d  reward_roll=%d" % [
+		Global.rooms_visited, Global.ROOMS_TO_ESCAPE, combat_chance, reward_chance,
+	])
 
-
-	## Generate a New Random Room Number from 0 to Navigation Array Size.
-	var new_navigation_random_number = rng.randi_range(0, navigation_array_size)
-	## Make sure that the newly generated number isnt the number that we already have.
-	if (new_navigation_random_number == navigation_random_number):
-		## Remake the number this time, assign it directly.
-		navigation_random_number = rng.randi_range(0, navigation_array_size)
-	## The generated number is unique, we will apply it here.
-	else:
-		navigation_random_number = new_navigation_random_number
-
-	## For Debugging the Navigation Sceene, print out our important information
-	print("\nNavigation Combat Encounter = ", combat_encounter_chance)
-	print("Navigation Random Number = ", navigation_random_number)
-
-
-	## From here below, we will begin setting the sceene appropriately
-	## If our combat encounter is greater than 750, we will enter combat.
-	if (combat_encounter_chance > 750):
-		#await get_tree().change_scene_to_packed(preloaded_combat_sceen)
+	if combat_chance > 750:
+		first_run_since_combat = true  # nerf next nav after combat resolves
 		get_tree().change_scene_to_file("res://Sceens/Combat/Combat.tscn")
-	## set the appropriate room to visible.
-	else:
-		navigation_options[navigation_random_number].visible = true
+		return
 
+	if reward_chance > 950:
+		get_tree().change_scene_to_file("res://Sceens/Reward/Reward.tscn")
+		return
+
+	# Pick a NEW room, guaranteed different from the last one shown.
+	var new_index := rng.randi_range(0, navigation_options.size() - 1)
+	if navigation_options.size() > 1:
+		while new_index == last_room_index:
+			new_index = rng.randi_range(0, navigation_options.size() - 1)
+	last_room_index = new_index
+
+	navigation_options[new_index].visible = true
+
+# ------------------------- Room-click signals --------------------------------
 func _on_left_area_input_event(_viewport: Node, event: InputEvent, _shape_idx: int) -> void:
-	if event.is_action_pressed("select"): # set this up in project settings
-		navigate_rooms() # Replace with function body.
+	if event.is_action_pressed("select"): navigate_rooms()
 
 func _on_right_area_input_event(_viewport: Node, event: InputEvent, _shape_idx: int) -> void:
-	if event.is_action_pressed("select"): # set this up in project settings
-		navigate_rooms() # Replace with function body.
+	if event.is_action_pressed("select"): navigate_rooms()
 
 func _on_forward_left_area_input_event(_viewport: Node, event: InputEvent, _shape_idx: int) -> void:
-	if event.is_action_pressed("select"): # set this up in project settings
-		navigate_rooms() # Replace with function body.
+	if event.is_action_pressed("select"): navigate_rooms()
 
 func _on_forward_right_area_input_event(_viewport: Node, event: InputEvent, _shape_idx: int) -> void:
-	if event.is_action_pressed("select"): # set this up in project settings
-		navigate_rooms() # Replace with function body.
+	if event.is_action_pressed("select"): navigate_rooms()
 
 func _on_left_or_right_area_one_input_event(_viewport: Node, event: InputEvent, _shape_idx: int) -> void:
-	if event.is_action_pressed("select"): # set this up in project settings
-		navigate_rooms() # Replace with function body.
+	if event.is_action_pressed("select"): navigate_rooms()
 
 func _on_left_or_right_area_two_input_event(_viewport: Node, event: InputEvent, _shape_idx: int) -> void:
-	if event.is_action_pressed("select"): # set this up in project settings
-		navigate_rooms() # Replace with function body.
+	if event.is_action_pressed("select"): navigate_rooms()
 
-
+# ------------------------- Deck manager overlay ------------------------------
 func _on_deck_area_2d_input_event(_viewport: Node, event: InputEvent, _shape_idx: int) -> void:
-	var cards_in_play = 0
-	for card in Global.card_states:
-		if Global.card_states[card] == true:
-			cards_in_play += 1
-	
-	if (deck_manager.visible):
-		if event.is_action_pressed("select") and Global.card_states: # set this up in project settings
-			if cards_in_play >= 6:
-				deck_manager.visible = false
-			else:
-				start_shake_deck_manager()
-			
+	if not event.is_action_pressed("select"):
+		return
+
+	var cards_in_play: int = Global.count_selected_cards()
+
+	if deck_manager.visible:
+		# Enforce MIN / MAX before allowing the player to close the manager.
+		if cards_in_play >= Global.MIN_DECK_SIZE and cards_in_play <= Global.MAX_DECK_SIZE:
+			deck_manager.visible = false
+		else:
+			print("Deck size %d out of range [%d..%d] — must fix before closing." % [
+				cards_in_play, Global.MIN_DECK_SIZE, Global.MAX_DECK_SIZE,
+			])
+			start_shake_deck_manager()
 	else:
-		if event.is_action_pressed("select"): # set this up in project settings
-			deck_manager.visible = true
-		
-		
+		deck_manager.visible = true
+
 func _on_deck_area_2d_mouse_entered() -> void:
 	card_deck.scale = Vector2(0.20, 0.20)
 
 func _on_deck_area_2d_mouse_exited() -> void:
 	card_deck.scale = Vector2(0.15, 0.15)
 
-func start_shake_deck_manager(duration: float = 0.5, strength: float = 10) -> void:
+func start_shake_deck_manager(duration: float = 0.5, strength: float = 10.0) -> void:
 	shake_duration = duration
 	shake_strength = strength
 	shaking = true

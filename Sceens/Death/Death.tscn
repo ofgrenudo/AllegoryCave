@@ -1,0 +1,27 @@
+[gd_scene load_steps=3 format=3 uid="uid://ddeath0scene01"]
+
+[ext_resource type="Script" path="res://Sceens/Death/death.gd" id="1_death"]
+[ext_resource type="Texture2D" uid="uid://b1a607o7cmcge" path="res://Media/you_died.png" id="2_youdied"]
+
+[node name="Death" type="Control"]
+anchor_right = 1.0
+anchor_bottom = 1.0
+script = ExtResource("1_death")
+
+[node name="Background" type="ColorRect" parent="."]
+anchor_right = 1.0
+anchor_bottom = 1.0
+color = Color(0, 0, 0, 1)
+
+[node name="YouDied" type="TextureRect" parent="."]
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -400.0
+offset_top = -200.0
+offset_right = 400.0
+offset_bottom = 200.0
+texture = ExtResource("2_youdied")
+expand_mode = 1
+stretch_mode = 5

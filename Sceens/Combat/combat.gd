@@ -1,22 +1,21 @@
 extends Node2D
 
-## This class acts as a medium between the Hand, Enemy, and Player.
-## It keeps track of the game states and processes turns.
+## Combat scene — medium between Hand, Enemy, and Player.
+## State machine: PlayerTurn -> EnemyTurn -> CheckWin -> PlayerTurn ...
 
-@onready var hand 	:= get_node("Room/Hand")
-@onready var enemy 	:= get_node("Room/Enemy")
-@onready var player	:= get_node("Room/Player")
-@onready var preload_combat_sceene := preload("res://Sceens/Navigation/Navigation.tscn")
-@onready var preload_main_menu_sceene := preload("res://Sceens/Main Menu.tscn")
+@onready var hand   := get_node("Room/Hand")
+@onready var enemy  := get_node("Room/Enemy")
+@onready var player := get_node("Room/Player")
 
 ## Game States
-enum State { PlayerTurn, EnemyTurn, CheckWin }
+enum State { PlayerTurn, EnemyTurn, CheckWin, Frozen }
 
 var current_state: State = State.PlayerTurn
 
 ## Player Action Information
 var player_card_type: String = "None"
 var player_card_damage: int = 0
+var player_skipped_turn: bool = false
 
 func _ready() -> void:
 	current_state = State.PlayerTurn
@@ -29,83 +28,88 @@ func _process(_delta: float) -> void:
 			enemy_turn()
 		State.CheckWin:
 			check_win()
+		State.Frozen:
+			pass
 
-# Player's Turn
+# -------------------------- Player Turn --------------------------------------
 func player_turn() -> void:
-	# Get the selected card
 	get_card_played()
 	hand.toggle_card_selected()
 
-	# If a valid attack card is played
-	if player_card_type != "None" and player_card_damage != 0:
-		print("Player Card Type -> ", player_card_type, " and Player Card Damage -> ", player_card_damage)
+	# Attack card
+	if player_card_type != "None" and player_card_damage != 0 and player_card_type != "Deck":
+		print("Player played ", player_card_type, " for ", player_card_damage, " damage")
 		await enemy.apply_damage(player_card_type, player_card_damage)
+		player_skipped_turn = false
 		current_state = State.EnemyTurn
 
-	# If the Deck card is played
+	# Deck / skip
 	elif player_card_type == "Deck":
-		print("Player drew from the deck.")
-		await get_tree().create_timer(1.0).timeout
+		print("Player drew from the deck — turn is skipped, no enemy attack this round.")
+		player_skipped_turn = true
+		await get_tree().create_timer(0.5).timeout
 		current_state = State.EnemyTurn
 
-	# Reset player card info to prevent re-triggering
+	# Reset player card info so we don't re-trigger
 	player_card_type = "None"
 	player_card_damage = 0
 
-
-# Enemy's Turn
+# -------------------------- Enemy Turn ---------------------------------------
 func enemy_turn() -> void:
-	## Apply damage to the player
-	var enemy_damage = 15	
-	await player.apply_damage(enemy_damage)
+	if player_skipped_turn:
+		# Playing the Deck card = "I don't act this round", but the enemy STILL
+		# gets to attack. Actually, the ORIGINAL intent (per the code) seems to
+		# be that Deck skips the WHOLE round. We'll honor that: skip enemy too.
+		print("Enemy watches you shuffle. No attack this round.")
+		player_skipped_turn = false
+	else:
+		var enemy_damage: int = enemy.roll_attack()
+		await player.apply_damage(enemy_damage)
 
-	if ((player_card_type == "Deck")):
-		## Reset player card info
-		player_card_type = "None"
-		player_card_damage = 0
-
-	## Pass turn to the check-win state
 	current_state = State.CheckWin
 
-# Check for game over or proceed to the next turn
+# -------------------------- Check Win ----------------------------------------
 func check_win() -> void:
 	if enemy.get_health() <= 0:
-		# Load Navigation scene (victory)
-		get_tree().change_scene_to_file("res://Sceens/Navigation/Navigation.tscn")
+		current_state = State.Frozen
+		# Winning combat advances the escape counter.
+		Global.rooms_visited += 1
+
+		# Small chance of a reward room after victory.
+		var rng := RandomNumberGenerator.new()
+		rng.randomize()
+		if rng.randf() < 0.4:
+			get_tree().change_scene_to_file("res://Sceens/Reward/Reward.tscn")
+		else:
+			get_tree().change_scene_to_file("res://Sceens/Navigation/Navigation.tscn")
 		return
 
 	if player.get_health() <= 0:
-		# TODO: Create a death scene
-		get_tree().change_scene_to_file("res://Sceens/Main Menu.tscn")
+		current_state = State.Frozen
+		get_tree().change_scene_to_file("res://Sceens/Death/Death.tscn")
 		return
 
-	# If no one has won, return to the player's turn
 	current_state = State.PlayerTurn
 
-
-# Get the card information from the hand
+# -------------------------- Card Query ---------------------------------------
 func get_card_played() -> void:
-	#print(hand.get_card_selected())
-	if hand.get_card_selected():
-		if hand.get_card_one_selected():
-			player_card_type = hand.get_card_one_type()
-			player_card_damage = hand.get_card_one_damage()
-
-		elif hand.get_card_two_selected():
-			player_card_type = hand.get_card_two_type()
-			player_card_damage = hand.get_card_two_damage()
-
-		elif hand.get_card_three_selected():
-			player_card_type = hand.get_card_three_type()
-			player_card_damage = hand.get_card_three_damage()
-
-		elif hand.get_card_deck_selected():
-			player_card_type = "Deck"
-			player_card_damage = 0
-		
-		if !(player_card_type == "None"):
-			print("Card Selected: ", player_card_type, " Card Damage: ", player_card_damage, "\n\n")
-
-	else:
+	if not hand.get_card_selected():
 		player_card_type = "None"
 		player_card_damage = 0
+		return
+
+	if hand.get_card_one_selected():
+		player_card_type = hand.get_card_one_type()
+		player_card_damage = hand.get_card_one_damage()
+	elif hand.get_card_two_selected():
+		player_card_type = hand.get_card_two_type()
+		player_card_damage = hand.get_card_two_damage()
+	elif hand.get_card_three_selected():
+		player_card_type = hand.get_card_three_type()
+		player_card_damage = hand.get_card_three_damage()
+	elif hand.get_card_deck_selected():
+		player_card_type = "Deck"
+		player_card_damage = 0
+
+	if player_card_type != "None":
+		print("Card Selected: %s | Damage: %d" % [player_card_type, player_card_damage])

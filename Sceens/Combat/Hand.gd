@@ -1,336 +1,143 @@
 extends Sprite2D
 
+## Hand — draws N unique cards from the player's enabled deck at scene start.
+## Cleaned up: getters no longer mutate state; card selection is polled cleanly
+## by combat.gd.
 
-## Used to make the card larger on hover.
-var card_one_hovered 	:= false
-var card_two_hovered 	:= false
-var card_three_hovered 	:= false
-var card_deck_hovered 	:= false
+# --- Hover flags (used by hover scale effect) ---
+var card_deck_hovered := false
 
-## Used to Preform the Next Action.
-var card_one_selected	:= false
-var card_two_selected 	:= false
-var card_three_selected := false
-var card_deck_selected 	:= false
-var card_selected	 	:= false
+# --- Selection flags ---
+var card_deck_selected := false
+var card_selected      := false
 
-## Capture Nodes
-@onready var card_one		= null
-@onready var card_two		= null
-@onready var card_three		= null
-@onready var card_deck	 	:= get_node("Deck")
-var all_playable_cards = []
-var loaded_playable_cards = []
-var selected_playable_cards = []
+# --- Card node refs ---
+@onready var card_one   = null
+@onready var card_two   = null
+@onready var card_three = null
+@onready var card_deck  := get_node("Deck")
 
-var rng = RandomNumberGenerator.new()
+# Full pool of scenes the player has unlocked.
+var all_playable_cards: Array = []
 
-# Called when the node enters the scene tree for the first time.
+var rng := RandomNumberGenerator.new()
+
+# Map card_name -> scene path
+const CARD_SCENE_MAP := {
+	"LightningOne": "res://Sceens/Cards/lightning_one.tscn",
+	"LightningTwo": "res://Sceens/Cards/lightning_two.tscn",
+	"FireOne":      "res://Sceens/Cards/fire_one.tscn",
+	"IceOne":       "res://Sceens/Cards/ice_one.tscn",
+	"AcidOne":      "res://Sceens/Cards/acid_one.tscn",
+	"AcidTwo":      "res://Sceens/Cards/acid_two.tscn",
+	"LightOne":     "res://Sceens/Cards/light_one.tscn",
+	"LightTwo":     "res://Sceens/Cards/light_two.tscn",
+	"IceTwo":       "res://Sceens/Cards/ice_two.tscn",
+	"SevenDiamond": "res://Sceens/Cards/seven_diamonds.tscn",
+	"ThreeHearts":  "res://Sceens/Cards/three_hearts.tscn",
+	"EightClubs":   "res://Sceens/Cards/eight_clubs.tscn",
+	"FiveDiamond":  "res://Sceens/Cards/five_diamonds.tscn",
+	"AceDiamond":   "res://Sceens/Cards/ace_diamonds.tscn",
+}
+
+const CARD_POSITIONS := [
+	Vector2(-319, 920),
+	Vector2(-109, 920),
+	Vector2( 100, 920),
+]
+const CARD_ROTATIONS := [-12.0, 0.0, 12.0]  # degrees
+
 func _ready() -> void:
 	rng.randomize()
-	
-	register_playable_cards()
-	load_playable_cards()
+	_register_playable_cards()
+	_draw_and_place_cards()
 
+func _register_playable_cards() -> void:
+	for card_name in Global.card_states.keys():
+		if Global.card_states[card_name] and CARD_SCENE_MAP.has(card_name):
+			all_playable_cards.append(CARD_SCENE_MAP[card_name])
 
-# Called every frame. 'delta' is the elapsed time since the previous frame.
-func _process(_delta: float) -> void:
-	pass
-	
-func register_playable_cards() -> void:
-	var cards = Global.card_states
-	# Parse into individual variables
-	for card_name in cards.keys():
-		if (cards[card_name]):
-			if card_name == "LightningOne": all_playable_cards.append("res://Sceens/Cards/lightning_one.tscn")
-			if card_name == "LightningTwo": all_playable_cards.append("res://Sceens/Cards/lightning_two.tscn")
-			if card_name == "FireOne": all_playable_cards.append("res://Sceens/Cards/fire_one.tscn")
-			if card_name == "IceOne": all_playable_cards.append("res://Sceens/Cards/ice_one.tscn")
-			if card_name == "AcidOne": all_playable_cards.append("res://Sceens/Cards/acid_one.tscn")
-			if card_name == "AcidTwo": all_playable_cards.append("res://Sceens/Cards/acid_two.tscn")
-			if card_name == "LightOne": all_playable_cards.append("res://Sceens/Cards/light_one.tscn")
-			if card_name == "LightTwo": all_playable_cards.append("res://Sceens/Cards/light_two.tscn")
-			if card_name == "IceTwo": all_playable_cards.append("res://Sceens/Cards/ice_two.tscn")
-			if card_name == "SevenDiamond": all_playable_cards.append("res://Sceens/Cards/seven_diamonds.tscn")
-			if card_name == "ThreeHearts": all_playable_cards.append("res://Sceens/Cards/three_hearts.tscn")
-			if card_name == "EightClubs": all_playable_cards.append("res://Sceens/Cards/eight_clubs.tscn")
-			if card_name == "FiveDiamond": all_playable_cards.append("res://Sceens/Cards/five_diamonds.tscn")
-			if card_name == "AceDiamond": all_playable_cards.append("res://Sceens/Cards/ace_diamonds.tscn")
+func _draw_and_place_cards() -> void:
+	# Draw 3 UNIQUE indexes if we have >= 3 cards; otherwise fall back to
+	# sampling with replacement (rare corner case if deck has <3 cards).
+	var draw_count := 3
+	var indices: Array = []
 
-func load_playable_cards() -> void:
-	for card in all_playable_cards:
-		loaded_playable_cards.append(card)
-	
-	var playable_cards_length = loaded_playable_cards.size()
-	while(selected_playable_cards.size() < 3):
-		selected_playable_cards.append(rng.randi_range(0, (playable_cards_length-1)))
-		
-	var card_one_scene = load(loaded_playable_cards[selected_playable_cards[0]])  # Load the resource
-	var card_two_scene = load(loaded_playable_cards[selected_playable_cards[1]])
-	var card_three_scene = load(loaded_playable_cards[selected_playable_cards[2]])
+	if all_playable_cards.size() == 0:
+		push_error("Hand: player has NO cards enabled. Cannot draw.")
+		return
 
-	if card_one_scene is PackedScene:  # Ensure it's a PackedScene
-		card_one = card_one_scene.instantiate()  # Instantiate the scene
-		card_one.position = Vector2(-319,920)
-		card_one.rotation = deg_to_rad(-12)
-		add_child(card_one)  # Add the instantiated node to the tree
+	if all_playable_cards.size() >= draw_count:
+		var pool := range(all_playable_cards.size())
+		pool.shuffle()
+		indices = pool.slice(0, draw_count)
 	else:
-		print("Error: The resource at ", loaded_playable_cards[selected_playable_cards[0]], " is not a PackedScene.")
+		# Fallback (shouldn't happen thanks to MIN_DECK_SIZE, but be safe).
+		while indices.size() < draw_count:
+			indices.append(rng.randi_range(0, all_playable_cards.size() - 1))
 
-	if card_two_scene is PackedScene:  # Ensure it's a PackedScene
-		card_two = card_two_scene.instantiate()  # Instantiate the scene
-		card_two.position = Vector2(-109,920)
-		card_two.rotation = deg_to_rad(0)
-		add_child(card_two)  # Add the instantiated node to the tree
-	else:
-		print("Error: The resource at ", loaded_playable_cards[selected_playable_cards[1]], " is not a PackedScene.")
+	var slots := [null, null, null]
+	for i in draw_count:
+		var path: String = all_playable_cards[indices[i]]
+		var scn = load(path)
+		if scn is PackedScene:
+			var inst = scn.instantiate()
+			inst.position = CARD_POSITIONS[i]
+			inst.rotation = deg_to_rad(CARD_ROTATIONS[i])
+			add_child(inst)
+			slots[i] = inst
+		else:
+			push_error("Hand: %s is not a PackedScene." % path)
 
-	if card_three_scene is PackedScene:  # Ensure it's a PackedScene
-		card_three = card_three_scene.instantiate()  # Instantiate the scene
-		card_three.position = Vector2(100,920)
-		card_three.rotation = deg_to_rad(12)
-		add_child(card_three)  # Add the instantiated node to the tree
-	else:
-		print("Error: The resource at ", loaded_playable_cards[selected_playable_cards[2]], " is not a PackedScene.")
-	
-# Combat.gd requires the following signatures
-#hand.toggle_card_selected()
-#hand.get_card_selected():
+	card_one   = slots[0]
+	card_two   = slots[1]
+	card_three = slots[2]
 
-#hand.get_card_one_selected()
-#hand.get_card_one_type()
-#hand.get_card_one_damage()
-#
-#hand.get_card_two_selected()
-#hand.get_card_two_type()
-#hand.get_card_two_damage()
-#
-#hand.get_card_three_selected()
-#hand.get_card_three_type()
-#hand.get_card_three_damage()
-#
-#hand.get_card_deck_selected()
+# ============================= Public API =====================================
+# NOTE: These getters are now PURE — they DO NOT mutate card_selected.
+# combat.gd polls them each frame; the previous impl caused a feedback loop.
 
 func get_card_selected() -> bool:
-	return card_selected
-	
-func toggle_card_selected():
-	if card_selected:
-		card_one.selected = false
-		card_two.selected = false
-		card_three.selected = false
-		card_deck_selected = false
+	# True if the player has clicked ANY card this "turn".
+	if card_deck_selected:
+		return true
+	if card_one and card_one.selected:
+		return true
+	if card_two and card_two.selected:
+		return true
+	if card_three and card_three.selected:
+		return true
+	return false
 
-		card_selected = false
-	else:
-		card_selected = true
+func toggle_card_selected() -> void:
+	# Reset selection state after combat.gd has consumed the choice.
+	if card_one:   card_one.selected = false
+	if card_two:   card_two.selected = false
+	if card_three: card_three.selected = false
+	card_deck_selected = false
+	card_selected = false
 
-# ===================================== Card One ========================================
-func get_card_one_selected() -> bool:
-	card_selected = true
-	return card_one.selected
+# ------------------------- Card One ------------------------------------------
+func get_card_one_selected() -> bool: return card_one != null and card_one.selected
+func get_card_one_type():             return card_one.card_type if card_one else "None"
+func get_card_one_damage() -> int:    return card_one.card_damage if card_one else 0
 
-func get_card_one_type():
-	return card_one.card_type
+# ------------------------- Card Two ------------------------------------------
+func get_card_two_selected() -> bool: return card_two != null and card_two.selected
+func get_card_two_type():             return card_two.card_type if card_two else "None"
+func get_card_two_damage() -> int:    return card_two.card_damage if card_two else 0
 
-func get_card_one_damage() -> int:
-	return card_one.card_damage
+# ------------------------- Card Three ----------------------------------------
+func get_card_three_selected() -> bool: return card_three != null and card_three.selected
+func get_card_three_type():             return card_three.card_type if card_three else "None"
+func get_card_three_damage() -> int:    return card_three.card_damage if card_three else 0
 
-# ===================================== Card Two ========================================
-func get_card_two_selected() -> bool:
-	card_selected = true
-	return card_two.selected
+# ------------------------- Deck ----------------------------------------------
+func get_card_deck_selected() -> bool: return card_deck_selected
 
-func get_card_two_type():
-	return card_two.card_type
-
-func get_card_two_damage():
-	return card_two.card_damage
-
-# ===================================== Card Three ========================================
-func get_card_three_selected() -> bool:
-	card_selected = true
-	return card_three.selected
-
-func get_card_three_type():
-	return card_three.card_type
-
-func get_card_three_damage():
-	return card_three.card_damage
-
-# ===================================== Card Deck ========================================
-func get_card_deck_selected():
-	card_selected = true
-	return card_deck_selected
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-# =================================== Getters  ===================================
-#func get_card_one_selected() -> bool:
-	#card_selected = card_one.selected
-	#return card_one.selected
-#
-#func get_card_two_selected() -> bool:
-	#card_selected = card_two.selected
-	#return card_two.selected
-#
-#func get_card_three_selected() -> bool:
-	#card_selected = card_three.selected
-	#return card_three.selected
-#
-#func get_card_deck_selected() -> bool:
-	#return card_deck_selected
-#
-#func get_card_selected() -> bool:
-	#return card_selected
-	#
-#func toggle_card_selected():
-	#if card_selected: 
-		#card_selected = false
-		#card_one_selected = false
-		#card_two_selected = false
-		#card_three_selected = false
-		#card_deck_selected = false
-#
-	#else: card_selected = true
-#
-#func get_card_one_type():
-	#return card_one.card_type
-#
-#func get_card_two_type():
-	#return card_two.card_type
-	#
-#func get_card_three_type():
-	#return card_three.card_type
-#
-#func get_card_one_damage():
-	#return card_one.card_damage
-#
-#func get_card_two_damage():
-	#return card_two.card_damage
-#
-#func get_card_three_damage():
-	#return card_three.card_damage
-#
-#
-#
-#
-#
-#
-#
-#
-#
-#
-#
-#
-#
-#
-#
-#
-#
-#
-#
-#
-#
-#
-#
-#
-#
-#
-#
-#
-#
-#
-#
-#
-#
-#
-#
-#
-#
-#
-#
-#
-#
-#
-#
-#
-#
-#
-#
-#
-#
-#
-#
-#
-#
-#
-#
-#
-#
-#
-#
-#
-#
-#
-#
-#
-#
-#
-#
-#
-## =================================== Input  ===================================
-#func _on_card_one_collission_input_event(_viewport: Node, event: InputEvent, _shape_idx: int) -> void:
-	#if event.is_action_pressed("select"): # set this up in project settings
-		##print("Card One Selected!")
-		#if card_selected == false:
-			#card_one_selected = true
-			#card_selected = true
-#
-#func _on_card_two_collission_input_event(_viewport: Node, event: InputEvent, _shape_idx: int) -> void:
-	#if event.is_action_pressed("select"): # set this up in project settings
-		##print("Card One Selected!")
-		#if card_selected == false:
-			#card_two_selected = true
-			#card_selected = true
-#
-#func _on_card_three_collission_input_event(_viewport: Node, event: InputEvent, _shape_idx: int) -> void:
-	#if event.is_action_pressed("select"): # set this up in project settings
-		##print("Card One Selected!")
-		#if card_selected == false:
-			#card_three_selected = true
-			#card_selected = true
-#
-## =================================== Scale Up / Down  ===================================
-## Generic Signal Handlers
-#func _on_card_mouse_entered(card: Node) -> void:
-	#card.scale += Vector2(0.05, 0.05)
-#
-#func _on_card_mouse_exited(card: Node) -> void:
-	#card.scale -= Vector2(0.05, 0.05)
-#
-
+# ============================= Signals ========================================
 func _on_deck_area_2d_input_event(_viewport: Node, event: InputEvent, _shape_idx: int) -> void:
-	if event.is_action_pressed("select"): # set this up in project settings
-		#print("Card One Selected!")
-		toggle_card_selected()
+	if event.is_action_pressed("select"):
 		card_deck_selected = true
 
 func _on_deck_area_2d_mouse_entered() -> void:

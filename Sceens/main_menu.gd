@@ -20,6 +20,7 @@ func _ready() -> void:
 
 ## This will navigate you to the starting scene when clicked.
 func _on_start_pressed() -> void:
+	Global.reset_run()  ## Fresh HP + room counter every new run
 	get_tree().change_scene_to_packed(opening_scene) ## Load our Opening Sceene
 
 ## This will change to the settings scene when ran.

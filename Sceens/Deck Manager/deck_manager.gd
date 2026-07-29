@@ -18,8 +18,9 @@ extends Control
 
 # Selected Cards Counter
 var selected_cards_count = 0
-const MIN_SELECTION = 3
-const MAX_SELECTION = 6
+# Pull limits from Global so there is ONE source of truth.
+@onready var MIN_SELECTION: int = Global.MIN_DECK_SIZE
+@onready var MAX_SELECTION: int = Global.MAX_DECK_SIZE
 
 # Shader Material
 @onready var bw_shader_material = ShaderMaterial.new()
@@ -81,12 +82,14 @@ func _on_card_gui_input(event: InputEvent, card: Control, card_name: String) -> 
 			card.material = null
 			selected_cards_count += 1
 			print("Selected: ", card_name, " - Total Selected: ", selected_cards_count)
-		elif Global.card_states[card_name]:
-			# Deselect the card
+		elif Global.card_states[card_name] and selected_cards_count > MIN_SELECTION:
+			# Deselect the card (only if we'd stay at/above MIN)
 			Global.card_states[card_name] = false
 			card.material = bw_shader_material
 			selected_cards_count -= 1
 			print("Deselected: ", card_name, " - Total Selected: ", selected_cards_count)
+		elif Global.card_states[card_name]:
+			print("Cannot deselect: deck at minimum size (", MIN_SELECTION, ")")
 
 # Individual Signal Connections
 func _on_lightning_one_mouse_entered() -> void: _on_card_mouse_entered(lightning_one)

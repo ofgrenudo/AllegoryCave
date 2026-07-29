@@ -1,0 +1,35 @@
+[gd_scene load_steps=2 format=3 uid="uid://descapescene001"]
+
+[ext_resource type="Script" path="res://Sceens/Escape/escape.gd" id="1_escape"]
+
+[node name="Escape" type="Control"]
+anchor_right = 1.0
+anchor_bottom = 1.0
+script = ExtResource("1_escape")
+
+[node name="Background" type="ColorRect" parent="."]
+anchor_right = 1.0
+anchor_bottom = 1.0
+color = Color(0.05, 0.05, 0.09, 1)
+
+[node name="VBox" type="VBoxContainer" parent="."]
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -400.0
+offset_top = -100.0
+offset_right = 400.0
+offset_bottom = 100.0
+theme_override_constants/separation = 24
+
+[node name="Title" type="Label" parent="VBox"]
+horizontal_alignment = 1
+text = "You Escaped"
+
+[node name="Subtitle" type="Label" parent="VBox"]
+horizontal_alignment = 1
+autowrap_mode = 3
+text = "You stumble into the light. The cave releases you.
+
+Press any key to return to the Main Menu."
