@@ -1,5 +1,12 @@
 # Changelog
 
+## [1.2.0](https://github.com/ofgrenudo/AllegoryCave/compare/v1.1.0...v1.2.0) (2026-07-29)
+
+
+### Features
+
+* test fix ([e381327](https://github.com/ofgrenudo/AllegoryCave/commit/e381327ca59e9310f92ad92de5d42169a522baee))
+
 ## [1.1.0](https://github.com/ofgrenudo/AllegoryCave/compare/v1.0.0...v1.1.0) (2026-07-29)
 
 
