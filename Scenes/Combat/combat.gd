@@ -69,16 +69,15 @@ func _on_card_played(card_type: String, card_damage: int) -> void:
 		print("Player played %s for %d damage" % [card_type, card_damage])
 		await enemy.apply_damage(card_type, card_damage)
 	# Small beat for readability
-	await get_tree().create_timer(0.15).timeout
+	await get_tree().create_timer(0.2).timeout
 
-	# Check for enemy death mid-turn.
+	# Check for enemy death from the card BEFORE the enemy gets to swing.
 	if enemy.get_health() <= 0:
 		_check_end_of_combat()
 		return
 
-	# Return to player turn — they can play more cards.
-	current_state = State.PlayerTurn
-	hand.resume_input()
+	# One card per turn — auto-end the turn now.
+	await _do_end_of_turn()
 
 # ============================================================================
 # End Turn button
@@ -86,6 +85,11 @@ func _on_card_played(card_type: String, card_damage: int) -> void:
 func _on_end_turn_pressed() -> void:
 	if current_state != State.PlayerTurn:
 		return
+	await _do_end_of_turn()
+
+# Shared end-of-turn flow, used by both the END TURN button (no card played)
+# and the auto-end after a card resolves.
+func _do_end_of_turn() -> void:
 	current_state = State.EnemyTurn
 	end_turn_button.disabled = true
 
