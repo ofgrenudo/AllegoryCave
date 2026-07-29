@@ -1,11 +1,11 @@
-[gd_scene load_steps=5 format=3 uid="uid://jxmd1k4bxqg6"]
+[gd_scene format=3 uid="uid://jxmd1k4bxqg6"]
 
-[ext_resource type="Script" path="res://Scenes/main_menu.gd" id="1_37vaq"]
+[ext_resource type="Script" uid="uid://d3dpnw5rf6142" path="res://Scenes/main_menu.gd" id="1_37vaq"]
 [ext_resource type="Texture2D" uid="uid://c7j3bxoktkodb" path="res://Media/Rooms/Title card.png" id="2_1n5ev"]
 [ext_resource type="AudioStream" uid="uid://1y64g24hrec6" path="res://Media/Music/One Man Symphony - Downtempo & Lofi & Progressive Music Pack Vol1/One Man Symphony - Downtempo & Lofi & Progressive Music Pack Vol - 1 (Free) - 01 A Place Where It's Just The Two Of Us.mp3" id="3_loalc"]
 [ext_resource type="Theme" uid="uid://ccavetheme01" path="res://Scenes/UI/menu_theme.tres" id="4_theme"]
 
-[node name="Main Menu" type="Control"]
+[node name="Main Menu" type="Control" unique_id=40666937]
 layout_mode = 3
 anchors_preset = 15
 anchor_right = 1.0
@@ -14,53 +14,46 @@ grow_horizontal = 2
 grow_vertical = 2
 script = ExtResource("1_37vaq")
 
-[node name="Background" type="Sprite2D" parent="."]
+[node name="Background" type="Sprite2D" parent="." unique_id=54777000]
 position = Vector2(965.62, 539.76)
 scale = Vector2(0.444, 0.414)
 texture = ExtResource("2_1n5ev")
 
-[node name="AudioStreamPlayer2D" type="AudioStreamPlayer2D" parent="Background"]
+[node name="AudioStreamPlayer2D" type="AudioStreamPlayer2D" parent="Background" unique_id=169078202]
 stream = ExtResource("3_loalc")
 volume_db = -2.0
 autoplay = true
 parameters/looping = true
 
-[node name="Vertical Shelf" type="VBoxContainer" parent="."]
+[node name="Vertical Shelf" type="VBoxContainer" parent="." unique_id=1688221718]
 layout_mode = 0
-offset_left = 130.0
-offset_top = 580.0
-offset_right = 620.0
-offset_bottom = 1040.0
+offset_left = 167.0
+offset_top = 568.0
+offset_right = 494.0
+offset_bottom = 1078.0
+scale = Vector2(0.76, 0.7199988)
 theme = ExtResource("4_theme")
 theme_override_constants/separation = 26
 
-[node name="Start" type="Button" parent="Vertical Shelf"]
+[node name="Start" type="Button" parent="Vertical Shelf" unique_id=110434489]
 layout_mode = 2
 size_flags_horizontal = 3
-pivot_offset = Vector2(245, 45)
-rotation = -0.0698
 text = "START"
 
-[node name="Settings" type="Button" parent="Vertical Shelf"]
+[node name="Settings" type="Button" parent="Vertical Shelf" unique_id=2055126006]
 layout_mode = 2
 size_flags_horizontal = 3
-pivot_offset = Vector2(245, 45)
-rotation = -0.0524
 disabled = true
 text = "SETTINGS"
 
-[node name="Credits" type="Button" parent="Vertical Shelf"]
+[node name="Credits" type="Button" parent="Vertical Shelf" unique_id=64912867]
 layout_mode = 2
 size_flags_horizontal = 3
-pivot_offset = Vector2(245, 45)
-rotation = -0.0873
 text = "CREDITS"
 
-[node name="Quit" type="Button" parent="Vertical Shelf"]
+[node name="Quit" type="Button" parent="Vertical Shelf" unique_id=1341280042]
 layout_mode = 2
 size_flags_horizontal = 3
-pivot_offset = Vector2(245, 45)
-rotation = -0.0611
 text = "QUIT"
 
 [connection signal="pressed" from="Vertical Shelf/Start" to="." method="_on_start_pressed"]
