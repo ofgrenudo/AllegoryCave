@@ -1,4 +1,4 @@
-[gd_scene load_steps=19 format=3 uid="uid://da7bfbph1odmc"]
+[gd_scene load_steps=17 format=3 uid="uid://da7bfbph1odmc"]
 
 [ext_resource type="Script" path="res://Scenes/Combat/Combat.gd" id="1_wien3"]
 [ext_resource type="Texture2D" uid="uid://sdsij0f5brft" path="res://Media/Rooms/combat_sceene.PNG" id="2_u60ik"]
@@ -9,10 +9,8 @@
 [ext_resource type="Texture2D" uid="uid://djcrodb8an6g5" path="res://Media/Enemys/BlobCube.png" id="7_1qse1"]
 [ext_resource type="Texture2D" uid="uid://ck62d4n6bbjkc" path="res://Media/Cards/EndTurn.png" id="7_hdr5s"]
 [ext_resource type="Script" path="res://Scenes/Combat/Enemy.gd" id="9_66w4a"]
-[ext_resource type="Texture2D" uid="uid://ciycr031ethmp" path="res://Media/Heart_Background.png" id="10_qwfnh"]
-[ext_resource type="Texture2D" uid="uid://coekpet0npm4c" path="res://Media/Heart_Filled_Placeholder.png" id="11_02y54"]
-[ext_resource type="Texture2D" uid="uid://b1a607o7cmcge" path="res://Media/you_died.png" id="12_gv2k7"]
 [ext_resource type="Script" path="res://Scenes/Combat/Player.gd" id="12_o3ix8"]
+[ext_resource type="PackedScene" uid="uid://healthbar0001" path="res://Scenes/UI/HealthBar.tscn" id="13_hbar"]
 [ext_resource type="AudioStream" uid="uid://crnar0eqamqbb" path="res://Media/Music/One Man Symphony - Downtempo & Lofi & Progressive Music Pack Vol1/One Man Symphony - Downtempo & Lofi & Progressive Music Pack Vol - 1 (Free) - 02 Lost Dream.mp3" id="14_nvehq"]
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_6rrsm"]
@@ -58,31 +56,24 @@ scale = Vector2(0.356752, 0.416338)
 texture = ExtResource("7_1qse1")
 script = ExtResource("9_66w4a")
 
-[node name="Player" type="Sprite2D" parent="Room"]
-position = Vector2(-1560.09, -832.618)
-texture = ExtResource("10_qwfnh")
+[node name="Player" type="Node2D" parent="Room"]
 script = ExtResource("12_o3ix8")
 
-[node name="HeartOne" type="Sprite2D" parent="Room/Player"]
-position = Vector2(-99, 0)
-texture = ExtResource("11_02y54")
+[node name="UI" type="CanvasLayer" parent="."]
 
-[node name="HeartTwo" type="Sprite2D" parent="Room/Player"]
-position = Vector2(6, 0)
-texture = ExtResource("11_02y54")
+[node name="PlayerHealthBar" parent="UI" instance=ExtResource("13_hbar")]
+offset_left = 40.0
+offset_top = 40.0
+offset_right = 500.0
+offset_bottom = 100.0
 
-[node name="HeartThree" type="Sprite2D" parent="Room/Player"]
-position = Vector2(100, 0)
-texture = ExtResource("11_02y54")
-
-[node name="DeathScreen" type="Sprite2D" parent="Room/Player"]
-visible = false
-position = Vector2(-250, -980)
-texture = ExtResource("12_gv2k7")
-
-[node name="DamageTimer" type="Timer" parent="Room/Player"]
-wait_time = 5.0
-one_shot = true
+[node name="EnemyHealthBar" parent="UI" instance=ExtResource("13_hbar")]
+anchor_left = 1.0
+anchor_right = 1.0
+offset_left = -500.0
+offset_top = 40.0
+offset_right = -40.0
+offset_bottom = 100.0
 
 [node name="AudioListener2D" type="AudioStreamPlayer2D" parent="."]
 stream = ExtResource("14_nvehq")

@@ -8,6 +8,9 @@ extends Sprite2D
 ## To add a new enemy: drop a new .tres file in Scenes/Combat/Enemies/. No
 ## code changes needed. The scan below picks it up automatically.
 
+signal health_changed(new_hp: int, max_hp: int)
+signal variant_ready(display_name: String, max_hp: int)
+
 const ENEMY_DATA_DIR := "res://Scenes/Combat/Enemies/"
 
 # --- Runtime state -----------------------------------------------------------
@@ -96,6 +99,9 @@ func _apply_variant() -> void:
 	])
 	if data.flavor != "":
 		print("        \"%s\"" % data.flavor)
+	# Announce to any UI listeners.
+	emit_signal("variant_ready", display_name, max_hp)
+	emit_signal("health_changed", health, max_hp)
 
 # ============================================================================
 # Damage in
@@ -120,6 +126,7 @@ func apply_damage(damage_type: String, damage_value: int) -> int:
 			display_name, final_damage, damage_type, mult, health, max_hp,
 		])
 		start_shake_and_wobble()
+		emit_signal("health_changed", health, max_hp)
 	elif mult == 0.0:
 		print("[%s] is IMMUNE to %s!" % [display_name, damage_type])
 	else:
@@ -156,6 +163,7 @@ func roll_attack() -> int:
 					print("[%s] regenerates %d hp (%d/%d)." % [
 						display_name, health - before, health, max_hp,
 					])
+					emit_signal("health_changed", health, max_hp)
 			print("[%s] attacks for %d." % [display_name, dmg])
 
 		"armor_up":
@@ -178,6 +186,7 @@ func roll_attack() -> int:
 				print("[%s] drains life! Attacks for %d, heals %d (%d/%d)." % [
 					display_name, dmg, health - before, health, max_hp,
 				])
+				emit_signal("health_changed", health, max_hp)
 			else:
 				print("[%s] attacks for %d." % [display_name, dmg])
 

@@ -7,6 +7,9 @@ extends Node2D
 @onready var enemy  := get_node("Room/Enemy")
 @onready var player := get_node("Room/Player")
 
+@onready var player_health_bar: HealthBar = $UI/PlayerHealthBar
+@onready var enemy_health_bar:  HealthBar = $UI/EnemyHealthBar
+
 ## Game States
 enum State { PlayerTurn, EnemyTurn, CheckWin, Frozen }
 
@@ -19,6 +22,26 @@ var player_skipped_turn: bool = false
 
 func _ready() -> void:
 	current_state = State.PlayerTurn
+	_wire_health_bars()
+
+func _wire_health_bars() -> void:
+	# Player
+	player_health_bar.setup("You", player.get_max_health(), player.get_health())
+	player.health_changed.connect(
+		func(hp: int, mx: int): player_health_bar.set_hp(hp)
+	)
+	# Enemy — variant is picked in Enemy._ready(), which fires before this
+	# (since Enemy is a child of Room and added to the tree before Combat's
+	# _ready runs). If for some reason the variant isn't ready yet, the
+	# variant_ready signal will fire when it is.
+	if enemy.get_display_name() != "Enemy":
+		enemy_health_bar.setup(enemy.get_display_name(), enemy.max_hp, enemy.get_health())
+	enemy.variant_ready.connect(
+		func(name: String, mx: int): enemy_health_bar.setup(name, mx, enemy.get_health())
+	)
+	enemy.health_changed.connect(
+		func(hp: int, mx: int): enemy_health_bar.set_hp(hp)
+	)
 
 func _process(_delta: float) -> void:
 	match current_state:

@@ -1,33 +1,24 @@
-extends Sprite2D
+extends Node2D
 
-## The player uses Global.player_health so HP persists across scene changes
-## (combat -> navigation -> combat).
+## Player — no visual sprite (the health is shown via the UI HealthBar).
+## Persists HP across scene changes via Global.player_health.
 
-var total_health: int = Global.PLAYER_MAX_HEALTH
+signal health_changed(new_hp: int, max_hp: int)
+
+var max_hp: int = Global.PLAYER_MAX_HEALTH
 var health: int = Global.PLAYER_MAX_HEALTH
 
-var heart_one_comparison: float = 0.33 * total_health
-var heart_two_comparison: float = 0.66 * total_health
-var heart_three_comparison: float = 1.0 * total_health
-
-# --- Shake Vars ---
+# --- Shake Vars (for screen-style feedback on damage) ---
 var is_shaking := false
-var shake_intensity := 0
 var wobble_intensity := 9
 var shake_duration := 0.3
 var shake_timer := 0.0
 @onready var starting_position := position
 
-@onready var heart_one   = get_node("HeartOne")
-@onready var heart_two   = get_node("HeartTwo")
-@onready var heart_three = get_node("HeartThree")
-
-@onready var damage_timer := $DamageTimer
-
 func _ready() -> void:
 	# Restore health from the global state so combat scenes remember damage.
 	health = Global.player_health
-	_refresh_hearts()
+	emit_signal("health_changed", health, max_hp)
 
 func _process(delta: float) -> void:
 	if is_shaking:
@@ -46,15 +37,19 @@ func apply_damage(damage_value: int) -> void:
 		Global.player_health = health  # persist across scenes
 		print("Player Health -> ", health)
 		start_shake_and_wobble()
-	_refresh_hearts()
+	emit_signal("health_changed", health, max_hp)
 
-func _refresh_hearts() -> void:
-	heart_three.visible = health > heart_two_comparison
-	heart_two.visible   = health > heart_one_comparison
-	heart_one.visible   = health > 0
+func heal(amount: int) -> void:
+	if amount > 0:
+		health = min(max_hp, health + amount)
+		Global.player_health = health
+		emit_signal("health_changed", health, max_hp)
 
 func get_health() -> int:
 	return health
+
+func get_max_health() -> int:
+	return max_hp
 
 func start_shake_and_wobble() -> void:
 	is_shaking = true
