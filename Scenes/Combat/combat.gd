@@ -68,7 +68,10 @@ func _on_card_played(card_type: String, card_damage: int) -> void:
 	# Give the eye a beat to register that the cards vanished before the hit.
 	await get_tree().create_timer(0.25).timeout
 
-	if card_damage > 0 and card_type != "None":
+	if card_type == "Defend":
+		print("[Combat] Defend played — blocking the next enemy hit")
+		player.add_block()
+	elif card_damage > 0 and card_type != "None":
 		print("[Combat] applying %d %s damage to enemy" % [card_damage, card_type])
 		enemy.apply_damage(card_type, card_damage)
 		# Wait for the enemy's healthbar to finish draining.

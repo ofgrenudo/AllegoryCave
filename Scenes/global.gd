@@ -6,6 +6,12 @@ extends Node
 const MIN_DECK_SIZE := 3
 const MAX_DECK_SIZE := 6
 
+# Base deck — always dealt in on top of whichever elemental cards the player
+# has selected above. 52 cards total, none of them elemental.
+const STARTING_DECK_ATTACK_COUNT := 10
+const STARTING_DECK_DEFEND_COUNT := 8
+const STARTING_DECK_NORMAL_COUNT := 34
+
 # Which cards the player has selected for their deck.
 var card_states := {
 	"LightningOne":  true,

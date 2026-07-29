@@ -8,6 +8,9 @@ signal health_changed(new_hp: int, max_hp: int)
 var max_hp: int = Global.PLAYER_MAX_HEALTH
 var health: int = Global.PLAYER_MAX_HEALTH
 
+# Set by playing a Defend card — absorbs the next incoming hit, then clears.
+var block_active := false
+
 # --- Shake Vars (for screen-style feedback on damage) ---
 var is_shaking := false
 var wobble_intensity := 9
@@ -32,12 +35,21 @@ func _process(delta: float) -> void:
 			apply_shake_and_wobble()
 
 func apply_damage(damage_value: int) -> void:
+	if block_active:
+		block_active = false
+		print("Player blocks the attack!")
+		emit_signal("health_changed", health, max_hp)
+		return
 	if damage_value > 0:
 		health = max(0, health - damage_value)
 		Global.player_health = health  # persist across scenes
 		print("Player Health -> ", health)
 		start_shake_and_wobble()
 	emit_signal("health_changed", health, max_hp)
+
+func add_block() -> void:
+	## Called when a Defend card is played — absorbs the next hit entirely.
+	block_active = true
 
 func heal(amount: int) -> void:
 	if amount > 0:

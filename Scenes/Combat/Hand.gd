@@ -34,6 +34,19 @@ const CARD_SCENE_MAP := {
 	"AceDiamond":   "res://Scenes/Cards/ace_diamonds.tscn",
 }
 
+# Base deck — always shuffled in alongside whatever elemental cards the
+# player selected above. No elements: Attack, Defend, and plain Normal only.
+const ATTACK_CARD_SCENE := "res://Scenes/Cards/attack_card.tscn"
+const DEFEND_CARD_SCENE := "res://Scenes/Cards/defend_card.tscn"
+const NORMAL_CARD_SCENES := [
+	"res://Scenes/Cards/seven_diamonds.tscn",
+	"res://Scenes/Cards/three_hearts.tscn",
+	"res://Scenes/Cards/eight_clubs.tscn",
+	"res://Scenes/Cards/five_diamonds.tscn",
+	"res://Scenes/Cards/ace_diamonds.tscn",
+	"res://Scenes/Cards/two_clubs.tscn",
+]
+
 # Fan layout for the hand
 const FAN_Y := 920.0
 const FAN_X_SPAN := 900.0    # total horizontal spread for the whole fan
@@ -72,9 +85,20 @@ func _ready() -> void:
 func _build_starting_draw_pile() -> void:
 	draw_pile.clear()
 	discard_pile.clear()
+
+	# Fixed 52-card base deck — always dealt in, no elements.
+	for i in Global.STARTING_DECK_ATTACK_COUNT:
+		draw_pile.append(ATTACK_CARD_SCENE)
+	for i in Global.STARTING_DECK_DEFEND_COUNT:
+		draw_pile.append(DEFEND_CARD_SCENE)
+	for i in Global.STARTING_DECK_NORMAL_COUNT:
+		draw_pile.append(NORMAL_CARD_SCENES[i % NORMAL_CARD_SCENES.size()])
+
+	# Player's selected elemental loadout, on top of the base deck.
 	for card_name in Global.card_states.keys():
 		if Global.card_states[card_name] and CARD_SCENE_MAP.has(card_name):
 			draw_pile.append(CARD_SCENE_MAP[card_name])
+
 	draw_pile.shuffle()
 	if draw_pile.is_empty():
 		push_error("Hand: player has no enabled cards. Deck is empty.")
