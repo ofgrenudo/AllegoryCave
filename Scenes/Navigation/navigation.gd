@@ -49,13 +49,23 @@ func _process(delta: float) -> void:
 			deck_manager.position = deck_manager_original_position
 
 func _unhandled_input(event: InputEvent) -> void:
-	# Controller "back" (B / Escape) closes the deck manager if the deck is legal.
-	if event.is_action_pressed("back") and deck_manager.visible:
-		var cards_in_play: int = Global.count_selected_cards()
-		if cards_in_play >= Global.MIN_DECK_SIZE and cards_in_play <= Global.MAX_DECK_SIZE:
-			deck_manager.visible = false
-		else:
-			start_shake_deck_manager()
+	# Don't accept navigation input while the deck manager is open.
+	if deck_manager.visible:
+		# B / Escape closes the deck manager if the deck is legal.
+		if event.is_action_pressed("back"):
+			var cards_in_play: int = Global.count_selected_cards()
+			if cards_in_play >= Global.MIN_DECK_SIZE and cards_in_play <= Global.MAX_DECK_SIZE:
+				deck_manager.visible = false
+			else:
+				start_shake_deck_manager()
+			get_viewport().set_input_as_handled()
+		return
+
+	# Left/right on any direction input navigates rooms.
+	# This catches: D-pad, left stick, WASD, arrow keys — all via nav_left / nav_right.
+	if event.is_action_pressed("nav_left") or event.is_action_pressed("nav_right") \
+			or event.is_action_pressed("select"):
+		navigate_rooms()
 		get_viewport().set_input_as_handled()
 
 func navigate_rooms() -> void:

@@ -49,6 +49,14 @@ var hand_nodes: Array = []            # matching Card node instances
 # is still resolving.
 var input_locked := true
 
+# Controller / keyboard card focus
+var focused_index: int = 0          # which card slot is highlighted
+const FOCUS_SCALE_BUMP := 0.12      # how much the focused card grows
+const FOCUS_REPEAT_DELAY := 0.3     # seconds before held direction repeats
+const FOCUS_REPEAT_RATE  := 0.15    # repeat interval while held
+var _repeat_timer: float = 0.0
+var _repeat_direction: int = 0      # -1 left, 0 none, 1 right
+
 @onready var card_deck := get_node("Deck")
 
 var rng := RandomNumberGenerator.new()
@@ -78,12 +86,14 @@ func start_turn() -> void:
 	print("[Hand] start_turn — draw=%d, discard=%d, hand=%d" % [
 		draw_pile.size(), discard_pile.size(), hand_paths.size(),
 	])
+	focused_index = 0
 	_draw_up_to(HAND_SIZE)
 	input_locked = false
 	print("[Hand] start_turn DONE — hand_nodes=%d, hand_paths=%d, input_locked=%s" % [
 		hand_nodes.size(), hand_paths.size(), str(input_locked),
 	])
 	_emit_pile_state()
+	_apply_focus_visuals()
 
 func end_turn() -> void:
 	## Discard whatever is left in the hand. Combat.gd calls this from its
@@ -163,15 +173,75 @@ func _layout_hand() -> void:
 	])
 
 # ============================================================================
-# Poll for a played card (each card sets .selected = true on click)
+# Input — controller/keyboard card navigation + mouse click fallback
 # ============================================================================
-func _process(_delta: float) -> void:
+func _process(delta: float) -> void:
 	if input_locked:
 		return
+
+	# --- Directional card navigation with auto-repeat ---
+	var dir := 0
+	if Input.is_action_just_pressed("card_left"):
+		dir = -1
+		_repeat_direction = -1
+		_repeat_timer = FOCUS_REPEAT_DELAY
+	elif Input.is_action_just_pressed("card_right"):
+		dir = 1
+		_repeat_direction = 1
+		_repeat_timer = FOCUS_REPEAT_DELAY
+	elif _repeat_direction != 0:
+		if Input.is_action_pressed("card_left") or Input.is_action_pressed("card_right"):
+			_repeat_timer -= delta
+			if _repeat_timer <= 0.0:
+				dir = _repeat_direction
+				_repeat_timer = FOCUS_REPEAT_RATE
+		else:
+			_repeat_direction = 0
+
+	if dir != 0 and hand_nodes.size() > 0:
+		# Range is 0..hand_nodes.size() inclusive — last slot = Deck (end turn)
+		focused_index = clamp(focused_index + dir, 0, hand_nodes.size())
+		_apply_focus_visuals()
+
+	# --- Play / confirm ---
+	if Input.is_action_just_pressed("play_card"):
+		if focused_index == hand_nodes.size():
+			# Focus is on the Deck — treat as end turn
+			if not input_locked:
+				emit_signal("end_turn_requested")
+		elif hand_nodes.size() > 0:
+			_play_card(hand_nodes[focused_index])
+		return
+
+	# --- X button / Tab = instant end turn ---
+	if Input.is_action_just_pressed("end_turn"):
+		if not input_locked:
+			emit_signal("end_turn_requested")
+		return
+
+	# --- Mouse click fallback (unchanged behaviour) ---
 	for card in hand_nodes:
 		if is_instance_valid(card) and card.selected:
 			_play_card(card)
-			break  # one at a time
+			break
+
+func _apply_focus_visuals() -> void:
+	## Scale up the focused card, reset all others to base scale.
+	for i in hand_nodes.size():
+		var card = hand_nodes[i]
+		if not is_instance_valid(card):
+			continue
+		if i == focused_index:
+			card.scale = Vector2(1.0 + FOCUS_SCALE_BUMP, 1.0 + FOCUS_SCALE_BUMP)
+		else:
+			card.scale = Vector2(1.0, 1.0)
+
+	# Also highlight the Deck sprite if focus is past all cards
+	if card_deck:
+		if focused_index == hand_nodes.size():
+			card_deck.scale = Vector2(0.42, 0.42)   # slightly bigger than normal hover
+		else:
+			card_deck.scale = Vector2(0.35, 0.35)  # one at a time
 
 func _play_card(card: Node) -> void:
 	input_locked = true
