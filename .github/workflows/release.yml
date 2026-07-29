@@ -1,0 +1,75 @@
+name: Build & Release
+
+on:
+  push:
+    branches:
+      - main
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Setup Godot
+        uses: chickensoft-games/setup-godot@v2
+        with:
+          version: 4.7.1
+          use-dotnet: false
+
+      - name: Create export templates directory
+        run: mkdir -p ~/.local/share/godot/export_templates/4.7.1.stable
+
+      - name: Download Godot export templates
+        run: |
+          cd ~/.local/share/godot/export_templates/4.7.1.stable
+          wget https://github.com/godotengine/godot-releases/releases/download/4.7.1-stable/Godot_v4.7.1-stable_export-templates.tpz
+          unzip -q Godot_v4.7.1-stable_export-templates.tpz
+          rm Godot_v4.7.1-stable_export-templates.tpz
+
+      - name: Build Linux (x86_64)
+        run: |
+          mkdir -p builds/linux
+          godot --export-release "Linux (x86_64)" builds/linux/AllegoryCave.x86_64
+
+      - name: Build Windows (x86_64)
+        run: |
+          mkdir -p builds/windows
+          godot --export-release "Windows (x86_64)" builds/windows/AllegoryCave.exe
+
+      - name: Build macOS (ARM64)
+        run: |
+          mkdir -p builds/macos
+          godot --export-release "macOS (ARM64)" builds/macos/AllegoryCave.dmg
+
+      - name: Create release artifacts
+        run: |
+          cd builds
+          tar -czf linux/AllegoryCave-linux.tar.gz -C linux AllegoryCave.x86_64
+          zip -r windows/AllegoryCave-windows.zip windows/AllegoryCave.exe
+          tar -czf macos/AllegoryCave-macos.tar.gz -C macos AllegoryCave.dmg
+
+      - name: Create GitHub Release
+        uses: softprops/action-gh-release@v1
+        with:
+          files: |
+            builds/linux/AllegoryCave-linux.tar.gz
+            builds/windows/AllegoryCave-windows.zip
+            builds/macos/AllegoryCave-macos.tar.gz
+          tag_name: v${{ github.run_number }}
+          name: Release v${{ github.run_number }}
+          body: |
+            Automated build from commit ${{ github.sha }}
+            
+            **Download:**
+            - 🐧 Linux (x86_64): AllegoryCave-linux.tar.gz
+            - 🪟 Windows (x86_64): AllegoryCave-windows.zip
+            - 🍎 macOS (ARM64): AllegoryCave-macos.tar.gz
+          draft: false
+          prerelease: false
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
