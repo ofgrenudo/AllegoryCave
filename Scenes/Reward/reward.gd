@@ -15,14 +15,17 @@ func _ready() -> void:
 	continue_button.pressed.connect(_on_continue_pressed)
 
 func roll_reward() -> void:
-	# Try to give the player a locked card first; if all owned, heal instead.
+	# Try to give the player an unowned card first; if all owned, heal instead.
+	# Elemental cards are excluded — those are earned by rescuing an NPC in a
+	# later cave, not found as a random reward in the first cave.
 	var locked: Array = []
-	for card_name in Global.card_states.keys():
-		if not Global.card_states[card_name]:
+	for card_name in Global.card_owned.keys():
+		if not Global.card_owned[card_name] and not Global.ELEMENTAL_CARD_NAMES.has(card_name):
 			locked.append(card_name)
 
 	if locked.size() > 0 and rng.randf() < 0.6:
 		var pick: String = locked[rng.randi_range(0, locked.size() - 1)]
+		Global.card_owned[pick] = true
 		Global.card_states[pick] = true
 		title_label.text = "A new card!"
 		desc_label.text = "You found: %s\nIt has been added to your collection." % pick

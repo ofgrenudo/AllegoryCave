@@ -65,6 +65,16 @@ func _unhandled_input(event: InputEvent) -> void:
 
 	# Left/right on any direction input navigates rooms.
 	# This catches: D-pad, left stick, WASD, arrow keys — all via nav_left / nav_right.
+	# Mouse clicks are excluded here — "select" is bound to the left mouse
+	# button, and each clickable sprite (rooms, Deck) already handles clicks
+	# itself via its own Area2D input_event. Letting a raw mouse click also
+	# fall through this blanket check races the Deck button: physics picking
+	# resolves the Area2D click a tick after this fires, so clicking Deck
+	# would navigate to the next room before the deck manager got a chance
+	# to open.
+	if event is InputEventMouseButton:
+		return
+
 	if event.is_action_pressed("nav_left") or event.is_action_pressed("nav_right") \
 			or event.is_action_pressed("select"):
 		navigate_rooms()

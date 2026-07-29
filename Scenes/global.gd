@@ -12,22 +12,75 @@ const STARTING_DECK_ATTACK_COUNT := 10
 const STARTING_DECK_DEFEND_COUNT := 8
 const STARTING_DECK_NORMAL_COUNT := 34
 
-# Which cards the player has selected for their deck.
-var card_states := {
-	"LightningOne":  true,
+# Elemental "taught" cards — per the story, these are unlocked by rescuing an
+# NPC in a later cave. The first cave (Waking Cave) has no one left to teach
+# you one, so none of these should start active or be earnable yet.
+const ELEMENTAL_CARD_NAMES := [
+	"LightningOne", "LightningTwo",
+	"FireOne",
+	"IceOne", "IceTwo",
+	"AcidOne", "AcidTwo",
+	"LightOne", "LightTwo",
+]
+
+# Card face art for the Deck Manager inventory screen, keyed the same as
+# card_owned/card_states.
+const CARD_TEXTURES := {
+	"LightningOne": "res://Media/Cards/magic/Untitled_Artwork-1.png",
+	"LightningTwo": "res://Media/Cards/magic/Untitled_Artwork-2.png",
+	"FireOne":      "res://Media/Cards/magic/Untitled_Artwork-3.png",
+	"IceOne":       "res://Media/Cards/magic/Untitled_Artwork-4.png",
+	"AcidOne":      "res://Media/Cards/magic/Untitled_Artwork-5.png",
+	"AcidTwo":      "res://Media/Cards/magic/Untitled_Artwork-6.png",
+	"LightOne":     "res://Media/Cards/magic/Untitled_Artwork-7.png",
+	"LightTwo":     "res://Media/Cards/magic/Untitled_Artwork-8.png",
+	"IceTwo":       "res://Media/Cards/magic/Untitled_Artwork-9.png",
+	"SevenDiamond": "res://Media/Cards/normal/Untitled_Artwork-1.png",
+	"ThreeHearts":  "res://Media/Cards/normal/Untitled_Artwork-3.png",
+	"EightClubs":   "res://Media/Cards/normal/Untitled_Artwork-4.png",
+	"FiveDiamond":  "res://Media/Cards/normal/Untitled_Artwork-5.png",
+	"AceDiamond":   "res://Media/Cards/normal/Untitled_Artwork-6.png",
+}
+
+# Cards the player currently owns/has unlocked. The Deck Manager only ever
+# shows cards from this inventory — a card not owned yet (e.g. an elemental
+# one not yet taught by an NPC) simply doesn't appear until earned. All the
+# plain playing-card-named cards are yours from the start (per the Story
+# Bible: "mundane, untaught" cards you already have); elemental cards are
+# unowned until an NPC teaches you one.
+var card_owned := {
+	"LightningOne":  false,
 	"LightningTwo":  false,
-	"FireOne":       true,
+	"FireOne":       false,
 	"IceOne":        false,
-	"AcidOne":       true,
+	"AcidOne":       false,
 	"AcidTwo":       false,
 	"LightOne":      false,
-	"LightTwo":      true,
+	"LightTwo":      false,
 	"IceTwo":        false,
 	"SevenDiamond":  true,
 	"ThreeHearts":   true,
-	"EightClubs":    false,
-	"FiveDiamond":   false,
-	"AceDiamond":    false,
+	"EightClubs":    true,
+	"FiveDiamond":   true,
+	"AceDiamond":    true,
+}
+
+# Which OWNED cards the player has selected to bring into their deck.
+var card_states := {
+	"LightningOne":  false,
+	"LightningTwo":  false,
+	"FireOne":       false,
+	"IceOne":        false,
+	"AcidOne":       false,
+	"AcidTwo":       false,
+	"LightOne":      false,
+	"LightTwo":      false,
+	"IceTwo":        false,
+	"SevenDiamond":  true,
+	"ThreeHearts":   true,
+	"EightClubs":    true,
+	"FiveDiamond":   true,
+	"AceDiamond":    true,
 }
 
 # =============================================================================
