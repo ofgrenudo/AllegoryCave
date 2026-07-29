@@ -27,33 +27,41 @@ parameters/looping = true
 
 [node name="Vertical Shelf" type="VBoxContainer" parent="."]
 layout_mode = 0
-offset_left = 140.0
-offset_top = 640.0
-offset_right = 560.0
-offset_bottom = 1020.0
+offset_left = 130.0
+offset_top = 580.0
+offset_right = 620.0
+offset_bottom = 1040.0
 theme = ExtResource("4_theme")
-theme_override_constants/separation = 18
+theme_override_constants/separation = 26
 
 [node name="Start" type="Button" parent="Vertical Shelf"]
 layout_mode = 2
 size_flags_horizontal = 3
-text = "Start"
+pivot_offset = Vector2(245, 45)
+rotation = -0.0698
+text = "START"
 
 [node name="Settings" type="Button" parent="Vertical Shelf"]
 layout_mode = 2
 size_flags_horizontal = 3
+pivot_offset = Vector2(245, 45)
+rotation = -0.0524
 disabled = true
-text = "Settings"
+text = "SETTINGS"
 
 [node name="Credits" type="Button" parent="Vertical Shelf"]
 layout_mode = 2
 size_flags_horizontal = 3
-text = "Credits"
+pivot_offset = Vector2(245, 45)
+rotation = -0.0873
+text = "CREDITS"
 
 [node name="Quit" type="Button" parent="Vertical Shelf"]
 layout_mode = 2
 size_flags_horizontal = 3
-text = "Quit"
+pivot_offset = Vector2(245, 45)
+rotation = -0.0611
+text = "QUIT"
 
 [connection signal="pressed" from="Vertical Shelf/Start" to="." method="_on_start_pressed"]
 [connection signal="pressed" from="Vertical Shelf/Settings" to="." method="_on_settings_pressed"]

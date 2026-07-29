@@ -14,13 +14,45 @@ extends Control
 @onready var opening_scene := preload("res://Scenes/Opening Sceen/Opening Sceen.tscn")
 @onready var music := get_node("Background/AudioStreamPlayer2D")
 
+const HOVER_KICK_X   := 30.0    ## How far the button slides right on hover
+const HOVER_SCALE    := 1.06    ## How much it grows on hover
+const KICK_DURATION  := 0.12    ## Snappy — Persona is fast
+
+var _button_rest_state: Dictionary = {}  # button -> {position, scale, rotation}
 
 func _ready() -> void:
-	# Give the Start button initial focus so keyboard/gamepad work right away
-	# (and shows the warm focus glow from the theme).
+	var shelf: VBoxContainer = $"Vertical Shelf"
+	for child in shelf.get_children():
+		if child is Button:
+			_wire_button(child)
+
+	# Give the Start button initial focus so keyboard/gamepad work right away.
 	var start_btn := $"Vertical Shelf/Start" as Button
 	if start_btn:
 		start_btn.grab_focus()
+
+func _wire_button(btn: Button) -> void:
+	# Remember its resting transform so we can kick relative to it.
+	_button_rest_state[btn] = {
+		"position": btn.position,
+		"scale":    btn.scale,
+	}
+	btn.mouse_entered.connect(func(): _kick(btn, true))
+	btn.mouse_exited.connect(func(): _kick(btn, false))
+	btn.focus_entered.connect(func(): _kick(btn, true))
+	btn.focus_exited.connect(func(): _kick(btn, false))
+
+func _kick(btn: Button, active: bool) -> void:
+	if not _button_rest_state.has(btn):
+		return
+	var rest: Dictionary = _button_rest_state[btn]
+	var target_pos: Vector2 = rest["position"] + (Vector2(HOVER_KICK_X, 0) if active else Vector2.ZERO)
+	var target_scale: Vector2 = (rest["scale"] as Vector2) * (HOVER_SCALE if active else 1.0)
+
+	var tween := create_tween().set_parallel(true)
+	tween.set_trans(Tween.TRANS_CUBIC).set_ease(Tween.EASE_OUT)
+	tween.tween_property(btn, "position", target_pos, KICK_DURATION)
+	tween.tween_property(btn, "scale", target_scale, KICK_DURATION)
 
 ## This will navigate you to the starting scene when clicked.
 func _on_start_pressed() -> void:
