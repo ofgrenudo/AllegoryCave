@@ -16,7 +16,11 @@ extends Control
 
 
 func _ready() -> void:
-	pass
+	# Give the Start button initial focus so keyboard/gamepad work right away
+	# (and shows the warm focus glow from the theme).
+	var start_btn := $"Vertical Shelf/Start" as Button
+	if start_btn:
+		start_btn.grab_focus()
 
 ## This will navigate you to the starting scene when clicked.
 func _on_start_pressed() -> void:

@@ -1,8 +1,9 @@
-[gd_scene load_steps=4 format=3 uid="uid://jxmd1k4bxqg6"]
+[gd_scene load_steps=5 format=3 uid="uid://jxmd1k4bxqg6"]
 
 [ext_resource type="Script" path="res://Scenes/main_menu.gd" id="1_37vaq"]
 [ext_resource type="Texture2D" uid="uid://c7j3bxoktkodb" path="res://Media/Rooms/Title card.png" id="2_1n5ev"]
 [ext_resource type="AudioStream" uid="uid://1y64g24hrec6" path="res://Media/Music/One Man Symphony - Downtempo & Lofi & Progressive Music Pack Vol1/One Man Symphony - Downtempo & Lofi & Progressive Music Pack Vol - 1 (Free) - 01 A Place Where It's Just The Two Of Us.mp3" id="3_loalc"]
+[ext_resource type="Theme" uid="uid://ccavetheme01" path="res://Scenes/UI/menu_theme.tres" id="4_theme"]
 
 [node name="Main Menu" type="Control"]
 layout_mode = 3
@@ -26,26 +27,32 @@ parameters/looping = true
 
 [node name="Vertical Shelf" type="VBoxContainer" parent="."]
 layout_mode = 0
-offset_left = 173.0
-offset_top = 845.0
-offset_right = 390.0
-offset_bottom = 981.0
+offset_left = 140.0
+offset_top = 640.0
+offset_right = 560.0
+offset_bottom = 1020.0
+theme = ExtResource("4_theme")
+theme_override_constants/separation = 18
 
 [node name="Start" type="Button" parent="Vertical Shelf"]
 layout_mode = 2
+size_flags_horizontal = 3
 text = "Start"
 
 [node name="Settings" type="Button" parent="Vertical Shelf"]
 layout_mode = 2
+size_flags_horizontal = 3
 disabled = true
 text = "Settings"
 
 [node name="Credits" type="Button" parent="Vertical Shelf"]
 layout_mode = 2
+size_flags_horizontal = 3
 text = "Credits"
 
 [node name="Quit" type="Button" parent="Vertical Shelf"]
 layout_mode = 2
+size_flags_horizontal = 3
 text = "Quit"
 
 [connection signal="pressed" from="Vertical Shelf/Start" to="." method="_on_start_pressed"]
