@@ -1,6 +1,6 @@
 extends Node2D
 
-@export var card_type = "Acid"
+@export var card_type = "Ice"
 @export var card_damage = 30
 @export var selected = false
 
