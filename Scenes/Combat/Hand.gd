@@ -12,6 +12,7 @@ extends Sprite2D
 
 signal card_played(card_type: String, card_damage: int)
 signal piles_changed(draw_count: int, hand_count: int, discard_count: int)
+signal end_turn_requested   # emitted when the player clicks the Deck sprite
 
 const HAND_SIZE := 5
 
@@ -74,8 +75,14 @@ func _build_starting_draw_pile() -> void:
 # Turn hooks (called by combat.gd)
 # ============================================================================
 func start_turn() -> void:
+	print("[Hand] start_turn — draw=%d, discard=%d, hand=%d" % [
+		draw_pile.size(), discard_pile.size(), hand_paths.size(),
+	])
 	_draw_up_to(HAND_SIZE)
 	input_locked = false
+	print("[Hand] start_turn DONE — hand_nodes=%d, hand_paths=%d, input_locked=%s" % [
+		hand_nodes.size(), hand_paths.size(), str(input_locked),
+	])
 	_emit_pile_state()
 
 func end_turn() -> void:
@@ -120,6 +127,7 @@ func _clear_hand_nodes() -> void:
 func _layout_hand() -> void:
 	_clear_hand_nodes()
 	var n: int = hand_paths.size()
+	print("[Hand] _layout_hand — laying out %d cards" % n)
 	if n == 0:
 		return
 
@@ -131,6 +139,11 @@ func _layout_hand() -> void:
 			continue
 		var inst = scn.instantiate()
 
+		# Defensive: brand new cards should NEVER start selected. If they do
+		# (e.g. someone changed the default), we'd auto-play on turn start.
+		if "selected" in inst:
+			inst.selected = false
+
 		# Fan positioning: centered on 0, spread across FAN_X_SPAN
 		var t: float = 0.0 if n == 1 else float(i) / float(n - 1)   # 0..1
 		var x: float = lerp(-FAN_X_SPAN * 0.5, FAN_X_SPAN * 0.5, t)
@@ -138,12 +151,16 @@ func _layout_hand() -> void:
 
 		inst.position = Vector2(x, FAN_Y)
 		inst.rotation = deg_to_rad(rot_deg)
+		inst.visible = true
 
 		# Stamp the source path so we can move the exact card to the discard.
 		inst.set_meta("scene_path", path)
 
 		add_child(inst)
 		hand_nodes.append(inst)
+	print("[Hand] _layout_hand DONE — hand_nodes=%d, Hand child_count=%d" % [
+		hand_nodes.size(), get_child_count(),
+	])
 
 # ============================================================================
 # Poll for a played card (each card sets .selected = true on click)
@@ -210,11 +227,12 @@ func _emit_pile_state() -> void:
 	emit_signal("piles_changed", draw_pile.size(), hand_paths.size(), discard_pile.size())
 
 # ============================================================================
-# Deck sprite (visual only now — clicking it just gives feedback)
+# Deck sprite — click it to end your turn
 # ============================================================================
 func _on_deck_area_2d_input_event(_viewport: Node, event: InputEvent, _shape_idx: int) -> void:
-	if event.is_action_pressed("select"):
-		print("[Hand] Draw pile: %d | Discard: %d" % [draw_pile.size(), discard_pile.size()])
+	if event.is_action_pressed("select") and not input_locked:
+		print("[Hand] Deck clicked — requesting end of turn")
+		emit_signal("end_turn_requested")
 
 func _on_deck_area_2d_mouse_entered() -> void:
 	card_deck.scale = Vector2(0.40, 0.40)

@@ -3,13 +3,14 @@ extends Node2D
 ## Combat scene — full deckbuilder loop.
 ##
 ## Turn flow:
-##   1. Player Turn starts — Hand draws up to HAND_SIZE cards.
-##   2. Player clicks any number of cards; each resolves via the
-##      Hand.card_played signal. Between cards, we return to the
-##      same player-turn state (unlock input, keep drawing/playing).
-##   3. Player clicks END TURN — remaining hand is discarded, enemy
-##      takes its turn, then a new player turn begins.
-##   4. When the draw pile empties, discard is shuffled back in.
+##   1. Player Turn starts — Hand draws 5.
+##   2. Player clicks ONE card. Whole hand vanishes, damage lands.
+##   3. Wait for healthbar drain + 0.3s beat.
+##   4. Enemy lurches, hits the player, recoils.
+##   5. New player turn — draw 5.
+##
+## The player can also click the Deck sprite to skip the play and end
+## the turn early (useful if their hand is bad).
 
 @onready var hand:   Node2D = get_node("Room/Hand")
 @onready var enemy         = get_node("Room/Enemy")
@@ -17,8 +18,8 @@ extends Node2D
 
 @onready var player_health_bar: HealthBar = $UI/PlayerHealthBar
 @onready var enemy_health_bar:  HealthBar = $UI/EnemyHealthBar
-@onready var end_turn_button:   Button    = $UI/EndTurnButton
-@onready var pile_counters:     Label     = $UI/PileCounters
+# Optional counters label — may be absent if the scene was edited.
+@onready var pile_counters:     Label     = get_node_or_null("UI/PileCounters")
 
 enum State { PlayerTurn, EnemyTurn, ResolvingCard, Frozen }
 var current_state: State = State.PlayerTurn
@@ -26,7 +27,6 @@ var current_state: State = State.PlayerTurn
 func _ready() -> void:
 	_wire_health_bars()
 	_wire_hand()
-	_wire_end_turn_button()
 
 	# Kick off the very first turn.
 	current_state = State.PlayerTurn
@@ -44,7 +44,7 @@ func _wire_health_bars() -> void:
 	if enemy.get_display_name() != "Enemy":
 		enemy_health_bar.setup(enemy.get_display_name(), enemy.max_hp, enemy.get_health())
 	enemy.variant_ready.connect(
-		func(name: String, mx: int): enemy_health_bar.setup(name, mx, enemy.get_health())
+		func(_name: String, _mx: int): enemy_health_bar.setup(enemy.get_display_name(), enemy.max_hp, enemy.get_health())
 	)
 	enemy.health_changed.connect(
 		func(hp: int, _mx: int): enemy_health_bar.set_hp(hp)
@@ -53,27 +53,23 @@ func _wire_health_bars() -> void:
 func _wire_hand() -> void:
 	hand.card_played.connect(_on_card_played)
 	hand.piles_changed.connect(_on_piles_changed)
-
-func _wire_end_turn_button() -> void:
-	end_turn_button.pressed.connect(_on_end_turn_pressed)
+	hand.end_turn_requested.connect(_on_end_turn_requested)
 
 # ============================================================================
 # Card play resolution
 # ============================================================================
 func _on_card_played(card_type: String, card_damage: int) -> void:
+	print("[Combat] _on_card_played: state=%d type=%s dmg=%d" % [current_state, card_type, card_damage])
 	if current_state != State.PlayerTurn:
+		print("[Combat] ignoring card_played — not in PlayerTurn")
 		return
 	current_state = State.ResolvingCard
-
-	# The hand has already cleared every card when this signal fires — the
-	# played card and any remaining ones are already in the discard pile.
-	# So now we just resolve the damage and let the player watch it land.
 
 	# Give the eye a beat to register that the cards vanished before the hit.
 	await get_tree().create_timer(0.25).timeout
 
 	if card_damage > 0 and card_type != "None":
-		print("Player played %s for %d damage" % [card_type, card_damage])
+		print("[Combat] applying %d %s damage to enemy" % [card_damage, card_type])
 		enemy.apply_damage(card_type, card_damage)
 		# Wait for the enemy's healthbar to finish draining.
 		await enemy_health_bar.await_settled()
@@ -90,18 +86,18 @@ func _on_card_played(card_type: String, card_damage: int) -> void:
 	await _do_end_of_turn()
 
 # ============================================================================
-# End Turn button
+# End Turn (via Deck click)
 # ============================================================================
-func _on_end_turn_pressed() -> void:
+func _on_end_turn_requested() -> void:
+	print("[Combat] end-turn requested: state=%d" % current_state)
 	if current_state != State.PlayerTurn:
 		return
 	await _do_end_of_turn()
 
-# Shared end-of-turn flow, used by both the END TURN button (no card played)
-# and the auto-end after a card resolves.
+# Shared end-of-turn flow: discard hand, enemy attacks, draw new hand.
 func _do_end_of_turn() -> void:
+	print("[Combat] _do_end_of_turn — enemy attacking")
 	current_state = State.EnemyTurn
-	end_turn_button.disabled = true
 
 	hand.end_turn()  # discard the hand (no-op after a card play — already cleared)
 
@@ -124,9 +120,10 @@ func _do_end_of_turn() -> void:
 		return
 
 	# New player turn — draw fresh hand.
+	print("[Combat] enemy done — starting next player turn")
 	current_state = State.PlayerTurn
-	end_turn_button.disabled = false
 	hand.start_turn()
+	print("[Combat] next turn started; state=%d" % current_state)
 
 # ============================================================================
 # End of combat check
@@ -151,7 +148,8 @@ func _check_end_of_combat() -> bool:
 	return false
 
 # ============================================================================
-# UI updates
+# UI updates (safe if PileCounters label was deleted)
 # ============================================================================
 func _on_piles_changed(draw_count: int, _hand_count: int, discard_count: int) -> void:
-	pile_counters.text = "Draw: %d    Discard: %d" % [draw_count, discard_count]
+	if pile_counters:
+		pile_counters.text = "Draw: %d    Discard: %d" % [draw_count, discard_count]
