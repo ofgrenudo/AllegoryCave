@@ -1,16 +1,34 @@
-name: Build & Release
+name: Release
 
 on:
   push:
     branches:
       - main
 
-jobs:
-  build:
-    runs-on: ubuntu-latest
-    permissions:
-      contents: write
+permissions:
+  contents: write
+  pull-requests: write
 
+jobs:
+  release-please:
+    runs-on: ubuntu-latest
+    outputs:
+      release_created: ${{ steps.release.outputs.release_created }}
+      tag_name: ${{ steps.release.outputs.tag_name }}
+    steps:
+      - name: Run release-please
+        id: release
+        uses: googleapis/release-please-action@v4
+        with:
+          token: ${{ secrets.GITHUB_TOKEN }}
+          config-file: release-please-config.json
+          manifest-file: .release-please-manifest.json
+          target-branch: main
+
+  build:
+    needs: release-please
+    if: needs.release-please.outputs.release_created == 'true'
+    runs-on: ubuntu-latest
     steps:
       - name: Checkout code
         uses: actions/checkout@v4
@@ -53,23 +71,12 @@ jobs:
           zip -r windows/AllegoryCave-windows.zip windows/AllegoryCave.exe
           tar -czf macos/AllegoryCave-macos.tar.gz -C macos AllegoryCave.dmg
 
-      - name: Create GitHub Release
-        uses: softprops/action-gh-release@v1
-        with:
-          files: |
-            builds/linux/AllegoryCave-linux.tar.gz
-            builds/windows/AllegoryCave-windows.zip
-            builds/macos/AllegoryCave-macos.tar.gz
-          tag_name: v${{ github.run_number }}
-          name: Release v${{ github.run_number }}
-          body: |
-            Automated build from commit ${{ github.sha }}
-            
-            **Download:**
-            - 🐧 Linux (x86_64): AllegoryCave-linux.tar.gz
-            - 🪟 Windows (x86_64): AllegoryCave-windows.zip
-            - 🍎 macOS (ARM64): AllegoryCave-macos.tar.gz
-          draft: false
-          prerelease: false
+      - name: Upload artifacts to release
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          gh release upload "${{ needs.release-please.outputs.tag_name }}" \
+            builds/linux/AllegoryCave-linux.tar.gz \
+            builds/windows/AllegoryCave-windows.zip \
+            builds/macos/AllegoryCave-macos.tar.gz \
+            --clobber
