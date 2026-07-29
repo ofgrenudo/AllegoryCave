@@ -27,10 +27,11 @@ parameters/looping = true
 
 [node name="Vertical Shelf" type="VBoxContainer" parent="." unique_id=1688221718]
 layout_mode = 0
-offset_left = 130.0
-offset_top = 580.0
-offset_right = 620.0
-offset_bottom = 1040.0
+offset_left = 182.0
+offset_top = 650.99994
+offset_right = 672.0
+offset_bottom = 1161.0
+scale = Vector2(0.5144061, 0.5144061)
 theme = ExtResource("4_theme")
 theme_override_constants/separation = 26
 
