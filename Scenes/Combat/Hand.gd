@@ -163,9 +163,8 @@ func _play_card(card: Node) -> void:
 	var path: String = card.get_meta("scene_path", "")
 
 	print("[Hand] played %s (%d dmg)" % [card_type, card_damage])
-	emit_signal("card_played", card_type, card_damage)
 
-	# Move it out of the hand.
+	# Move the played card into the discard pile.
 	var idx := hand_nodes.find(card)
 	if idx >= 0:
 		hand_nodes.remove_at(idx)
@@ -173,11 +172,19 @@ func _play_card(card: Node) -> void:
 	if path != "":
 		discard_pile.append(path)
 
+	# Clear the ENTIRE rest of the hand immediately — the played card gets
+	# the spotlight, everything else discards along with it.
+	for i in range(hand_paths.size()):
+		discard_pile.append(hand_paths[i])
+	hand_paths.clear()
+	# Free the played card and every other card in the hand.
 	card.queue_free()
-	_layout_hand()
+	_clear_hand_nodes()
+
 	_emit_pile_state()
 
-	# After the card resolves, combat.gd will unlock us or advance the turn.
+	# Now announce the play. combat.gd will handle the enemy hit + attack.
+	emit_signal("card_played", card_type, card_damage)
 
 func resume_input() -> void:
 	## Combat.gd calls this after a card resolves, if it's still the player's

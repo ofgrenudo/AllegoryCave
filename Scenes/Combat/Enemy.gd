@@ -10,6 +10,7 @@ extends Sprite2D
 
 signal health_changed(new_hp: int, max_hp: int)
 signal variant_ready(display_name: String, max_hp: int)
+signal lurch_impact  # peak of the enemy's attack lunge — land player damage here
 
 const ENEMY_DATA_DIR := "res://Scenes/Combat/Enemies/"
 
@@ -239,3 +240,34 @@ func start_shake_and_wobble() -> void:
 
 func apply_shake_and_wobble() -> void:
 	rotation = deg_to_rad(randf_range(-wobble_intensity, wobble_intensity))
+
+# ============================================================================
+# Attack animation — lurch toward the player, then recoil back
+# ============================================================================
+func lurch_and_recoil() -> void:
+	## Winds up, lunges toward the player, emits lurch_impact at the peak so
+	## combat.gd can trigger player damage there, then recoils back to rest.
+	if not is_shaking:
+		starting_position = position
+
+	var lunge_offset := Vector2(-260, -60)  # toward player (upper-left)
+
+	var wind_up := create_tween()
+	wind_up.set_trans(Tween.TRANS_CUBIC).set_ease(Tween.EASE_OUT)
+	wind_up.tween_property(self, "position", starting_position + Vector2(60, 20), 0.15)
+	wind_up.parallel().tween_property(self, "rotation", deg_to_rad(6), 0.15)
+	await wind_up.finished
+
+	var lunge := create_tween()
+	lunge.set_trans(Tween.TRANS_CUBIC).set_ease(Tween.EASE_IN)
+	lunge.tween_property(self, "position", starting_position + lunge_offset, 0.14)
+	lunge.parallel().tween_property(self, "rotation", deg_to_rad(-10), 0.14)
+	await lunge.finished
+
+	emit_signal("lurch_impact")
+
+	var recoil := create_tween()
+	recoil.set_trans(Tween.TRANS_CUBIC).set_ease(Tween.EASE_OUT)
+	recoil.tween_property(self, "position", starting_position, 0.25)
+	recoil.parallel().tween_property(self, "rotation", 0.0, 0.25)
+	await recoil.finished

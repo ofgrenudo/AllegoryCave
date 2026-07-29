@@ -65,18 +65,28 @@ func _on_card_played(card_type: String, card_damage: int) -> void:
 		return
 	current_state = State.ResolvingCard
 
+	# The hand has already cleared every card when this signal fires — the
+	# played card and any remaining ones are already in the discard pile.
+	# So now we just resolve the damage and let the player watch it land.
+
+	# Give the eye a beat to register that the cards vanished before the hit.
+	await get_tree().create_timer(0.25).timeout
+
 	if card_damage > 0 and card_type != "None":
 		print("Player played %s for %d damage" % [card_type, card_damage])
-		await enemy.apply_damage(card_type, card_damage)
-	# Small beat for readability
-	await get_tree().create_timer(0.2).timeout
+		enemy.apply_damage(card_type, card_damage)
+		# Wait for the enemy's healthbar to finish draining.
+		await enemy_health_bar.await_settled()
 
-	# Check for enemy death from the card BEFORE the enemy gets to swing.
+	# Check for enemy death first — if it died, don't let it swing back.
 	if enemy.get_health() <= 0:
 		_check_end_of_combat()
 		return
 
-	# One card per turn — auto-end the turn now.
+	# The requested 0.3s pause before the enemy retaliates.
+	await get_tree().create_timer(0.3).timeout
+
+	# Now the enemy lurches and hits the player.
 	await _do_end_of_turn()
 
 # ============================================================================
@@ -93,14 +103,23 @@ func _do_end_of_turn() -> void:
 	current_state = State.EnemyTurn
 	end_turn_button.disabled = true
 
-	hand.end_turn()  # discard remainder
+	hand.end_turn()  # discard the hand (no-op after a card play — already cleared)
 
-	# Enemy attacks.
+	# Enemy attacks: roll the damage first, then animate the lurch. Player
+	# damage lands on the "lurch_impact" signal at the peak of the lunge.
 	var enemy_damage: int = enemy.roll_attack()
-	await player.apply_damage(enemy_damage)
+
+	# One-shot connect so we can fire damage on impact then disconnect cleanly.
+	var impact_callable := func():
+		player.apply_damage(enemy_damage)
+	enemy.lurch_impact.connect(impact_callable, CONNECT_ONE_SHOT)
+
+	await enemy.lurch_and_recoil()
+
+	# Let the player's healthbar finish draining before checking outcomes.
+	await player_health_bar.await_settled()
 	await get_tree().create_timer(0.25).timeout
 
-	# Check outcomes.
 	if _check_end_of_combat():
 		return
 

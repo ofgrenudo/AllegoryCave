@@ -47,6 +47,13 @@ func set_hp(new_hp: int) -> void:
 	_current_hp = new_hp
 	_animate_to(_current_hp, is_damage)
 
+func await_settled() -> void:
+	## Yields until the currently-running fill tween finishes. combat.gd calls
+	## this so the "slower combat" flow can wait for the healthbar to visibly
+	## drain before the next beat.
+	if _tween_fill and _tween_fill.is_valid():
+		await _tween_fill.finished
+
 # ------------------------------------------------------------------------
 func _apply_immediate() -> void:
 	if _fill == null:
