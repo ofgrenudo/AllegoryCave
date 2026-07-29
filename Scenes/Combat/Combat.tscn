@@ -68,12 +68,11 @@ offset_right = 500.0
 offset_bottom = 100.0
 
 [node name="EnemyHealthBar" parent="UI" instance=ExtResource("13_hbar")]
-anchor_left = 1.0
-anchor_right = 1.0
-offset_left = -500.0
-offset_top = 40.0
-offset_right = -40.0
-offset_bottom = 100.0
+custom_minimum_size = Vector2(320, 40)
+offset_left = 760.0
+offset_top = 800.0
+offset_right = 1080.0
+offset_bottom = 840.0
 
 [node name="AudioListener2D" type="AudioStreamPlayer2D" parent="."]
 stream = ExtResource("14_nvehq")
