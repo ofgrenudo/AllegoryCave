@@ -58,7 +58,9 @@ func _unhandled_input(event: InputEvent) -> void:
 				deck_manager.visible = false
 			else:
 				start_shake_deck_manager()
-			get_viewport().set_input_as_handled()
+			var vp = get_viewport()
+			if vp:
+				vp.set_input_as_handled()
 		return
 
 	# Left/right on any direction input navigates rooms.
@@ -66,7 +68,9 @@ func _unhandled_input(event: InputEvent) -> void:
 	if event.is_action_pressed("nav_left") or event.is_action_pressed("nav_right") \
 			or event.is_action_pressed("select"):
 		navigate_rooms()
-		get_viewport().set_input_as_handled()
+		var vp = get_viewport()
+		if vp:
+			vp.set_input_as_handled()
 
 func navigate_rooms() -> void:
 	# Hide every room.
