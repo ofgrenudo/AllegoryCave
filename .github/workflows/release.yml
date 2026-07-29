@@ -38,38 +38,35 @@ jobs:
         with:
           version: 4.7.1
           use-dotnet: false
-
-      - name: Create export templates directory
-        run: mkdir -p ~/.local/share/godot/export_templates/4.7.1.stable
-
-      - name: Download Godot export templates
-        run: |
-          cd ~/.local/share/godot/export_templates/4.7.1.stable
-          wget https://github.com/godotengine/godot-releases/releases/download/4.7.1-stable/Godot_v4.7.1-stable_export-templates.tpz
-          unzip -q Godot_v4.7.1-stable_export-templates.tpz
-          rm Godot_v4.7.1-stable_export-templates.tpz
+          include-templates: true
 
       - name: Build Linux (x86_64)
         run: |
           mkdir -p builds/linux
-          godot --export-release "Linux (x86_64)" builds/linux/AllegoryCave.x86_64
+          godot --headless --export-release "Linux" builds/linux/AllegoryCave.x86_64
 
       - name: Build Windows (x86_64)
         run: |
           mkdir -p builds/windows
-          godot --export-release "Windows (x86_64)" builds/windows/AllegoryCave.exe
+          godot --headless --export-release "Windows Desktop" builds/windows/AllegoryCave.exe
 
-      - name: Build macOS (ARM64)
+      - name: Build macOS (arm64)
         run: |
           mkdir -p builds/macos
-          godot --export-release "macOS (ARM64)" builds/macos/AllegoryCave.dmg
+          godot --headless --export-release "macOS" builds/macos/AllegoryCave.zip
+
+      - name: Build Web
+        run: |
+          mkdir -p builds/web
+          godot --headless --export-release "Web" builds/web/index.html
 
       - name: Create release artifacts
         run: |
           cd builds
           tar -czf linux/AllegoryCave-linux.tar.gz -C linux AllegoryCave.x86_64
           zip -r windows/AllegoryCave-windows.zip windows/AllegoryCave.exe
-          tar -czf macos/AllegoryCave-macos.tar.gz -C macos AllegoryCave.dmg
+          mv macos/AllegoryCave.zip macos/AllegoryCave-macos.zip
+          zip -r AllegoryCave-web.zip web
 
       - name: Upload artifacts to release
         env:
@@ -78,5 +75,6 @@ jobs:
           gh release upload "${{ needs.release-please.outputs.tag_name }}" \
             builds/linux/AllegoryCave-linux.tar.gz \
             builds/windows/AllegoryCave-windows.zip \
-            builds/macos/AllegoryCave-macos.tar.gz \
+            builds/macos/AllegoryCave-macos.zip \
+            builds/AllegoryCave-web.zip \
             --clobber
