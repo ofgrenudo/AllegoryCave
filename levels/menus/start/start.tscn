@@ -1,0 +1,33 @@
+[gd_scene format=3 uid="uid://5ealnk5jwacx"]
+
+[ext_resource type="Script" uid="uid://cqnn7guk124pj" path="res://levels/menus/start/start.gd" id="1_l5j4o"]
+
+[node name="Start" type="Node2D" unique_id=2117339440]
+script = ExtResource("1_l5j4o")
+
+[node name="MainMenuButtonContainer" type="VBoxContainer" parent="." unique_id=604524964]
+offset_left = 586.0
+offset_top = 242.0
+offset_right = 656.0
+offset_bottom = 378.0
+
+[node name="StartButton" type="Button" parent="MainMenuButtonContainer" unique_id=418470007]
+layout_mode = 2
+text = "Start"
+
+[node name="SettingsButton" type="Button" parent="MainMenuButtonContainer" unique_id=335092416]
+layout_mode = 2
+text = "Settings"
+
+[node name="CreditsButton" type="Button" parent="MainMenuButtonContainer" unique_id=1355947911]
+layout_mode = 2
+text = "Credits"
+
+[node name="QuitButton" type="Button" parent="MainMenuButtonContainer" unique_id=1303576142]
+layout_mode = 2
+text = "Quit"
+
+[connection signal="pressed" from="MainMenuButtonContainer/StartButton" to="." method="_on_start_button_pressed"]
+[connection signal="pressed" from="MainMenuButtonContainer/SettingsButton" to="." method="_on_settings_button_pressed"]
+[connection signal="pressed" from="MainMenuButtonContainer/CreditsButton" to="." method="_on_credits_button_pressed"]
+[connection signal="pressed" from="MainMenuButtonContainer/QuitButton" to="." method="_on_quit_button_pressed"]
