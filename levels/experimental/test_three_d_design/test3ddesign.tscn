@@ -1,0 +1,714 @@
+[gd_scene load_steps=29 format=3 uid="uid://cciywuu8ixwmk"]
+
+[ext_resource type="PackedScene" uid="uid://dq48fb65j3ui4" path="res://models/3D/floor_tile.glb" id="1_floo"]
+[ext_resource type="PackedScene" uid="uid://fh7ml17s20lq" path="res://models/3D/wall_straight.glb" id="2_wall"]
+[ext_resource type="PackedScene" uid="uid://bltsewrd1irw4" path="res://models/3D/wall_corner.glb" id="3_wall"]
+[ext_resource type="PackedScene" uid="uid://dbrjb0gt1ie4u" path="res://models/3D/doorway.glb" id="4_door"]
+[ext_resource type="PackedScene" uid="uid://dsup1kj0ui2gj" path="res://models/3D/window_wall.glb" id="5_wind"]
+[ext_resource type="PackedScene" uid="uid://xtpay2dbaf3o" path="res://models/3D/pillar.glb" id="6_pill"]
+[ext_resource type="PackedScene" uid="uid://dphaa3hymlpet" path="res://models/3D/stairs.glb" id="7_stai"]
+[ext_resource type="PackedScene" uid="uid://c3vs4ouisr31" path="res://models/3D/wall_broken.glb" id="8_wall"]
+[ext_resource type="Script" path="res://levels/experimental/test_three_d_design/debug_fly_camera.gd" id="9_camscript"]
+
+[sub_resource type="BoxShape3D" id="Box_floor_tile_0"]
+size = Vector3(2, 0.2, 2)
+
+[sub_resource type="BoxShape3D" id="Box_wall_straight_0"]
+size = Vector3(2, 3, 0.3)
+
+[sub_resource type="BoxShape3D" id="Box_wall_corner_0"]
+size = Vector3(2, 3, 0.3)
+
+[sub_resource type="BoxShape3D" id="Box_wall_corner_1"]
+size = Vector3(0.3, 3, 2)
+
+[sub_resource type="BoxShape3D" id="Box_doorway_0"]
+size = Vector3(0.4, 3, 0.3)
+
+[sub_resource type="BoxShape3D" id="Box_doorway_1"]
+size = Vector3(2, 0.6, 0.3)
+
+[sub_resource type="BoxShape3D" id="Box_window_wall_0"]
+size = Vector3(2, 1, 0.3)
+
+[sub_resource type="BoxShape3D" id="Box_window_wall_1"]
+size = Vector3(2, 0.8, 0.3)
+
+[sub_resource type="BoxShape3D" id="Box_window_wall_2"]
+size = Vector3(0.4, 1.2, 0.3)
+
+[sub_resource type="BoxShape3D" id="Box_stairs_0"]
+size = Vector3(2, 0.375, 2)
+
+[sub_resource type="BoxShape3D" id="Box_stairs_1"]
+size = Vector3(2, 0.75, 1.75)
+
+[sub_resource type="BoxShape3D" id="Box_stairs_2"]
+size = Vector3(2, 1.125, 1.5)
+
+[sub_resource type="BoxShape3D" id="Box_stairs_3"]
+size = Vector3(2, 1.5, 1.25)
+
+[sub_resource type="BoxShape3D" id="Box_stairs_4"]
+size = Vector3(2, 1.875, 1)
+
+[sub_resource type="BoxShape3D" id="Box_stairs_5"]
+size = Vector3(2, 2.25, 0.75)
+
+[sub_resource type="BoxShape3D" id="Box_stairs_6"]
+size = Vector3(2, 2.625, 0.5)
+
+[sub_resource type="BoxShape3D" id="Box_stairs_7"]
+size = Vector3(2, 3, 0.25)
+
+[sub_resource type="BoxShape3D" id="Box_wall_broken_0"]
+size = Vector3(0.4, 0.5, 0.3)
+
+[sub_resource type="BoxShape3D" id="Box_pillar_0"]
+size = Vector3(0.8, 3, 0.8)
+
+[sub_resource type="Environment" id="Env_1"]
+background_mode = 1
+background_color = Color(0.035, 0.035, 0.05, 1)
+ambient_light_source = 2
+ambient_light_color = Color(0.55, 0.58, 0.65, 1)
+ambient_light_energy = 0.9
+tonemap_mode = 2
+
+[node name="Test3Ddesign" type="Node3D" unique_id=500000001]
+
+[node name="WorldEnvironment" type="WorldEnvironment" parent="." unique_id=500000002]
+environment = SubResource("Env_1")
+
+[node name="SunLight" type="DirectionalLight3D" parent="." unique_id=500000003]
+position = Vector3(5, 6, 4)
+rotation_degrees = Vector3(-55, -35, 0)
+light_energy = 1.1
+shadow_enabled = true
+
+[node name="DebugCamera" type="Camera3D" parent="." unique_id=500000004]
+position = Vector3(5, 1.7, 2)
+rotation_degrees = Vector3(-8, 180, 0)
+current = true
+fov = 75.0
+script = ExtResource("9_camscript")
+
+[node name="Pieces" type="Node3D" parent="." unique_id=500000005]
+
+[node name="Collision" type="Node3D" parent="." unique_id=500000006]
+
+[node name="floor_0_0" parent="Pieces" instance=ExtResource("1_floo") unique_id=500000007]
+position = Vector3(0, 0, 0)
+
+[node name="floor_0_0_col" type="StaticBody3D" parent="Collision" unique_id=500000008]
+position = Vector3(0, 0, 0)
+
+[node name="floor_0_0_col_shape0" type="CollisionShape3D" parent="Collision/floor_0_0_col" unique_id=500000009]
+position = Vector3(1, -0.1, 1)
+shape = SubResource("Box_floor_tile_0")
+
+[node name="floor_0_1" parent="Pieces" instance=ExtResource("1_floo") unique_id=500000010]
+position = Vector3(0, 0, 2)
+
+[node name="floor_0_1_col" type="StaticBody3D" parent="Collision" unique_id=500000011]
+position = Vector3(0, 0, 2)
+
+[node name="floor_0_1_col_shape0" type="CollisionShape3D" parent="Collision/floor_0_1_col" unique_id=500000012]
+position = Vector3(1, -0.1, 1)
+shape = SubResource("Box_floor_tile_0")
+
+[node name="floor_0_2" parent="Pieces" instance=ExtResource("1_floo") unique_id=500000013]
+position = Vector3(0, 0, 4)
+
+[node name="floor_0_2_col" type="StaticBody3D" parent="Collision" unique_id=500000014]
+position = Vector3(0, 0, 4)
+
+[node name="floor_0_2_col_shape0" type="CollisionShape3D" parent="Collision/floor_0_2_col" unique_id=500000015]
+position = Vector3(1, -0.1, 1)
+shape = SubResource("Box_floor_tile_0")
+
+[node name="floor_0_3" parent="Pieces" instance=ExtResource("1_floo") unique_id=500000016]
+position = Vector3(0, 0, 6)
+
+[node name="floor_0_3_col" type="StaticBody3D" parent="Collision" unique_id=500000017]
+position = Vector3(0, 0, 6)
+
+[node name="floor_0_3_col_shape0" type="CollisionShape3D" parent="Collision/floor_0_3_col" unique_id=500000018]
+position = Vector3(1, -0.1, 1)
+shape = SubResource("Box_floor_tile_0")
+
+[node name="floor_1_0" parent="Pieces" instance=ExtResource("1_floo") unique_id=500000019]
+position = Vector3(2, 0, 0)
+
+[node name="floor_1_0_col" type="StaticBody3D" parent="Collision" unique_id=500000020]
+position = Vector3(2, 0, 0)
+
+[node name="floor_1_0_col_shape0" type="CollisionShape3D" parent="Collision/floor_1_0_col" unique_id=500000021]
+position = Vector3(1, -0.1, 1)
+shape = SubResource("Box_floor_tile_0")
+
+[node name="floor_1_1" parent="Pieces" instance=ExtResource("1_floo") unique_id=500000022]
+position = Vector3(2, 0, 2)
+
+[node name="floor_1_1_col" type="StaticBody3D" parent="Collision" unique_id=500000023]
+position = Vector3(2, 0, 2)
+
+[node name="floor_1_1_col_shape0" type="CollisionShape3D" parent="Collision/floor_1_1_col" unique_id=500000024]
+position = Vector3(1, -0.1, 1)
+shape = SubResource("Box_floor_tile_0")
+
+[node name="floor_1_2" parent="Pieces" instance=ExtResource("1_floo") unique_id=500000025]
+position = Vector3(2, 0, 4)
+
+[node name="floor_1_2_col" type="StaticBody3D" parent="Collision" unique_id=500000026]
+position = Vector3(2, 0, 4)
+
+[node name="floor_1_2_col_shape0" type="CollisionShape3D" parent="Collision/floor_1_2_col" unique_id=500000027]
+position = Vector3(1, -0.1, 1)
+shape = SubResource("Box_floor_tile_0")
+
+[node name="floor_1_3" parent="Pieces" instance=ExtResource("1_floo") unique_id=500000028]
+position = Vector3(2, 0, 6)
+
+[node name="floor_1_3_col" type="StaticBody3D" parent="Collision" unique_id=500000029]
+position = Vector3(2, 0, 6)
+
+[node name="floor_1_3_col_shape0" type="CollisionShape3D" parent="Collision/floor_1_3_col" unique_id=500000030]
+position = Vector3(1, -0.1, 1)
+shape = SubResource("Box_floor_tile_0")
+
+[node name="floor_2_0" parent="Pieces" instance=ExtResource("1_floo") unique_id=500000031]
+position = Vector3(4, 0, 0)
+
+[node name="floor_2_0_col" type="StaticBody3D" parent="Collision" unique_id=500000032]
+position = Vector3(4, 0, 0)
+
+[node name="floor_2_0_col_shape0" type="CollisionShape3D" parent="Collision/floor_2_0_col" unique_id=500000033]
+position = Vector3(1, -0.1, 1)
+shape = SubResource("Box_floor_tile_0")
+
+[node name="floor_2_1" parent="Pieces" instance=ExtResource("1_floo") unique_id=500000034]
+position = Vector3(4, 0, 2)
+
+[node name="floor_2_1_col" type="StaticBody3D" parent="Collision" unique_id=500000035]
+position = Vector3(4, 0, 2)
+
+[node name="floor_2_1_col_shape0" type="CollisionShape3D" parent="Collision/floor_2_1_col" unique_id=500000036]
+position = Vector3(1, -0.1, 1)
+shape = SubResource("Box_floor_tile_0")
+
+[node name="floor_2_2" parent="Pieces" instance=ExtResource("1_floo") unique_id=500000037]
+position = Vector3(4, 0, 4)
+
+[node name="floor_2_2_col" type="StaticBody3D" parent="Collision" unique_id=500000038]
+position = Vector3(4, 0, 4)
+
+[node name="floor_2_2_col_shape0" type="CollisionShape3D" parent="Collision/floor_2_2_col" unique_id=500000039]
+position = Vector3(1, -0.1, 1)
+shape = SubResource("Box_floor_tile_0")
+
+[node name="floor_2_3" parent="Pieces" instance=ExtResource("1_floo") unique_id=500000040]
+position = Vector3(4, 0, 6)
+
+[node name="floor_2_3_col" type="StaticBody3D" parent="Collision" unique_id=500000041]
+position = Vector3(4, 0, 6)
+
+[node name="floor_2_3_col_shape0" type="CollisionShape3D" parent="Collision/floor_2_3_col" unique_id=500000042]
+position = Vector3(1, -0.1, 1)
+shape = SubResource("Box_floor_tile_0")
+
+[node name="floor_3_0" parent="Pieces" instance=ExtResource("1_floo") unique_id=500000043]
+position = Vector3(6, 0, 0)
+
+[node name="floor_3_0_col" type="StaticBody3D" parent="Collision" unique_id=500000044]
+position = Vector3(6, 0, 0)
+
+[node name="floor_3_0_col_shape0" type="CollisionShape3D" parent="Collision/floor_3_0_col" unique_id=500000045]
+position = Vector3(1, -0.1, 1)
+shape = SubResource("Box_floor_tile_0")
+
+[node name="floor_3_1" parent="Pieces" instance=ExtResource("1_floo") unique_id=500000046]
+position = Vector3(6, 0, 2)
+
+[node name="floor_3_1_col" type="StaticBody3D" parent="Collision" unique_id=500000047]
+position = Vector3(6, 0, 2)
+
+[node name="floor_3_1_col_shape0" type="CollisionShape3D" parent="Collision/floor_3_1_col" unique_id=500000048]
+position = Vector3(1, -0.1, 1)
+shape = SubResource("Box_floor_tile_0")
+
+[node name="floor_3_2" parent="Pieces" instance=ExtResource("1_floo") unique_id=500000049]
+position = Vector3(6, 0, 4)
+
+[node name="floor_3_2_col" type="StaticBody3D" parent="Collision" unique_id=500000050]
+position = Vector3(6, 0, 4)
+
+[node name="floor_3_2_col_shape0" type="CollisionShape3D" parent="Collision/floor_3_2_col" unique_id=500000051]
+position = Vector3(1, -0.1, 1)
+shape = SubResource("Box_floor_tile_0")
+
+[node name="floor_3_3" parent="Pieces" instance=ExtResource("1_floo") unique_id=500000052]
+position = Vector3(6, 0, 6)
+
+[node name="floor_3_3_col" type="StaticBody3D" parent="Collision" unique_id=500000053]
+position = Vector3(6, 0, 6)
+
+[node name="floor_3_3_col_shape0" type="CollisionShape3D" parent="Collision/floor_3_3_col" unique_id=500000054]
+position = Vector3(1, -0.1, 1)
+shape = SubResource("Box_floor_tile_0")
+
+[node name="floor_4_0" parent="Pieces" instance=ExtResource("1_floo") unique_id=500000055]
+position = Vector3(8, 0, 0)
+
+[node name="floor_4_0_col" type="StaticBody3D" parent="Collision" unique_id=500000056]
+position = Vector3(8, 0, 0)
+
+[node name="floor_4_0_col_shape0" type="CollisionShape3D" parent="Collision/floor_4_0_col" unique_id=500000057]
+position = Vector3(1, -0.1, 1)
+shape = SubResource("Box_floor_tile_0")
+
+[node name="floor_4_1" parent="Pieces" instance=ExtResource("1_floo") unique_id=500000058]
+position = Vector3(8, 0, 2)
+
+[node name="floor_4_1_col" type="StaticBody3D" parent="Collision" unique_id=500000059]
+position = Vector3(8, 0, 2)
+
+[node name="floor_4_1_col_shape0" type="CollisionShape3D" parent="Collision/floor_4_1_col" unique_id=500000060]
+position = Vector3(1, -0.1, 1)
+shape = SubResource("Box_floor_tile_0")
+
+[node name="floor_4_2" parent="Pieces" instance=ExtResource("1_floo") unique_id=500000061]
+position = Vector3(8, 0, 4)
+
+[node name="floor_4_2_col" type="StaticBody3D" parent="Collision" unique_id=500000062]
+position = Vector3(8, 0, 4)
+
+[node name="floor_4_2_col_shape0" type="CollisionShape3D" parent="Collision/floor_4_2_col" unique_id=500000063]
+position = Vector3(1, -0.1, 1)
+shape = SubResource("Box_floor_tile_0")
+
+[node name="floor_4_3" parent="Pieces" instance=ExtResource("1_floo") unique_id=500000064]
+position = Vector3(8, 0, 6)
+
+[node name="floor_4_3_col" type="StaticBody3D" parent="Collision" unique_id=500000065]
+position = Vector3(8, 0, 6)
+
+[node name="floor_4_3_col_shape0" type="CollisionShape3D" parent="Collision/floor_4_3_col" unique_id=500000066]
+position = Vector3(1, -0.1, 1)
+shape = SubResource("Box_floor_tile_0")
+
+[node name="corner_NW" parent="Pieces" instance=ExtResource("3_wall") unique_id=500000067]
+position = Vector3(0, 0, 0)
+
+[node name="corner_NW_col" type="StaticBody3D" parent="Collision" unique_id=500000068]
+position = Vector3(0, 0, 0)
+
+[node name="corner_NW_col_shape0" type="CollisionShape3D" parent="Collision/corner_NW_col" unique_id=500000069]
+position = Vector3(1, 1.5, 0.15)
+shape = SubResource("Box_wall_corner_0")
+
+[node name="corner_NW_col_shape1" type="CollisionShape3D" parent="Collision/corner_NW_col" unique_id=500000070]
+position = Vector3(0.15, 1.5, 1)
+shape = SubResource("Box_wall_corner_1")
+
+[node name="corner_NE" parent="Pieces" instance=ExtResource("3_wall") unique_id=500000071]
+position = Vector3(10, 0, 0)
+rotation_degrees = Vector3(0, 270, 0)
+
+[node name="corner_NE_col" type="StaticBody3D" parent="Collision" unique_id=500000072]
+position = Vector3(10, 0, 0)
+rotation_degrees = Vector3(0, 270, 0)
+
+[node name="corner_NE_col_shape0" type="CollisionShape3D" parent="Collision/corner_NE_col" unique_id=500000073]
+position = Vector3(1, 1.5, 0.15)
+shape = SubResource("Box_wall_corner_0")
+
+[node name="corner_NE_col_shape1" type="CollisionShape3D" parent="Collision/corner_NE_col" unique_id=500000074]
+position = Vector3(0.15, 1.5, 1)
+shape = SubResource("Box_wall_corner_1")
+
+[node name="corner_SW" parent="Pieces" instance=ExtResource("3_wall") unique_id=500000075]
+position = Vector3(0, 0, 8)
+rotation_degrees = Vector3(0, 90, 0)
+
+[node name="corner_SW_col" type="StaticBody3D" parent="Collision" unique_id=500000076]
+position = Vector3(0, 0, 8)
+rotation_degrees = Vector3(0, 90, 0)
+
+[node name="corner_SW_col_shape0" type="CollisionShape3D" parent="Collision/corner_SW_col" unique_id=500000077]
+position = Vector3(1, 1.5, 0.15)
+shape = SubResource("Box_wall_corner_0")
+
+[node name="corner_SW_col_shape1" type="CollisionShape3D" parent="Collision/corner_SW_col" unique_id=500000078]
+position = Vector3(0.15, 1.5, 1)
+shape = SubResource("Box_wall_corner_1")
+
+[node name="corner_SE" parent="Pieces" instance=ExtResource("3_wall") unique_id=500000079]
+position = Vector3(10, 0, 8)
+rotation_degrees = Vector3(0, 180, 0)
+
+[node name="corner_SE_col" type="StaticBody3D" parent="Collision" unique_id=500000080]
+position = Vector3(10, 0, 8)
+rotation_degrees = Vector3(0, 180, 0)
+
+[node name="corner_SE_col_shape0" type="CollisionShape3D" parent="Collision/corner_SE_col" unique_id=500000081]
+position = Vector3(1, 1.5, 0.15)
+shape = SubResource("Box_wall_corner_0")
+
+[node name="corner_SE_col_shape1" type="CollisionShape3D" parent="Collision/corner_SE_col" unique_id=500000082]
+position = Vector3(0.15, 1.5, 1)
+shape = SubResource("Box_wall_corner_1")
+
+[node name="N_wall_i1" parent="Pieces" instance=ExtResource("2_wall") unique_id=500000083]
+position = Vector3(2, 0, 0)
+
+[node name="N_wall_i1_col" type="StaticBody3D" parent="Collision" unique_id=500000084]
+position = Vector3(2, 0, 0)
+
+[node name="N_wall_i1_col_shape0" type="CollisionShape3D" parent="Collision/N_wall_i1_col" unique_id=500000085]
+position = Vector3(1, 1.5, 0.15)
+shape = SubResource("Box_wall_straight_0")
+
+[node name="N_window_i2" parent="Pieces" instance=ExtResource("5_wind") unique_id=500000086]
+position = Vector3(4, 0, 0)
+
+[node name="N_window_i2_col" type="StaticBody3D" parent="Collision" unique_id=500000087]
+position = Vector3(4, 0, 0)
+
+[node name="N_window_i2_col_shape0" type="CollisionShape3D" parent="Collision/N_window_i2_col" unique_id=500000088]
+position = Vector3(1, 0.5, 0.15)
+shape = SubResource("Box_window_wall_0")
+
+[node name="N_window_i2_col_shape1" type="CollisionShape3D" parent="Collision/N_window_i2_col" unique_id=500000089]
+position = Vector3(1, 2.6, 0.15)
+shape = SubResource("Box_window_wall_1")
+
+[node name="N_window_i2_col_shape2" type="CollisionShape3D" parent="Collision/N_window_i2_col" unique_id=500000090]
+position = Vector3(0.2, 1.6, 0.15)
+shape = SubResource("Box_window_wall_2")
+
+[node name="N_window_i2_col_shape3" type="CollisionShape3D" parent="Collision/N_window_i2_col" unique_id=500000091]
+position = Vector3(1.8, 1.6, 0.15)
+shape = SubResource("Box_window_wall_2")
+
+[node name="N_wall_i3" parent="Pieces" instance=ExtResource("2_wall") unique_id=500000092]
+position = Vector3(6, 0, 0)
+
+[node name="N_wall_i3_col" type="StaticBody3D" parent="Collision" unique_id=500000093]
+position = Vector3(6, 0, 0)
+
+[node name="N_wall_i3_col_shape0" type="CollisionShape3D" parent="Collision/N_wall_i3_col" unique_id=500000094]
+position = Vector3(1, 1.5, 0.15)
+shape = SubResource("Box_wall_straight_0")
+
+[node name="S_wall_i1" parent="Pieces" instance=ExtResource("2_wall") unique_id=500000095]
+position = Vector3(4, 0, 8)
+rotation_degrees = Vector3(0, 180, 0)
+
+[node name="S_wall_i1_col" type="StaticBody3D" parent="Collision" unique_id=500000096]
+position = Vector3(4, 0, 8)
+rotation_degrees = Vector3(0, 180, 0)
+
+[node name="S_wall_i1_col_shape0" type="CollisionShape3D" parent="Collision/S_wall_i1_col" unique_id=500000097]
+position = Vector3(1, 1.5, 0.15)
+shape = SubResource("Box_wall_straight_0")
+
+[node name="S_doorway_i2" parent="Pieces" instance=ExtResource("4_door") unique_id=500000098]
+position = Vector3(6, 0, 8)
+rotation_degrees = Vector3(0, 180, 0)
+
+[node name="S_doorway_i2_col" type="StaticBody3D" parent="Collision" unique_id=500000099]
+position = Vector3(6, 0, 8)
+rotation_degrees = Vector3(0, 180, 0)
+
+[node name="S_doorway_i2_col_shape0" type="CollisionShape3D" parent="Collision/S_doorway_i2_col" unique_id=500000100]
+position = Vector3(0.2, 1.5, 0.15)
+shape = SubResource("Box_doorway_0")
+
+[node name="S_doorway_i2_col_shape1" type="CollisionShape3D" parent="Collision/S_doorway_i2_col" unique_id=500000101]
+position = Vector3(1.8, 1.5, 0.15)
+shape = SubResource("Box_doorway_0")
+
+[node name="S_doorway_i2_col_shape2" type="CollisionShape3D" parent="Collision/S_doorway_i2_col" unique_id=500000102]
+position = Vector3(1, 2.7, 0.15)
+shape = SubResource("Box_doorway_1")
+
+[node name="S_wall_i3" parent="Pieces" instance=ExtResource("2_wall") unique_id=500000103]
+position = Vector3(8, 0, 8)
+rotation_degrees = Vector3(0, 180, 0)
+
+[node name="S_wall_i3_col" type="StaticBody3D" parent="Collision" unique_id=500000104]
+position = Vector3(8, 0, 8)
+rotation_degrees = Vector3(0, 180, 0)
+
+[node name="S_wall_i3_col_shape0" type="CollisionShape3D" parent="Collision/S_wall_i3_col" unique_id=500000105]
+position = Vector3(1, 1.5, 0.15)
+shape = SubResource("Box_wall_straight_0")
+
+[node name="W_broken_j1" parent="Pieces" instance=ExtResource("8_wall") unique_id=500000106]
+position = Vector3(0, 0, 4)
+rotation_degrees = Vector3(0, 90, 0)
+
+[node name="W_broken_j1_col" type="StaticBody3D" parent="Collision" unique_id=500000107]
+position = Vector3(0, 0, 4)
+rotation_degrees = Vector3(0, 90, 0)
+
+[node name="W_broken_j1_col_shape0" type="CollisionShape3D" parent="Collision/W_broken_j1_col" unique_id=500000108]
+position = Vector3(0.2, 0.25, 0.15)
+shape = SubResource("Box_wall_broken_0")
+
+[node name="W_broken_j1_col_shape1" type="CollisionShape3D" parent="Collision/W_broken_j1_col" unique_id=500000109]
+position = Vector3(0.2, 0.75, 0.15)
+shape = SubResource("Box_wall_broken_0")
+
+[node name="W_broken_j1_col_shape2" type="CollisionShape3D" parent="Collision/W_broken_j1_col" unique_id=500000110]
+position = Vector3(0.2, 1.25, 0.15)
+shape = SubResource("Box_wall_broken_0")
+
+[node name="W_broken_j1_col_shape3" type="CollisionShape3D" parent="Collision/W_broken_j1_col" unique_id=500000111]
+position = Vector3(0.2, 1.75, 0.15)
+shape = SubResource("Box_wall_broken_0")
+
+[node name="W_broken_j1_col_shape4" type="CollisionShape3D" parent="Collision/W_broken_j1_col" unique_id=500000112]
+position = Vector3(0.2, 2.25, 0.15)
+shape = SubResource("Box_wall_broken_0")
+
+[node name="W_broken_j1_col_shape5" type="CollisionShape3D" parent="Collision/W_broken_j1_col" unique_id=500000113]
+position = Vector3(0.6, 0.75, 0.15)
+shape = SubResource("Box_wall_broken_0")
+
+[node name="W_broken_j1_col_shape6" type="CollisionShape3D" parent="Collision/W_broken_j1_col" unique_id=500000114]
+position = Vector3(0.6, 1.75, 0.15)
+shape = SubResource("Box_wall_broken_0")
+
+[node name="W_broken_j1_col_shape7" type="CollisionShape3D" parent="Collision/W_broken_j1_col" unique_id=500000115]
+position = Vector3(0.6, 2.25, 0.15)
+shape = SubResource("Box_wall_broken_0")
+
+[node name="W_broken_j1_col_shape8" type="CollisionShape3D" parent="Collision/W_broken_j1_col" unique_id=500000116]
+position = Vector3(1, 0.25, 0.15)
+shape = SubResource("Box_wall_broken_0")
+
+[node name="W_broken_j1_col_shape9" type="CollisionShape3D" parent="Collision/W_broken_j1_col" unique_id=500000117]
+position = Vector3(1, 0.75, 0.15)
+shape = SubResource("Box_wall_broken_0")
+
+[node name="W_broken_j1_col_shape10" type="CollisionShape3D" parent="Collision/W_broken_j1_col" unique_id=500000118]
+position = Vector3(1, 2.25, 0.15)
+shape = SubResource("Box_wall_broken_0")
+
+[node name="W_broken_j1_col_shape11" type="CollisionShape3D" parent="Collision/W_broken_j1_col" unique_id=500000119]
+position = Vector3(1.4, 0.25, 0.15)
+shape = SubResource("Box_wall_broken_0")
+
+[node name="W_broken_j1_col_shape12" type="CollisionShape3D" parent="Collision/W_broken_j1_col" unique_id=500000120]
+position = Vector3(1.4, 0.75, 0.15)
+shape = SubResource("Box_wall_broken_0")
+
+[node name="W_broken_j1_col_shape13" type="CollisionShape3D" parent="Collision/W_broken_j1_col" unique_id=500000121]
+position = Vector3(1.4, 1.25, 0.15)
+shape = SubResource("Box_wall_broken_0")
+
+[node name="W_broken_j1_col_shape14" type="CollisionShape3D" parent="Collision/W_broken_j1_col" unique_id=500000122]
+position = Vector3(1.4, 1.75, 0.15)
+shape = SubResource("Box_wall_broken_0")
+
+[node name="W_broken_j1_col_shape15" type="CollisionShape3D" parent="Collision/W_broken_j1_col" unique_id=500000123]
+position = Vector3(1.4, 2.25, 0.15)
+shape = SubResource("Box_wall_broken_0")
+
+[node name="W_broken_j1_col_shape16" type="CollisionShape3D" parent="Collision/W_broken_j1_col" unique_id=500000124]
+position = Vector3(1.8, 0.25, 0.15)
+shape = SubResource("Box_wall_broken_0")
+
+[node name="W_broken_j1_col_shape17" type="CollisionShape3D" parent="Collision/W_broken_j1_col" unique_id=500000125]
+position = Vector3(1.8, 0.75, 0.15)
+shape = SubResource("Box_wall_broken_0")
+
+[node name="W_broken_j1_col_shape18" type="CollisionShape3D" parent="Collision/W_broken_j1_col" unique_id=500000126]
+position = Vector3(1.8, 1.25, 0.15)
+shape = SubResource("Box_wall_broken_0")
+
+[node name="W_broken_j1_col_shape19" type="CollisionShape3D" parent="Collision/W_broken_j1_col" unique_id=500000127]
+position = Vector3(1.8, 1.75, 0.15)
+shape = SubResource("Box_wall_broken_0")
+
+[node name="W_broken_j1_col_shape20" type="CollisionShape3D" parent="Collision/W_broken_j1_col" unique_id=500000128]
+position = Vector3(1.8, 2.25, 0.15)
+shape = SubResource("Box_wall_broken_0")
+
+[node name="W_broken_j1_col_shape21" type="CollisionShape3D" parent="Collision/W_broken_j1_col" unique_id=500000129]
+position = Vector3(1.8, 2.75, 0.15)
+shape = SubResource("Box_wall_broken_0")
+
+[node name="W_wall_j2" parent="Pieces" instance=ExtResource("2_wall") unique_id=500000130]
+position = Vector3(0, 0, 6)
+rotation_degrees = Vector3(0, 90, 0)
+
+[node name="W_wall_j2_col" type="StaticBody3D" parent="Collision" unique_id=500000131]
+position = Vector3(0, 0, 6)
+rotation_degrees = Vector3(0, 90, 0)
+
+[node name="W_wall_j2_col_shape0" type="CollisionShape3D" parent="Collision/W_wall_j2_col" unique_id=500000132]
+position = Vector3(1, 1.5, 0.15)
+shape = SubResource("Box_wall_straight_0")
+
+[node name="E_wall_j1" parent="Pieces" instance=ExtResource("2_wall") unique_id=500000133]
+position = Vector3(10, 0, 2)
+rotation_degrees = Vector3(0, 270, 0)
+
+[node name="E_wall_j1_col" type="StaticBody3D" parent="Collision" unique_id=500000134]
+position = Vector3(10, 0, 2)
+rotation_degrees = Vector3(0, 270, 0)
+
+[node name="E_wall_j1_col_shape0" type="CollisionShape3D" parent="Collision/E_wall_j1_col" unique_id=500000135]
+position = Vector3(1, 1.5, 0.15)
+shape = SubResource("Box_wall_straight_0")
+
+[node name="E_wall_j2" parent="Pieces" instance=ExtResource("2_wall") unique_id=500000136]
+position = Vector3(10, 0, 4)
+rotation_degrees = Vector3(0, 270, 0)
+
+[node name="E_wall_j2_col" type="StaticBody3D" parent="Collision" unique_id=500000137]
+position = Vector3(10, 0, 4)
+rotation_degrees = Vector3(0, 270, 0)
+
+[node name="E_wall_j2_col_shape0" type="CollisionShape3D" parent="Collision/E_wall_j2_col" unique_id=500000138]
+position = Vector3(1, 1.5, 0.15)
+shape = SubResource("Box_wall_straight_0")
+
+[node name="hall_pillar" parent="Pieces" instance=ExtResource("6_pill") unique_id=500000139]
+position = Vector3(4, 0, 2)
+
+[node name="hall_pillar_col" type="StaticBody3D" parent="Collision" unique_id=500000140]
+position = Vector3(4, 0, 2)
+
+[node name="hall_pillar_col_shape0" type="CollisionShape3D" parent="Collision/hall_pillar_col" unique_id=500000141]
+position = Vector3(1, 1.5, 1)
+shape = SubResource("Box_pillar_0")
+
+[node name="corridor_floor_j4" parent="Pieces" instance=ExtResource("1_floo") unique_id=500000142]
+position = Vector3(4, 0, 8)
+
+[node name="corridor_floor_j4_col" type="StaticBody3D" parent="Collision" unique_id=500000143]
+position = Vector3(4, 0, 8)
+
+[node name="corridor_floor_j4_col_shape0" type="CollisionShape3D" parent="Collision/corridor_floor_j4_col" unique_id=500000144]
+position = Vector3(1, -0.1, 1)
+shape = SubResource("Box_floor_tile_0")
+
+[node name="corridor_W_wall_j4" parent="Pieces" instance=ExtResource("2_wall") unique_id=500000145]
+position = Vector3(4, 0, 10)
+rotation_degrees = Vector3(0, 90, 0)
+
+[node name="corridor_W_wall_j4_col" type="StaticBody3D" parent="Collision" unique_id=500000146]
+position = Vector3(4, 0, 10)
+rotation_degrees = Vector3(0, 90, 0)
+
+[node name="corridor_W_wall_j4_col_shape0" type="CollisionShape3D" parent="Collision/corridor_W_wall_j4_col" unique_id=500000147]
+position = Vector3(1, 1.5, 0.15)
+shape = SubResource("Box_wall_straight_0")
+
+[node name="corridor_E_wall_j4" parent="Pieces" instance=ExtResource("2_wall") unique_id=500000148]
+position = Vector3(6, 0, 8)
+rotation_degrees = Vector3(0, 270, 0)
+
+[node name="corridor_E_wall_j4_col" type="StaticBody3D" parent="Collision" unique_id=500000149]
+position = Vector3(6, 0, 8)
+rotation_degrees = Vector3(0, 270, 0)
+
+[node name="corridor_E_wall_j4_col_shape0" type="CollisionShape3D" parent="Collision/corridor_E_wall_j4_col" unique_id=500000150]
+position = Vector3(1, 1.5, 0.15)
+shape = SubResource("Box_wall_straight_0")
+
+[node name="corridor_floor_j5" parent="Pieces" instance=ExtResource("1_floo") unique_id=500000151]
+position = Vector3(4, 0, 10)
+
+[node name="corridor_floor_j5_col" type="StaticBody3D" parent="Collision" unique_id=500000152]
+position = Vector3(4, 0, 10)
+
+[node name="corridor_floor_j5_col_shape0" type="CollisionShape3D" parent="Collision/corridor_floor_j5_col" unique_id=500000153]
+position = Vector3(1, -0.1, 1)
+shape = SubResource("Box_floor_tile_0")
+
+[node name="corridor_W_wall_j5" parent="Pieces" instance=ExtResource("2_wall") unique_id=500000154]
+position = Vector3(4, 0, 12)
+rotation_degrees = Vector3(0, 90, 0)
+
+[node name="corridor_W_wall_j5_col" type="StaticBody3D" parent="Collision" unique_id=500000155]
+position = Vector3(4, 0, 12)
+rotation_degrees = Vector3(0, 90, 0)
+
+[node name="corridor_W_wall_j5_col_shape0" type="CollisionShape3D" parent="Collision/corridor_W_wall_j5_col" unique_id=500000156]
+position = Vector3(1, 1.5, 0.15)
+shape = SubResource("Box_wall_straight_0")
+
+[node name="corridor_E_wall_j5" parent="Pieces" instance=ExtResource("2_wall") unique_id=500000157]
+position = Vector3(6, 0, 10)
+rotation_degrees = Vector3(0, 270, 0)
+
+[node name="corridor_E_wall_j5_col" type="StaticBody3D" parent="Collision" unique_id=500000158]
+position = Vector3(6, 0, 10)
+rotation_degrees = Vector3(0, 270, 0)
+
+[node name="corridor_E_wall_j5_col_shape0" type="CollisionShape3D" parent="Collision/corridor_E_wall_j5_col" unique_id=500000159]
+position = Vector3(1, 1.5, 0.15)
+shape = SubResource("Box_wall_straight_0")
+
+[node name="stairs" parent="Pieces" instance=ExtResource("7_stai") unique_id=500000160]
+position = Vector3(4, 0, 12)
+
+[node name="stairs_col" type="StaticBody3D" parent="Collision" unique_id=500000161]
+position = Vector3(4, 0, 12)
+
+[node name="stairs_col_shape0" type="CollisionShape3D" parent="Collision/stairs_col" unique_id=500000162]
+position = Vector3(1, 0.1875, 1)
+shape = SubResource("Box_stairs_0")
+
+[node name="stairs_col_shape1" type="CollisionShape3D" parent="Collision/stairs_col" unique_id=500000163]
+position = Vector3(1, 0.375, 1.125)
+shape = SubResource("Box_stairs_1")
+
+[node name="stairs_col_shape2" type="CollisionShape3D" parent="Collision/stairs_col" unique_id=500000164]
+position = Vector3(1, 0.5625, 1.25)
+shape = SubResource("Box_stairs_2")
+
+[node name="stairs_col_shape3" type="CollisionShape3D" parent="Collision/stairs_col" unique_id=500000165]
+position = Vector3(1, 0.75, 1.375)
+shape = SubResource("Box_stairs_3")
+
+[node name="stairs_col_shape4" type="CollisionShape3D" parent="Collision/stairs_col" unique_id=500000166]
+position = Vector3(1, 0.9375, 1.5)
+shape = SubResource("Box_stairs_4")
+
+[node name="stairs_col_shape5" type="CollisionShape3D" parent="Collision/stairs_col" unique_id=500000167]
+position = Vector3(1, 1.125, 1.625)
+shape = SubResource("Box_stairs_5")
+
+[node name="stairs_col_shape6" type="CollisionShape3D" parent="Collision/stairs_col" unique_id=500000168]
+position = Vector3(1, 1.3125, 1.75)
+shape = SubResource("Box_stairs_6")
+
+[node name="stairs_col_shape7" type="CollisionShape3D" parent="Collision/stairs_col" unique_id=500000169]
+position = Vector3(1, 1.5, 1.875)
+shape = SubResource("Box_stairs_7")
+
+[node name="platform_floor" parent="Pieces" instance=ExtResource("1_floo") unique_id=500000170]
+position = Vector3(4, 3, 14)
+
+[node name="platform_floor_col" type="StaticBody3D" parent="Collision" unique_id=500000171]
+position = Vector3(4, 3, 14)
+
+[node name="platform_floor_col_shape0" type="CollisionShape3D" parent="Collision/platform_floor_col" unique_id=500000172]
+position = Vector3(1, -0.1, 1)
+shape = SubResource("Box_floor_tile_0")
+
+[node name="platform_pillar" parent="Pieces" instance=ExtResource("6_pill") unique_id=500000173]
+position = Vector3(4, 3, 14)
+
+[node name="platform_pillar_col" type="StaticBody3D" parent="Collision" unique_id=500000174]
+position = Vector3(4, 3, 14)
+
+[node name="platform_pillar_col_shape0" type="CollisionShape3D" parent="Collision/platform_pillar_col" unique_id=500000175]
+position = Vector3(1, 1.5, 1)
+shape = SubResource("Box_pillar_0")
