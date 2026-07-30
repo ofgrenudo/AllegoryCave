@@ -1,0 +1,6 @@
+[gd_scene format=3 uid="uid://c57t6oixyc3b4"]
+
+[ext_resource type="Script" uid="uid://n8njpgrrq1rg" path="res://characters/player/glaucon/glaucon.gd" id="1_jwleq"]
+
+[node name="Glaucon" type="Node2D" unique_id=652551115]
+script = ExtResource("1_jwleq")
